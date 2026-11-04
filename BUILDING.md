@@ -27,6 +27,7 @@ Every step below calls out which of these it's practicing.
 - [Step 7 — The API: layers, auth, and idempotent XP](#step-7--the-api-layers-auth-and-idempotent-xp)
 - [Step 8 — The React frontend](#step-8--the-react-frontend)
 - [Step 9 — Verify like a user, then automate it](#step-9--verify-like-a-user-then-automate-it)
+- [Step 10 — Scaling the content (and what it taught us)](#step-10--scaling-the-content-and-what-it-taught-us)
 - [Recap: the build order, and why](#recap-the-build-order-and-why)
 - [Exercises: extend it yourself](#exercises-extend-it-yourself)
 
@@ -440,6 +441,42 @@ That pass is what proved two things no unit test covers:
 Then the checks were **automated** in `.github/workflows/ci.yml`: on every push, GitHub Actions starts a Postgres service container and runs typecheck → all tests (runner, shared, curriculum, API integration, React components) → content validation → production build.
 
 A small but real bug turned up while wiring this up. `npm test` runs every workspace's tests and *then* the content validator. The curriculum package had no test files, Vitest exits non-zero when it finds none, and so the validator **silently never ran**. Everything looked green because the earlier suites printed passing results. Adding real tests for the content loader fixed it. **Always confirm the last step of a pipeline actually ran.** A green summary can hide a step that never executed.
+
+---
+
+## Step 10 — Scaling the content (and what it taught us)
+
+*Skills: verification, sequencing.*
+
+The first version shipped 79 quests. Growing it to 255 quests (with hints and further reading on every one) was a different kind of engineering problem: **how do you add hundreds of things without breaking any of them?**
+
+### Make room before you grow
+
+Quest folders were renumbered from `01, 02, 03…` to `010, 020, 030…`, so new quests slot in between (`011`, `012`, …) without renaming everything again. This was safe *only* because of the Step 4 decision to key progress by the slug in frontmatter, not the folder name. **Earlier design decisions either enable or block later changes.** That one paid off months later.
+
+### Let the validator find your mistakes
+
+Writing ~180 new quests by hand produced real bugs, and **every single one was caught by `npm run validate:content`** before a learner could see it:
+
+| Bug | How it was caught | Lesson |
+|-----|-------------------|--------|
+| A hand-written HMAC signature in a test was simply wrong | Reference solution failed its own test. Recomputing with Node's `crypto` confirmed the solution was right and the test was wrong | Don't hand-compute expected values for crypto or hashes. Derive them with an independent tool |
+| `1_000_000 * 0.001` is `999.9999…` in floating point, so `Math.floor` gave 599 instead of 600 | Solution failed | Round before flooring. Money and counts deserve integer maths |
+| A starter that was deliberately slow (naive Fibonacci) hung the validator forever | Validation never finished | The validator now runs every quest in a **worker thread with a timeout**, just like the browser |
+| A test declared `const text = …`, which collided with the runner's `text()` helper | `SyntaxError: Identifier 'text' has already been declared` | Fixed in the runner itself (nested block scopes), so **learners** can never hit it either |
+| A test referenced helper functions that didn't exist | `ReferenceError` | Redesigned the quest to inject its dependency (`each(cases, register = test)`). The fix *improved* the lesson |
+
+A pattern worth noticing: two of those bugs were fixed **in the platform, not the content**, because the content bug revealed a trap that learners would also fall into. When you find a bug, ask: "Is this a one-off, or a class of bug I can eliminate for everyone?"
+
+### Content as data, generated with a tiny tool
+
+Quests were authored as Python data structures and written to disk with a ~60-line helper (lesson, starter, tests, solution, hints, resources in one place). The output is plain Markdown and JS/TS files, so the tool is disposable and nothing in the repo depends on it. **Build throwaway tooling freely when it removes repetition, but don't make the product depend on it.**
+
+### Every quest gets the same learning scaffolding
+
+- **Progressive hints** (`hints:` in frontmatter) are revealed one at a time in the UI, from a gentle nudge to nearly the answer.
+- **"Go deeper" resources** (`resources:`) link to MDN, react.dev, the Postgres docs, OWASP cheat sheets, and so on.
+- **The solution unlocks** after 3 attempts, framed as "compare approaches", not "copy this".
 
 ---
 

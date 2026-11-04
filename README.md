@@ -170,8 +170,8 @@ Learner code runs **in the browser**, inside a Web Worker, so there's no server 
 - [x] Test runner for JS, TypeScript, JSX and SQL quests
 - [x] User accounts and progress tracking
 - [x] XP, levels, streaks, achievements and leaderboard
-- [x] 12-chapter curriculum with quizzes and projects
-- [ ] Expanded curriculum (many more quests per chapter)
+- [x] 12-chapter curriculum: 255 quests (214 code, 30 quizzes, 11 projects), with progressive hints and further reading
+- [ ] Even more quests in the later chapters (React, testing, deploy)
 - [ ] Server-side sandboxed verification
 - [ ] Peer review for projects
 

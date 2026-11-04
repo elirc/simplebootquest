@@ -26,6 +26,7 @@ questions:
   - prompt: "Which middleware sets safe HTTP security headers in Express?"
     options: ["helmet", "cors", "morgan"]
     answer: 0
+resources: [{"title": "OWASP Top 10", "url": "https://owasp.org/www-project-top-ten/"}]
 ---
 # Checkpoint: Web Vulnerabilities
 

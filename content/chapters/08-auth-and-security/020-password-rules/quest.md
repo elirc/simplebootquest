@@ -4,6 +4,8 @@ title: Password Rules
 type: code
 language: ts
 xp: 20
+hints: ["Collect errors in an array, checking each rule independently.", "Personal info: the email local part is `email.split(\"@\")[0]`."]
+resources: [{"title": "NIST SP 800-63B summary", "url": "https://pages.nist.gov/800-63-4/sp800-63b.html"}]
 ---
 # Password Rules
 

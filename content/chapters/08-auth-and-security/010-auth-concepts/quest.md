@@ -25,6 +25,7 @@ questions:
   - prompt: "Anyone can decode a JWT's payload. What stops them from changing it?"
     options: ["Nothing", "The signature: changing the payload invalidates it, and only the server has the secret", "Base64 encoding"]
     answer: 1
+resources: [{"title": "OWASP: Password storage", "url": "https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html"}, {"title": "OWASP: Session management", "url": "https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html"}]
 ---
 # Authentication Concepts
 

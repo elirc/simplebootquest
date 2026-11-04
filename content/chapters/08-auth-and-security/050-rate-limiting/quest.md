@@ -4,6 +4,7 @@ title: Rate Limiting
 type: code
 language: ts
 xp: 25
+hints: ["Filter out timestamps older than the window on every hit.", "Retry-after is `oldest + windowMs - now`."]
 ---
 # Rate Limiting
 

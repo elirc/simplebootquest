@@ -4,6 +4,8 @@ title: Authorization Rules
 type: code
 language: ts
 xp: 25
+hints: ["Return `true` early for reading published posts, then handle guests.", "End with `default: return false` (default deny)."]
+resources: [{"title": "OWASP API Security Top 10", "url": "https://owasp.org/API-Security/"}]
 ---
 # Authorization Rules
 

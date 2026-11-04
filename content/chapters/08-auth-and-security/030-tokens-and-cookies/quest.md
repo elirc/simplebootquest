@@ -4,6 +4,8 @@ title: Tokens & Cookies
 type: code
 language: ts
 xp: 25
+hints: ["A single regex handles the whole Bearer header.", "Convert base64url to base64 before calling `atob`."]
+resources: [{"title": "jwt.io debugger", "url": "https://jwt.io/"}]
 ---
 # Tokens & Cookies
 

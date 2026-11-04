@@ -4,6 +4,8 @@ title: Basic Types
 type: code
 language: ts
 xp: 15
+hints: ["`(Math.abs(cents) / 100).toFixed(2)` gives the number part.", "A regex like `/^\\d+$/` checks for digits only."]
+resources: [{"title": "TS Handbook: Everyday Types", "url": "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html"}]
 ---
 # Basic Types
 

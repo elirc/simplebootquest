@@ -4,6 +4,8 @@ title: Validating Unknown Data
 type: code
 language: ts
 xp: 25
+hints: ["Check `typeof input !== \"object\" || input === null || Array.isArray(input)` first.", "Collect errors in an array and only return `ok: true` if it is empty."]
+resources: [{"title": "Zod", "url": "https://zod.dev/"}]
 ---
 # Validating Unknown Data
 

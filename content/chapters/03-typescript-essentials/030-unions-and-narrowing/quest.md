@@ -4,6 +4,8 @@ title: Unions & Narrowing
 type: code
 language: ts
 xp: 20
+hints: ["`switch (event.type)` narrows each case.", "Track placed orders in a Map and delete cancelled ones."]
+resources: [{"title": "TS Handbook: Narrowing", "url": "https://www.typescriptlang.org/docs/handbook/2/narrowing.html"}]
 ---
 # Unions & Narrowing
 

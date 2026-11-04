@@ -4,6 +4,8 @@ title: Generics
 type: code
 language: ts
 xp: 20
+hints: ["`(groups[key] ??= []).push(item)`.", "A `Set` remembers the keys you have seen."]
+resources: [{"title": "TS Handbook: Generics", "url": "https://www.typescriptlang.org/docs/handbook/2/generics.html"}]
 ---
 # Generics
 

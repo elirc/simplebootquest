@@ -4,6 +4,8 @@ title: Interfaces & Type Aliases
 type: code
 language: ts
 xp: 15
+hints: ["ISO dates compare correctly as strings: `book.dueDate < today`.", "Use `setUTCDate(getUTCDate() + days)` for date maths."]
+resources: [{"title": "TS Handbook: Object Types", "url": "https://www.typescriptlang.org/docs/handbook/2/objects.html"}]
 ---
 # Interfaces & Type Aliases
 

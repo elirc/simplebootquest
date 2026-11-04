@@ -4,6 +4,8 @@ title: Utility Types
 type: code
 language: ts
 xp: 20
+hints: ["Filter out the `id` key and undefined values from the patch entries.", "Loop over `Object.keys(after)` for `diff`."]
+resources: [{"title": "TS Handbook: Utility Types", "url": "https://www.typescriptlang.org/docs/handbook/utility-types.html"}]
 ---
 # Utility Types
 

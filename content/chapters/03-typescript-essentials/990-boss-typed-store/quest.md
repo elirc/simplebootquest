@@ -5,6 +5,7 @@ type: code
 language: ts
 xp: 60
 boss: true
+hints: ["Store records in a `Map<number, T>` and always return copies (`{ ...record }`).", "A `matches(record, where)` helper can be reused by `findMany` and `count`."]
 ---
 # Boss: Generic Typed Repository
 

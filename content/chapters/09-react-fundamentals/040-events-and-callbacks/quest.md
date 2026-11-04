@@ -4,6 +4,8 @@ title: Events & Callback Props
 type: code
 language: jsx
 xp: 25
+hints: ["`onClick={() => onDelete(todo.id)}`: pass a function, don't call one.", "`disabled={page <= 1}`."]
+resources: [{"title": "React docs: Responding to events", "url": "https://react.dev/learn/responding-to-events"}]
 ---
 # Events & Callback Props
 

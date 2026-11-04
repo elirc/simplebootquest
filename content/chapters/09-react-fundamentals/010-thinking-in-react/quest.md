@@ -20,6 +20,7 @@ questions:
     options: ["State copied from props", "Values you can calculate from existing state/props during render — so don't store them separately", "State from the server"]
     answer: 1
     explanation: "Don't keep `remainingCount` in state alongside `todos`. Compute `todos.filter(t => !t.done).length` during render."
+resources: [{"title": "React docs: Thinking in React", "url": "https://react.dev/learn/thinking-in-react"}]
 ---
 # Thinking in React
 

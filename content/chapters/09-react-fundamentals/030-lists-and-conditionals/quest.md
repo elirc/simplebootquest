@@ -4,6 +4,8 @@ title: Lists & Conditional Rendering
 type: code
 language: jsx
 xp: 25
+hints: ["Filter first, then check for an empty list.", "Put `key={todo.id}` on the element returned from `map`."]
+resources: [{"title": "React docs: Rendering lists", "url": "https://react.dev/learn/rendering-lists"}, {"title": "React docs: Conditional rendering", "url": "https://react.dev/learn/conditional-rendering"}]
 ---
 # Lists & Conditional Rendering
 

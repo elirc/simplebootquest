@@ -4,6 +4,8 @@ title: JSX & Props
 type: code
 language: jsx
 xp: 20
+hints: ["Use a default parameter for `name`.", "`{footer && <footer>{footer}</footer>}` renders it only when present."]
+resources: [{"title": "React docs: Passing props", "url": "https://react.dev/learn/passing-props-to-a-component"}]
 ---
 # JSX & Props
 

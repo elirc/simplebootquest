@@ -4,6 +4,8 @@ title: State with Reducers
 type: code
 language: jsx
 xp: 30
+hints: ["Every case returns `{ ...state, todos: ... }`.", "The default case returns `state` itself."]
+resources: [{"title": "React docs: Extracting state logic into a reducer", "url": "https://react.dev/learn/extracting-state-logic-into-a-reducer"}]
 ---
 # State with Reducers
 

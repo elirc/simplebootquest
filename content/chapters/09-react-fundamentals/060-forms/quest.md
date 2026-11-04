@@ -4,6 +4,8 @@ title: Forms & Validation
 type: code
 language: jsx
 xp: 25
+hints: ["Collect errors in an object keyed by field.", "Render `null` from FieldError unless `touched && error`."]
+resources: [{"title": "React docs: Reacting to input with state", "url": "https://react.dev/learn/reacting-to-input-with-state"}]
 ---
 # Forms & Validation
 

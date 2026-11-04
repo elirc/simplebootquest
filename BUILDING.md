@@ -21,6 +21,8 @@ Every step below calls out which of these it's practicing.
 - [Step 1 — The monorepo skeleton](#step-1--the-monorepo-skeleton)
 - [Step 2 — Shared domain logic first](#step-2--shared-domain-logic-first)
 - [Step 3 — The code runner (the riskiest piece)](#step-3--the-code-runner-the-riskiest-piece)
+- [Step 4 — Content as files, with a schema](#step-4--content-as-files-with-a-schema)
+- [Step 5 — Test the content, not just the code](#step-5--test-the-content-not-just-the-code)
 
 <!-- Later steps are appended below as the app is built. -->
 
@@ -182,3 +184,56 @@ To test components we don't need a real DOM. `src/jsx.ts` is a ~100-line JSX run
 ### Verification
 
 `src/runner.test.ts` tests the runner itself: passing code, failing code, syntax errors, async tests, timeouts, TypeScript, JSX and SQL. Later we'll go a level further and run *every quest's reference solution* through this same runner to prove the curriculum itself is correct (Step 5).
+
+---
+
+## Step 4 — Content as files, with a schema
+
+*Skill: boundaries.*
+
+Each quest is a folder:
+
+```
+content/chapters/
+└── 01-javascript-foundations/
+    ├── chapter.md                 # frontmatter: title, description
+    └── 03-control-flow/
+        ├── quest.md               # frontmatter + the lesson in Markdown
+        ├── starter.js             # what the learner sees first
+        ├── tests.js               # what the runner checks
+        └── solution.js            # reference solution (revealed after 3 attempts or completion)
+```
+
+Quizzes and projects put their data (questions, requirements) in the frontmatter instead of separate files.
+
+**Design decisions worth copying:**
+
+- **Ordering comes from the folder name** (`03-control-flow`). `ls` shows the real course order, and reordering is a rename. The number is stripped to form the chapter slug.
+- **The quest's `slug` lives in frontmatter, not the folder name.** Progress in the database is keyed by slug. If we derived it from the folder name, renumbering folders would orphan everyone's progress. *Identity should be stable, and position should be free to change.*
+- **Validate at the boundary.** `packages/curriculum` parses frontmatter with [Zod](https://zod.dev) schemas. A typo like `type: qiuz` fails loudly at startup with a file path and field name. It doesn't turn into a mysterious `undefined` in the UI weeks later. Anything that enters your program from outside (files, HTTP bodies, env vars) should be validated once at the edge and trusted afterwards.
+- **It's its own package** (`@sbq/curriculum`), so the API *and* the validation script can load content without either one importing the other.
+
+---
+
+## Step 5 — Test the content, not just the code
+
+*Skill: verification.*
+
+Content has bugs too. A quest whose tests are wrong is worse than a code bug: it tells a learner their correct answer is wrong. `scripts/validate-content.ts` runs on every `npm test` and checks two things for **every code quest**:
+
+1. The **reference solution passes** every test. This proves the tests are satisfiable and correct.
+2. The **starter code fails** at least one test. This proves the quest isn't free XP and that the tests actually test something.
+
+Check #2 is a simple form of **mutation testing**: if the tests can't tell the empty starter apart from a correct solution, they aren't testing anything.
+
+Writing this script caught real issues during development. One example: a starter stub left a `Promise.reject()` unhandled, which crashed Node (browsers just log a warning). The fix was a process-level `unhandledRejection` handler in the validator. The lesson: **your tooling runs in a different environment than production** (Node vs browser), and those differences show up in exactly these edge cases.
+
+### How the lessons are written
+
+Each lesson follows the same shape, and that consistency is part of the design:
+
+1. **The concept**, in a few sentences and a short code sample.
+2. **The gotcha**: the bug juniors actually ship (`fetch` doesn't reject on 404, `sort()` compares strings, sequential `await` in loops).
+3. **The task**, with exact function names and behaviors spelled out like a spec.
+
+Every chapter ends with a quiz checkpoint and a **boss**. The bosses build on each other: an in-memory todo list (Ch. 1), an HTTP client for it (Ch. 2), a typed generic store (Ch. 3), and eventually a real Express + Postgres API and a React frontend. The curriculum mirrors how you'd build a real app: logic first, then I/O, then UI.

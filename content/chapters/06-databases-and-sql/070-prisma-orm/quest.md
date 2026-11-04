@@ -20,6 +20,7 @@ questions:
   - prompt: "Should migration files be committed to git?"
     options: ["No, they're generated", "Yes — they're the history of your schema and are applied in production with `prisma migrate deploy`"]
     answer: 1
+resources: [{"title": "Prisma docs: CRUD", "url": "https://www.prisma.io/docs/orm/prisma-client/queries/crud"}, {"title": "Prisma docs: Relation queries", "url": "https://www.prisma.io/docs/orm/prisma-client/queries/relation-queries"}]
 ---
 # Prisma ORM
 

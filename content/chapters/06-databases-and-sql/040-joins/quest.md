@@ -4,6 +4,8 @@ title: JOINs
 type: code
 language: sql
 xp: 20
+hints: ["Join loans → members, loans → books, books → authors.", "`WHERE l.returned_on IS NULL` finds books still out."]
+resources: [{"title": "Visual JOIN explanation", "url": "https://joins.spathon.com/"}]
 ---
 # JOINs
 

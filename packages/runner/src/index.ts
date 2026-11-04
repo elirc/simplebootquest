@@ -175,6 +175,8 @@ export async function runQuest(req: RunRequest, options: RunOptions = {}): Promi
       helpers.db = db;
       helpers.result = resultRows;
       helpers.query = (sql: string) => rowsFrom(db.exec(sql));
+      // The learner's SQL text, so tests can check that a technique was used.
+      helpers.code = req.code;
       program = `"use strict";\n{\n${transpile(req.tests, 'js', 'tests')}\n}`;
     } else {
       helpers.h = h;

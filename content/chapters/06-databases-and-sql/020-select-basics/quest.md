@@ -4,6 +4,8 @@ title: SELECT Basics
 type: code
 language: sql
 xp: 15
+hints: ["List the columns: `SELECT title, year`.", "Sort by two keys: `ORDER BY year DESC, title ASC`."]
+resources: [{"title": "SQLite docs: SELECT", "url": "https://www.sqlite.org/lang_select.html"}, {"title": "SQLBolt interactive lessons", "url": "https://sqlbolt.com/"}]
 ---
 # SELECT Basics
 

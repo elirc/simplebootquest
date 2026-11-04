@@ -23,6 +23,7 @@ questions:
   - prompt: "Which column is the best candidate for an index?"
     options: ["A column you frequently filter or join on, like `posts.author_id`", "Every column", "A column you never query"]
     answer: 0
+resources: [{"title": "Database normalization explained", "url": "https://www.datacamp.com/tutorial/normalization-in-sql"}, {"title": "dbdiagram.io (draw schemas)", "url": "https://dbdiagram.io/"}]
 ---
 # Thinking in Tables
 

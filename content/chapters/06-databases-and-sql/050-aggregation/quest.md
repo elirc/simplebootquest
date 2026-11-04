@@ -4,6 +4,7 @@ title: GROUP BY & Aggregates
 type: code
 language: sql
 xp: 25
+hints: ["`GROUP BY a.id, a.name` then `HAVING COUNT(b.id) > 1`.", "Alias aggregate columns with AS to match the expected names."]
 ---
 # GROUP BY & Aggregates
 

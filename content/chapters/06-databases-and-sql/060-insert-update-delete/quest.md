@@ -4,6 +4,7 @@ title: INSERT, UPDATE & DELETE
 type: code
 language: sql
 xp: 25
+hints: ["Each statement ends with a semicolon.", "Test your DELETE condition as a SELECT first."]
 ---
 # INSERT, UPDATE & DELETE
 

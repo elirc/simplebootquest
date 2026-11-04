@@ -4,6 +4,7 @@ title: Filtering with WHERE
 type: code
 language: sql
 xp: 15
+hints: ["`genre IN ('sci-fi', 'fantasy')` is neater than two ORs.", "Combine conditions with AND."]
 ---
 # Filtering with WHERE
 

@@ -4,6 +4,8 @@ title: Promises
 type: code
 language: js
 xp: 20
+hints: ["`new Promise((resolve) => setTimeout(() => resolve(value), ms))`.", "`Promise.race` with a promise that rejects after `ms`.", "`Promise.allSettled` never rejects. Map its results to your shape."]
+resources: [{"title": "javascript.info: Promises", "url": "https://javascript.info/promise-basics"}]
 ---
 # Promises
 

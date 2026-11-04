@@ -4,6 +4,8 @@ title: async / await
 type: code
 language: js
 xp: 20
+hints: ["`await Promise.all(ids.map(fetchUser))` runs in parallel.", "In `firstAvailable`, `return await` inside `try` so the catch sees rejections."]
+resources: [{"title": "javascript.info: async/await", "url": "https://javascript.info/async-await"}]
 ---
 # async / await
 

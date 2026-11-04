@@ -4,6 +4,8 @@ title: fetch & Error Handling
 type: code
 language: js
 xp: 25
+hints: ["Check `res.ok` before calling `res.json()`.", "Set `this.name` and `this.status` after calling `super(message)`."]
+resources: [{"title": "MDN: Using fetch", "url": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch"}]
 ---
 # fetch & Error Handling
 

@@ -5,6 +5,7 @@ type: code
 language: js
 xp: 60
 boss: true
+hints: ["Write one private `request(method, path, body)` and build all five methods on it.", "Loop up to 3 times only for GET, and break when the response is ok or below 500.", "Parse the error body inside its own try/catch."]
 ---
 # Boss: REST API Client
 

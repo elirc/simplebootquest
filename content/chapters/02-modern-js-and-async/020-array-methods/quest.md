@@ -4,6 +4,8 @@ title: map, filter & reduce
 type: code
 language: js
 xp: 20
+hints: ["Filter to paid orders first, then reduce to a sum.", "For `biggest`, reduce with `undefined` as the initial value."]
+resources: [{"title": "MDN: Array.prototype.reduce", "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce"}]
 ---
 # map, filter & reduce
 

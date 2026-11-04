@@ -4,6 +4,8 @@ title: Destructuring & Spread
 type: code
 language: js
 xp: 15
+hints: ["Filter out `undefined` overrides with `Object.entries(...).filter(...)`, then `Object.fromEntries`.", "Rest in destructuring: `const { password, ...rest } = user`."]
+resources: [{"title": "MDN: Destructuring", "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment"}]
 ---
 # Destructuring & Spread
 

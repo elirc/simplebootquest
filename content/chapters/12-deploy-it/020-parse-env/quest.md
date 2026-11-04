@@ -4,6 +4,8 @@ title: Parse a .env File
 type: code
 language: js
 xp: 20
+hints: ["Handle quoted values before looking for inline comments.", "An inline comment is `#` preceded by whitespace."]
+resources: [{"title": "Node.js: --env-file", "url": "https://nodejs.org/api/cli.html#--env-fileconfig"}]
 ---
 # Parse a .env File
 

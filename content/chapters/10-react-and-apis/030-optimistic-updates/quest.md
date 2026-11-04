@@ -4,6 +4,8 @@ title: Optimistic Updates
 type: code
 language: ts
 xp: 30
+hints: ["For confirm, the target id is `op.tempId` for creates and `op.id` for updates."]
+resources: [{"title": "TanStack Query: Optimistic updates", "url": "https://tanstack.com/query/latest/docs/framework/react/guides/optimistic-updates"}]
 ---
 # Optimistic Updates
 

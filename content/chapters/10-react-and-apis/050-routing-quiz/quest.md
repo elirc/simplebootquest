@@ -19,6 +19,7 @@ questions:
   - prompt: "Where should filter state like `?tag=vegan&page=2` live so it survives refreshes and can be shared?"
     options: ["In useState only", "In the URL search params (useSearchParams)", "In a cookie"]
     answer: 1
+resources: [{"title": "React Router docs", "url": "https://reactrouter.com"}]
 ---
 # Client-Side Routing
 

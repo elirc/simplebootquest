@@ -4,6 +4,7 @@ title: Rendering Async States
 type: code
 language: jsx
 xp: 25
+hints: ["Work out `data` first (success data or previous), then branch."]
 ---
 # Rendering Async States
 

@@ -4,6 +4,7 @@ title: Build toEqual
 type: code
 language: js
 xp: 25
+hints: ["Use `Object.is` first, so NaN equals NaN.", "Track visited pairs in a Map to survive circular references."]
 ---
 # Build toEqual
 

@@ -4,6 +4,7 @@ title: Fail Fast on Bad Config
 type: code
 language: ts
 xp: 25
+hints: ["Treat empty strings as missing with a small `get()` helper.", "Collect every error, then throw once."]
 ---
 # Fail Fast on Bad Config
 

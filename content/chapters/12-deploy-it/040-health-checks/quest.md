@@ -4,6 +4,8 @@ title: Health Checks
 type: code
 language: ts
 xp: 25
+hints: ["`Promise.allSettled` plus a timeout wrapper around each check."]
+resources: [{"title": "Kubernetes: Liveness and readiness probes", "url": "https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/"}]
 ---
 # Health Checks
 

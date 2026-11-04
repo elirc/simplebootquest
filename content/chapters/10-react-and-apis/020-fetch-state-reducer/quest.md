@@ -4,6 +4,7 @@ title: Modelling Fetch State
 type: code
 language: ts
 xp: 25
+hints: ["A `currentData(state)` helper simplifies every case.", "Only include `previous` when it is defined."]
 ---
 # Modelling Fetch State
 

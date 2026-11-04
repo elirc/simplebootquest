@@ -19,6 +19,7 @@ questions:
   - prompt: "In dev, your frontend runs on :5173 and your API on :3001. What's the simplest way to avoid CORS issues?"
     options: ["Disable CORS in the browser", "Configure Vite's dev-server proxy so /api is forwarded to :3001", "Serve both from different domains"]
     answer: 1
+resources: [{"title": "React docs: You might not need an effect", "url": "https://react.dev/learn/you-might-not-need-an-effect"}, {"title": "TanStack Query overview", "url": "https://tanstack.com/query/latest/docs/framework/react/overview"}]
 ---
 # Fetching Data in React
 

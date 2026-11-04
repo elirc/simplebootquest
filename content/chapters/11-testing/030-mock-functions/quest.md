@@ -4,6 +4,8 @@ title: Build a Mock Function
 type: code
 language: js
 xp: 25
+hints: ["Functions are objects, so attach `mockFn.mock = { calls: [], results: [] }`.", "A queue array handles `mockReturnValueOnce`."]
+resources: [{"title": "Vitest: Mock functions", "url": "https://vitest.dev/api/mock"}]
 ---
 # Build a Mock Function
 

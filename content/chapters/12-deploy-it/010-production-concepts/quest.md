@@ -22,6 +22,7 @@ questions:
   - prompt: "What should production logs look like?"
     options: ["console.log('here!!')", "Structured (JSON) lines with a level, message, and context like request id — and no secrets or passwords", "Nothing — logs slow the app down"]
     answer: 1
+resources: [{"title": "The Twelve-Factor App", "url": "https://12factor.net/"}, {"title": "Render: Deploy a Node app", "url": "https://render.com/docs/deploy-node-express-app"}]
 ---
 # Dev vs Production
 

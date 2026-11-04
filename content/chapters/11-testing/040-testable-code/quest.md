@@ -4,6 +4,7 @@ title: Designing Testable Code
 type: code
 language: ts
 xp: 30
+hints: ["Compute \"yesterday\" in UTC from the injected `now`.", "Wrap each `sendEmail` in try/catch inside the loop."]
 ---
 # Designing Testable Code
 

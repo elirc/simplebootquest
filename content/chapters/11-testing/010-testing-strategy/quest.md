@@ -23,6 +23,7 @@ questions:
   - prompt: "100% code coverage means…"
     options: ["The code has no bugs", "Every line ran during tests — not that the right things were asserted", "You can stop writing tests"]
     answer: 1
+resources: [{"title": "Kent C. Dodds: The Testing Trophy", "url": "https://kentcdodds.com/blog/the-testing-trophy-and-testing-classifications"}, {"title": "Vitest docs", "url": "https://vitest.dev"}]
 ---
 # Testing Strategy
 

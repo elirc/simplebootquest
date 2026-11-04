@@ -4,6 +4,8 @@ title: Pagination
 type: code
 language: ts
 xp: 25
+hints: ["A strict integer regex avoids accepting `\"1.5\"` or `\"abc\"`.", "`totalPages = Math.max(1, Math.ceil(total / pageSize))`."]
+resources: [{"title": "Prisma: Pagination", "url": "https://www.prisma.io/docs/orm/prisma-client/queries/pagination"}]
 ---
 # Pagination
 

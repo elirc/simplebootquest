@@ -4,6 +4,8 @@ title: Filtering & Sorting
 type: code
 language: ts
 xp: 30
+hints: ["Start `where` with `{ ownerId: userId }` so nothing can override it.", "Strip a leading `-` to get the field, then check it against an allow-list."]
+resources: [{"title": "Prisma: Filtering and sorting", "url": "https://www.prisma.io/docs/orm/prisma-client/queries/filtering-and-sorting"}]
 ---
 # Filtering & Sorting
 

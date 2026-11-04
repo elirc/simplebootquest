@@ -21,6 +21,7 @@ questions:
   - prompt: "What should a list endpoint return when there are no results?"
     options: ["404 Not Found", "200 with an empty array", "204 No Content"]
     answer: 1
+resources: [{"title": "Martin Fowler: Service Layer", "url": "https://martinfowler.com/eaaCatalog/serviceLayer.html"}, {"title": "The Clean Architecture (overview)", "url": "https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html"}]
 ---
 # Layered Architecture
 

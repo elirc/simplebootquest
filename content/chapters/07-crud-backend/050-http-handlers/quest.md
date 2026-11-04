@@ -4,6 +4,7 @@ title: HTTP Handlers
 type: code
 language: ts
 xp: 30
+hints: ["Write `handleErrors(fn)` and `withId(fn)` wrappers to avoid repeating try/catch.", "Parse ids with `/^\\d+$/` and reject 0."]
 ---
 # HTTP Handlers
 

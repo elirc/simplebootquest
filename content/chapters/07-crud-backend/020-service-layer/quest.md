@@ -4,6 +4,7 @@ title: The Service Layer
 type: code
 language: ts
 xp: 30
+hints: ["Write a private `getOwned(userId, id)` helper and reuse it in get, update and remove.", "Check the note limit with `repo.countByOwner` before creating."]
 ---
 # The Service Layer
 

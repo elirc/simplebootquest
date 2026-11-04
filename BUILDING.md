@@ -25,6 +25,10 @@ Every step below calls out which of these it's practicing.
 - [Step 5 — Test the content, not just the code](#step-5--test-the-content-not-just-the-code)
 - [Step 6 — The database schema](#step-6--the-database-schema)
 - [Step 7 — The API: layers, auth, and idempotent XP](#step-7--the-api-layers-auth-and-idempotent-xp)
+- [Step 8 — The React frontend](#step-8--the-react-frontend)
+- [Step 9 — Verify like a user, then automate it](#step-9--verify-like-a-user-then-automate-it)
+- [Recap: the build order, and why](#recap-the-build-order-and-why)
+- [Exercises: extend it yourself](#exercises-extend-it-yourself)
 
 <!-- Later steps are appended below as the app is built. -->
 
@@ -363,3 +367,107 @@ Every request body passes through `parse(ZodSchema, req.body)`, which throws `Ht
 ### Building for production
 
 The internal packages ship as TypeScript source (Step 1), so plain `node` can't import them. `tsup` bundles `server.ts` **plus** the `@sbq/*` packages into a single `dist/server.js`, and leaves real npm dependencies external. One snag found while testing the build: a bundled CommonJS dependency (`gray-matter`) calls `require()`, which doesn't exist in ES modules. The fix is a one-line banner that creates `require` with `createRequire(import.meta.url)`. **Always run your production build locally before you deploy it.**
+
+---
+
+## Step 8 — The React frontend
+
+*Skills: boundaries, trade-offs.*
+
+```
+apps/web/src/
+├── main.tsx             # providers: Router → Auth → Toasts → App
+├── App.tsx              # routes (+ RequireAuth wrapper, lazy-loaded quest page)
+├── api.ts               # the ONLY file that calls fetch(); typed with @sbq/shared
+├── auth.tsx             # AuthContext: current user, login/register/logout
+├── runner/
+│   ├── worker.ts        # Web Worker: runs @sbq/runner (+ sql.js wasm)
+│   └── runInWorker.ts   # spawns a worker per run, kills it after 8s
+├── components/          # Layout, CodeEditor, TestResults, Hints, XpBar, Toasts, useAsync...
+└── pages/               # Home, Auth, Learn, Chapter, Quest, Profile, Leaderboard, NotFound
+```
+
+### One API module, typed end to end
+
+Components never call `fetch` directly. They call `api.quest(slug)`, which returns `Promise<QuestDetail>`, the **same type** the server uses to build the response (`packages/shared`). If someone renames a field on the server, TypeScript flags every frontend usage. `api.ts` also normalises errors into an `ApiError` with `status` and field-level `details`, so forms can show server validation messages next to the right input (try registering with a taken email).
+
+### No data-fetching library, on purpose
+
+`components/useAsync.ts` is a 40-line hook. It models state as a **discriminated union** (`loading | success | error`), keeps previous data while reloading (no spinner flash), and ignores stale responses when the component re-renders with new params. This is exactly what curriculum Chapter 10 teaches. For a bigger app, use TanStack Query, which adds caching, deduplication and background refetching. **Trade-off:** we have less code and fewer dependencies, but we refetch more than strictly necessary.
+
+### Running learner code without freezing the page
+
+`runInWorker()` creates a **fresh Web Worker for every run**:
+
+- A fresh worker means no leftover state between runs (a learner's global variable from the last run can't leak into this one).
+- If the code loops forever, the main thread calls `worker.terminate()` after 8 seconds. The UI never freezes, because the loop is on a different thread.
+- Workers can't touch the DOM, the page's cookies or `localStorage`, which limits what hostile code could do to the page.
+
+Vite bundles the worker (`new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' })`) along with sql.js's WebAssembly file (`import wasmUrl from 'sql.js/dist/sql-wasm.wasm?url'`).
+
+### The quest page
+
+It's one route with three variants (`CodeQuest`, `QuizQuest`, `ProjectQuest`), selected by `quest.type`. That's a discriminated union again, this time driving the UI. Details worth reading in `pages/Quest.tsx`:
+
+- **Debounced autosave:** an effect waits 1.5s after the last keystroke, then `PUT`s the draft. The cleanup function cancels the pending timer on each keystroke. This is the canonical "debounce with `useEffect`" pattern.
+- **`key={quest.slug}`** on each variant resets all local state when navigating between quests. Without it, the editor would keep the previous quest's code. This is a classic React bug, and `key` is the idiomatic fix.
+- **Progressive hints** reveal one at a time: just enough help, without spoiling the solution.
+- The quest page is **lazy-loaded** (`React.lazy`), so the code editor's ~500 KB isn't downloaded by people who are just browsing the landing page.
+
+### Accessibility is part of "done"
+
+Every input has a `<label>`, errors use `role="alert"` and `aria-invalid`, progress bars have `role="progressbar"` with values, and quiz options are real radio buttons inside `<fieldset>`s. That also makes the UI testable by role (`getByRole('button', { name: /show a hint/i })`), so good accessibility and good tests reinforce each other.
+
+### Styling without a framework
+
+`styles.css` defines **design tokens** (`--bg`, `--accent`, `--ok`, ...) on `:root` and redefines them under `prefers-color-scheme: dark`. Every component uses the tokens, so dark mode is about 20 lines. No CSS framework is needed at this size. **Trade-off:** Tailwind or CSS modules would scale better on a large team, but plain CSS is one less tool to learn while you study the rest of the stack.
+
+---
+
+## Step 9 — Verify like a user, then automate it
+
+*Skill: verification.*
+
+Unit and integration tests passed, but that doesn't prove a *user* can complete a quest. Before calling the app done, it was driven in a real browser (Playwright) against the **production build**: register, run starter code (fails), type a solution (passes), see the XP toast and achievement, run a SQL quest, run a JSX quest, paste `while (true) {}` and confirm the worker is killed, check the profile, and check that a 390px-wide phone viewport has no horizontal scroll.
+
+That pass is what proved two things no unit test covers:
+
+1. The production **Content-Security-Policy** still allows the runner (`'unsafe-eval'` for `new Function`, `'wasm-unsafe-eval'` for sql.js). A stricter default CSP would have silently broken every quest.
+2. The sql.js WebAssembly file is found and loaded inside the worker in the bundled build.
+
+Then the checks were **automated** in `.github/workflows/ci.yml`: on every push, GitHub Actions starts a Postgres service container and runs typecheck → all tests (runner, shared, curriculum, API integration, React components) → content validation → production build.
+
+A small but real bug turned up while wiring this up. `npm test` runs every workspace's tests and *then* the content validator. The curriculum package had no test files, Vitest exits non-zero when it finds none, and so the validator **silently never ran**. Everything looked green because the earlier suites printed passing results. Adding real tests for the content loader fixed it. **Always confirm the last step of a pipeline actually ran.** A green summary can hide a step that never executed.
+
+---
+
+## Recap: the build order, and why
+
+| # | Step | Why at this point |
+|---|------|-------------------|
+| 0 | Define the core loop and data ownership | Everything else depends on these decisions |
+| 1 | Monorepo skeleton | Cheap now, painful to retrofit |
+| 2 | Pure domain logic + tests | Easiest to get right, and everything builds on it |
+| 3 | Code runner | **Riskiest unknown**: if it couldn't work, the product idea changes |
+| 4–5 | Content format + validation | The runner exists, so content can be proven correct |
+| 6 | Database schema | Only now do we know exactly what state must persist |
+| 7 | API | Thin layer over proven logic: routes → services → Prisma |
+| 8 | Frontend | Consumes a tested API with shared types |
+| 9 | Browser verification + CI | Proves the whole thing works, and keeps it working |
+
+The general principle: **de-risk first, build on verified foundations, and leave the UI late.** The UI is the most visible part, so it's tempting to start there. But a UI built before the logic it displays gets rewritten when that logic changes.
+
+---
+
+## Exercises: extend it yourself
+
+Graded roughly junior → senior. Each one practices a skill from this guide.
+
+1. **(Junior)** Add a "Copy solution into editor" button to the Solution tab. *Touches: React state, props.*
+2. **(Junior)** Add a new achievement: "Night Owl", for completing a quest between midnight and 5am UTC. *Touches: `packages/shared/achievements.ts` and its tests. Hint: the context will need the completion time.*
+3. **(Mid)** Show the learner's rank on their profile page. *Touches: a new Prisma query (`count` of users with more XP), the API, shared types, UI.*
+4. **(Mid)** Add a `GET /api/quests/:slug/stats` endpoint showing what percentage of learners completed the quest, and how many attempts it took on average. Watch out for division by zero.
+5. **(Mid)** Let learners reset a quest (delete their progress) *without* losing the XP already earned. Which table needs changing, and why does `xpAwarded` on `QuestProgress` help?
+6. **(Senior)** Move code verification to the server. Design it first: which isolation technology (containers, Firecracker, isolated-vm), what timeouts, what memory limits, and how do you queue runs under load? Write up the trade-offs before writing code.
+7. **(Senior)** Make the leaderboard weekly instead of all-time without scanning every progress row. Consider a `weeklyXp` column, its reset strategy, and the race conditions that reset could introduce.
+8. **(Senior)** The content is loaded once at startup. Design hot-reloading for development and zero-downtime content updates for production.

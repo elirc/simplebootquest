@@ -185,7 +185,7 @@ export async function runQuest(req: RunRequest, options: RunOptions = {}): Promi
       helpers.find = find;
       helpers.findAll = findAll;
       const user = transpile(req.code, req.language, 'your code');
-      const tests = transpile(req.tests, req.language === 'sql' ? 'js' : req.language, 'tests');
+      const tests = transpile(req.tests, req.language, 'tests');
       program = `${user}\n;\n${tests}`;
     }
 

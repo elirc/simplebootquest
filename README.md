@@ -79,60 +79,101 @@ Build and deploy a complete full-stack CRUD app of your choice (task manager, re
 Learners build with this stack, and the platform itself is built with it too:
 
 - **Language:** TypeScript / JavaScript
-- **Frontend:** React, Vite, React Router
-- **Backend:** Node.js, Express
-- **Database:** PostgreSQL, Prisma
-- **Testing:** Vitest, React Testing Library, Supertest
-- **Code execution:** sandboxed runner for checking learner submissions
+- **Frontend:** React 19, Vite, React Router, CodeMirror
+- **Backend:** Node.js, Express 5, Zod
+- **Database:** PostgreSQL, Prisma 7
+- **Auth:** bcrypt password hashing, JWT in an httpOnly cookie
+- **Testing:** Vitest, Supertest, React Testing Library
+- **Code execution:** learner code runs in a Web Worker in the browser (JS, TS, JSX via Sucrase; SQL via sql.js)
+
+> 📖 **Want to learn how this app was built?** Read [BUILDING.md](./BUILDING.md), a step-by-step walkthrough of the build order, the architecture, and the reasoning behind every major decision. It's written for junior developers who want to think like mid and senior engineers.
 
 ---
 
-## Project Structure (planned)
+## Project Structure
 
 ```
 simplebootquest/
 ├── apps/
-│   ├── web/          # React frontend (lessons, editor, progress)
-│   └── api/          # Express + TypeScript backend
+│   ├── api/              # Express + Prisma backend (auth, progress, XP, quizzes)
+│   └── web/              # React frontend (lessons, editor, dashboard, profile)
 ├── packages/
-│   └── shared/       # Shared types and utilities
+│   ├── shared/           # API types, XP/level curve, streaks, achievements
+│   ├── runner/           # Runs learner code against quest tests (browser + Node)
+│   └── curriculum/       # Loads and validates the content files
 ├── content/
-│   └── chapters/     # Lesson content, exercises, and test files
-└── runner/           # Sandboxed code execution for checking submissions
+│   └── chapters/         # The curriculum: one folder per chapter and quest
+├── scripts/
+│   └── validate-content.ts   # Proves every solution passes and every starter fails
+└── BUILDING.md           # How (and why) the app was built
 ```
 
 ---
 
 ## Getting Started (Development)
 
-> ⚠️ SimpleBootQuest is in early development. Setup instructions will be updated as the project takes shape.
-
-**Prerequisites**
-
-- Node.js 20+
-- npm or pnpm
-- PostgreSQL 15+ (or Docker)
+**Prerequisites:** Node.js 20+, and Docker (or a local PostgreSQL 15+).
 
 ```bash
 git clone https://github.com/elirc/simplebootquest.git
 cd simplebootquest
 npm install
-cp .env.example .env
+```
+
+Start PostgreSQL and configure the API:
+
+```bash
+docker compose up -d
+cp .env.example apps/api/.env
+```
+
+Create the database tables:
+
+```bash
+npm run db:migrate
+```
+
+Run the API (port 3001) and the web app (port 5173) together:
+
+```bash
 npm run dev
 ```
+
+Open http://localhost:5173.
+
+### Useful scripts
+
+| Command | What it does |
+|---------|--------------|
+| `npm run dev` | API + web with hot reload |
+| `npm test` | All unit/integration tests, then content validation |
+| `npm run typecheck` | TypeScript across every package |
+| `npm run validate:content` | Check every quest: solutions pass, starters fail |
+| `npm run build` | Production build of web + API |
+| `npm start` | Run the production server (serves the API and the built web app) |
+
+API integration tests need a database named `simplebootquest_test`. Create it with `docker compose exec db createdb -U sbq simplebootquest_test`, or point `TEST_DATABASE_URL` at another database.
+
+### Writing content
+
+Each quest is a folder in `content/chapters/<NN-chapter>/<NN-quest>/` containing a `quest.md` (frontmatter + lesson in Markdown). Code quests also have `starter.*`, `tests.*` and `solution.*` files, and SQL quests have a `setup.sql`. Quizzes and projects keep their questions and requirements in the frontmatter. Quests can add `hints` and `resources` to their frontmatter, too. Run `npm run validate:content` after every change.
+
+### A note on code checking
+
+Learner code runs **in the browser**, inside a Web Worker, so there's no server infrastructure to run and feedback is instant. The trade-off is that a determined learner could fake a pass, so progress works on an honor system, like The Odin Project. Quizzes are graded on the server. See [BUILDING.md, Step 3](./BUILDING.md#step-3--the-code-runner-the-riskiest-piece) for the reasoning.
 
 ---
 
 ## Roadmap
 
-- [ ] Core lesson viewer and in-browser code editor
-- [ ] Sandboxed test runner for submissions
-- [ ] User accounts and progress tracking
-- [ ] XP, levels, and streaks
-- [ ] Chapters 1–4 content
-- [ ] Chapters 5–8 content
-- [ ] Chapters 9–12 content
-- [ ] Final project guide and review checklist
+- [x] Lesson viewer and in-browser code editor
+- [x] Test runner for JS, TypeScript, JSX and SQL quests
+- [x] User accounts and progress tracking
+- [x] XP, levels, streaks, achievements and leaderboard
+- [x] 12-chapter curriculum with quizzes and projects
+- [ ] Expanded curriculum (many more quests per chapter)
+- [ ] Server-side sandboxed verification
+- [ ] Peer review for projects
 
 ---
 

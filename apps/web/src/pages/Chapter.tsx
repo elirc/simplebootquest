@@ -23,17 +23,19 @@ export function ChapterPage() {
   if (!state.data) return <Spinner />;
 
   const [curriculum, intro] = state.data;
-  const chapter = curriculum.chapters.find((c) => c.slug === chapterSlug);
-  if (!chapter) return <NotFoundPage />;
+  const track = curriculum.tracks.find((t) => t.chapters.some((c) => c.slug === chapterSlug));
+  const chapter = track?.chapters.find((c) => c.slug === chapterSlug);
+  if (!track || !chapter) return <NotFoundPage />;
   const p = chapterProgress(chapter);
-  const index = curriculum.chapters.indexOf(chapter);
-  const prev = curriculum.chapters[index - 1];
-  const next = curriculum.chapters[index + 1];
+  const index = track.chapters.indexOf(chapter);
+  const prev = track.chapters[index - 1];
+  const next = track.chapters[index + 1];
+  const trackLink = track.slug === curriculum.tracks[0]?.slug ? '/learn' : `/learn?track=${track.slug}`;
 
   return (
     <div className="chapter-page">
       <nav className="breadcrumbs" aria-label="Breadcrumb">
-        <Link to="/learn">Learn</Link> / <span>Chapter {chapter.number}</span>
+        <Link to="/learn">Learn</Link> / <Link to={trackLink}>{track.title}</Link> / <span>Chapter {chapter.number}</span>
       </nav>
       <header className="card">
         <span className="chapter-number">Chapter {chapter.number}</span>

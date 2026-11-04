@@ -156,7 +156,7 @@ API integration tests need a database named `simplebootquest_test`. Create it wi
 
 ### Writing content
 
-Each quest is a folder in `content/chapters/<NN-chapter>/<NN-quest>/` containing a `quest.md` (frontmatter + lesson in Markdown). Code quests also have `starter.*`, `tests.*` and `solution.*` files, and SQL quests have a `setup.sql`. Quizzes and projects keep their questions and requirements in the frontmatter. Quests can add `hints` and `resources` to their frontmatter, too. Run `npm run validate:content` after every change.
+Each quest is a folder in `content/tracks/<NN-track>/<NN-chapter>/<NN-quest>/` containing a `quest.md` (frontmatter + lesson in Markdown). Code quests also have `starter.*`, `tests.*` and `solution.*` files, and SQL quests have a `setup.sql`. Quizzes and projects keep their questions and requirements in the frontmatter. Quests can add `hints` and `resources` to their frontmatter, too. Run `npm run validate:content` after every change.
 
 ### A note on code checking
 

@@ -24,6 +24,11 @@ export function meRouter(db: Db, curriculum: Curriculum) {
       levelProgress: levelProgress(user.xp),
       completedQuests: user.progress.filter((p) => curriculum.bySlug.has(p.questSlug)).length,
       totalQuests: curriculum.quests.length,
+      tracks: curriculum.tracks.map((t) => {
+        const quests = t.chapters.flatMap((c) => c.quests);
+        const done = new Set(user.progress.map((p) => p.questSlug));
+        return { slug: t.slug, title: t.title, icon: t.icon, completed: quests.filter((q) => done.has(q.slug)).length, total: quests.length };
+      }),
       achievements: user.achievements.flatMap((a) => {
         const def = achievementDefinition(a.key);
         return def ? [{ ...def, earnedAt: a.earnedAt.toISOString() }] : [];

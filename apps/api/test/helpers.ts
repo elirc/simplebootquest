@@ -43,3 +43,4 @@ export async function registeredAgent(name = 'Ada', email = `${name.toLowerCase(
 export const firstCodeQuest = () => curriculum.quests.find((q) => q.type === 'code')!;
 export const firstQuiz = () => curriculum.quests.find((q) => q.type === 'quiz')!;
 export const firstProject = () => curriculum.quests.find((q) => q.type === 'project')!;
+export const firstDesign = () => curriculum.quests.find((q) => q.type === 'design')!;

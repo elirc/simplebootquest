@@ -1,16 +1,27 @@
 import request from 'supertest';
 import { describe, expect, it } from 'vitest';
-import { app, clock, curriculum, db, firstCodeQuest, firstProject, firstQuiz, registeredAgent, useCleanDatabase } from './helpers.ts';
+import { app, clock, curriculum, db, firstCodeQuest, firstDesign, firstProject, firstQuiz, registeredAgent, useCleanDatabase } from './helpers.ts';
 
 useCleanDatabase();
 
 describe('curriculum', () => {
-  it('lists chapters and quests for guests', async () => {
+  it('lists tracks, chapters and quests for guests', async () => {
     const res = await request(app).get('/api/curriculum');
     expect(res.status).toBe(200);
-    expect(res.body.chapters).toHaveLength(curriculum.chapters.length);
-    expect(res.body.chapters[0].quests[0].status).toBe('not_started');
+    expect(res.body.tracks.map((t: { slug: string }) => t.slug)).toEqual(curriculum.tracks.map((t) => t.slug));
+    const chapters = res.body.tracks.flatMap((t: { chapters: unknown[] }) => t.chapters);
+    expect(chapters).toHaveLength(curriculum.chapters.length);
+    expect(res.body.tracks[0].chapters[0].quests[0].status).toBe('not_started');
     expect(res.body.totalXp).toBe(curriculum.totalXp);
+  });
+
+  it('keeps prev/next links inside a track', async () => {
+    for (const track of curriculum.tracks.slice(1)) {
+      const first = track.chapters[0]!.quests[0]!;
+      const res = await request(app).get(`/api/quests/${first.slug}`);
+      expect(res.body.prev).toBeNull();
+      expect(res.body.trackSlug).toBe(track.slug);
+    }
   });
 
   it('returns quest details with starter code and tests, but no solution', async () => {
@@ -155,6 +166,42 @@ describe('projects', () => {
   });
 });
 
+describe('design write-ups', () => {
+  it('returns the rubric and template but hides the reference', async () => {
+    const quest = firstDesign();
+    const res = await request(app).get(`/api/quests/${quest.slug}`);
+    expect(res.body).toMatchObject({ type: 'design', rubric: quest.rubric, minWords: quest.minWords, code: quest.template, solutionAvailable: false });
+    expect(JSON.stringify(res.body)).not.toContain(quest.reference!.slice(0, 60));
+  });
+
+  it('enforces a minimum length, then reveals the reference', async () => {
+    const quest = firstDesign();
+    const agent = await registeredAgent();
+    expect((await agent.get(`/api/quests/${quest.slug}/solution`)).status).toBe(403);
+
+    const short = await agent.post(`/api/quests/${quest.slug}/design`).send({ document: 'Too short.' });
+    expect(short.status).toBe(400);
+    expect(short.body.error).toMatch(/at least \d+ words/);
+
+    const document = Array.from({ length: quest.minWords! + 5 }, (_, i) => `word${i}`).join(' ');
+    const ok = await agent.post(`/api/quests/${quest.slug}/design`).send({ document });
+    expect(ok.body).toMatchObject({ completed: true, xpAwarded: quest.xp });
+    expect(ok.body.newAchievements.map((a: { key: string }) => a.key)).toContain('first-design');
+
+    const ref = await agent.get(`/api/quests/${quest.slug}/solution`);
+    expect(ref.status).toBe(200);
+    expect(ref.body.solution).toBe(quest.reference);
+    expect((await agent.get(`/api/quests/${quest.slug}`)).body.code).toBe(document);
+  });
+
+  it('saves design drafts', async () => {
+    const quest = firstDesign();
+    const agent = await registeredAgent();
+    expect((await agent.put(`/api/quests/${quest.slug}/draft`).send({ code: '# My draft' })).status).toBe(204);
+    expect((await agent.get(`/api/quests/${quest.slug}`)).body.code).toBe('# My draft');
+  });
+});
+
 describe('profile and leaderboard', () => {
   it('summarises progress and ranks users by XP', async () => {
     const ada = await registeredAgent('Ada');
@@ -163,6 +210,7 @@ describe('profile and leaderboard', () => {
 
     const profile = await ada.get('/api/me/profile');
     expect(profile.body).toMatchObject({ completedQuests: 1, totalQuests: curriculum.quests.length });
+    expect(profile.body.tracks[0]).toMatchObject({ slug: curriculum.tracks[0]!.slug, completed: 1 });
     expect(profile.body.achievements[0].key).toBe('first-quest');
     expect(profile.body.recent[0].questSlug).toBe(firstCodeQuest().slug);
 

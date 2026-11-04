@@ -55,22 +55,32 @@ export function HomePage() {
       </section>
 
       <section className="path">
-        <h2>The path</h2>
+        <h2>Three tracks, one goal</h2>
+        <p className="muted center">Start with the Full-Stack Path. Dip into System Design and Agentic Engineering whenever you like.</p>
         {state.data ? (
-          <ol className="path-list">
-            {state.data.chapters.map((c) => (
-              <li key={c.slug}>
-                <Link to={`/learn/${c.slug}`} className="path-item">
-                  <span className="path-number">{c.number}</span>
-                  <span>
-                    <strong>{c.title}</strong>
-                    <span className="muted"> — {c.description}</span>
-                  </span>
-                  <span className="muted path-count">{c.quests.length} quests</span>
-                </Link>
-              </li>
+          <div className="track-overview">
+            {state.data.tracks.map((t) => (
+              <article key={t.slug} className="card">
+                <h3>
+                  <span aria-hidden="true">{t.icon}</span> {t.title}
+                </h3>
+                <p className="muted">{t.description}</p>
+                <ol className="path-list">
+                  {t.chapters.map((c) => (
+                    <li key={c.slug}>
+                      <Link to={`/learn/${c.slug}`} className="path-item">
+                        <span className="path-number">{c.number}</span>
+                        <span>
+                          <strong>{c.title}</strong>
+                        </span>
+                        <span className="muted path-count">{c.quests.length} quests</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ol>
+              </article>
             ))}
-          </ol>
+          </div>
         ) : (
           <p className="muted">Loading the curriculum…</p>
         )}

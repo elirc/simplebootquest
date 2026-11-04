@@ -231,6 +231,154 @@ function QuizQuest({ quest, onCompleted }: { quest: QuestDetail; onCompleted: ()
   );
 }
 
+/** Live word count, matching the server's rules closely enough for feedback. */
+function wordCount(text: string): number {
+  return (text.match(/[\p{L}\p{N}][\p{L}\p{N}'’-]*/gu) ?? []).length;
+}
+
+function DesignQuest({ quest, onCompleted }: { quest: QuestDetail; onCompleted: () => void }) {
+  const { user } = useAuth();
+  const celebrate = useCelebrate();
+  const [doc, setDoc] = useState(quest.code ?? quest.template ?? '');
+  const [tab, setTab] = useState<'write' | 'preview' | 'reference'>('write');
+  const [reference, setReference] = useState<string | null>(null);
+  const [completed, setCompleted] = useState(quest.status === 'completed');
+  const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const rubric = quest.rubric ?? [];
+  const storageKey = `sbq:rubric:${quest.slug}`;
+  const [checked, setChecked] = useState<boolean[]>(() => {
+    try {
+      return JSON.parse(localStorage.getItem(storageKey) ?? '[]');
+    } catch {
+      return [];
+    }
+  });
+  const lastSaved = useRef(doc);
+  const words = wordCount(doc);
+  const minWords = quest.minWords ?? 150;
+  const allChecked = rubric.every((_, i) => checked[i]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(checked));
+    } catch {
+      // storage unavailable: the checklist just won't persist
+    }
+  }, [checked, storageKey]);
+
+  // Autosave drafts, like code quests.
+  useEffect(() => {
+    if (!user || doc === lastSaved.current) return;
+    const timer = setTimeout(() => {
+      api.saveDraft(quest.slug, doc).then(() => (lastSaved.current = doc)).catch(() => {});
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, [doc, user, quest.slug]);
+
+  async function showReference() {
+    setTab('reference');
+    if (reference !== null) return;
+    try {
+      setReference((await api.solution(quest.slug)).solution);
+    } catch (err) {
+      setReference(`_${err instanceof ApiError ? err.message : 'Could not load the reference design'}_`);
+    }
+  }
+
+  async function submit() {
+    setSubmitting(true);
+    setError(null);
+    try {
+      const r = await api.submitDesign(quest.slug, doc);
+      lastSaved.current = doc;
+      celebrate(r);
+      setCompleted(true);
+      onCompleted();
+      void showReference();
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : 'Something went wrong');
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  return (
+    <div className="design">
+      <div className="workbench design-workbench">
+        <div className="tabs" role="tablist">
+          <button role="tab" aria-selected={tab === 'write'} onClick={() => setTab('write')}>
+            Write
+          </button>
+          <button role="tab" aria-selected={tab === 'preview'} onClick={() => setTab('preview')}>
+            Preview
+          </button>
+          {user && (
+            <button
+              role="tab"
+              aria-selected={tab === 'reference'}
+              disabled={!completed}
+              title={completed ? 'Compare with a reference design' : 'Unlocks after you submit your own design'}
+              onClick={showReference}
+            >
+              Reference design {completed ? '' : '🔒'}
+            </button>
+          )}
+          <span className="spacer" />
+          <span className={`word-count ${words >= minWords ? 'ok' : ''}`} aria-live="polite">
+            {words}/{minWords} words
+          </span>
+        </div>
+        <div className="tab-panel design-panel">
+          {tab === 'write' && (
+            <textarea
+              className="design-editor"
+              aria-label="Your design document (Markdown)"
+              value={doc}
+              onChange={(e) => setDoc(e.target.value)}
+              spellCheck
+            />
+          )}
+          {tab === 'preview' && <Markdown>{doc || '_Nothing written yet._'}</Markdown>}
+          {tab === 'reference' &&
+            (reference === null ? (
+              <Spinner />
+            ) : (
+              <>
+                <p className="banner">There is no single right answer in design. Compare trade-offs: what did the reference consider that you didn't, and what did you consider that it didn't?</p>
+                <Markdown>{reference}</Markdown>
+              </>
+            ))}
+        </div>
+      </div>
+      <section className="card">
+        <h3>Self-review rubric</h3>
+        <ul className="checklist">
+          {rubric.map((item, i) => (
+            <li key={i}>
+              <label>
+                <input type="checkbox" checked={Boolean(checked[i])} onChange={() => setChecked((c) => rubric.map((_, k) => (k === i ? !c[k] : Boolean(c[k]))))} />
+                <Markdown>{item}</Markdown>
+              </label>
+            </li>
+          ))}
+        </ul>
+        {error && <p className="form-error" role="alert">{error}</p>}
+        {user ? (
+          <>
+            {!allChecked && <p className="muted">Review your document against every rubric item before submitting.</p>}
+            <button className="btn btn-primary" onClick={submit} disabled={submitting || !allChecked || words < minWords}>
+              {submitting ? 'Submitting…' : completed ? 'Update submission' : 'Submit design'}
+            </button>
+          </>
+        ) : (
+          <GuestBanner />
+        )}
+      </section>
+    </div>
+  );
+}
+
 function ProjectQuest({ quest, onCompleted }: { quest: QuestDetail; onCompleted: () => void }) {
   const { user } = useAuth();
   const celebrate = useCelebrate();
@@ -359,6 +507,7 @@ export default function QuestPage() {
         {quest.type === 'code' && <CodeQuest key={quest.slug} quest={quest} onCompleted={markCompleted} />}
         {quest.type === 'quiz' && <QuizQuest key={quest.slug} quest={quest} onCompleted={markCompleted} />}
         {quest.type === 'project' && <ProjectQuest key={quest.slug} quest={quest} onCompleted={markCompleted} />}
+        {quest.type === 'design' && <DesignQuest key={quest.slug} quest={quest} onCompleted={markCompleted} />}
       </section>
     </div>
   );

@@ -5,6 +5,9 @@ export interface AchievementContext {
   completedProjects: number;
   completedChapters: number;
   totalChapters: number;
+  /** Slugs of tracks where every quest is complete. */
+  completedTracks: string[];
+  completedDesigns: number;
   streak: number;
   level: number;
   xp: number;
@@ -24,12 +27,22 @@ export const ACHIEVEMENTS: AchievementRule[] = [
   { key: 'streak-7', icon: '🌋', title: 'Week Warrior', description: 'Reach a 7-day streak.', earned: (c) => c.streak >= 7 },
   { key: 'level-5', icon: '⭐', title: 'Rising Star', description: 'Reach level 5.', earned: (c) => c.level >= 5 },
   { key: 'level-10', icon: '🌟', title: 'Mid-Level Energy', description: 'Reach level 10.', earned: (c) => c.level >= 10 },
+  { key: 'first-design', icon: '📐', title: 'On the Whiteboard', description: 'Submit your first design write-up.', earned: (c) => c.completedDesigns >= 1 },
+  { key: 'ten-designs', icon: '🏛️', title: 'Design Reviewer', description: 'Submit 10 design write-ups.', earned: (c) => c.completedDesigns >= 10 },
   {
     key: 'graduate',
     icon: '🎓',
     title: 'Full-Stack Graduate',
-    description: 'Finish every chapter.',
-    earned: (c) => c.totalChapters > 0 && c.completedChapters >= c.totalChapters,
+    description: 'Finish the Full-Stack Path.',
+    earned: (c) => c.completedTracks.includes('full-stack'),
+  },
+  { key: 'architect', icon: '🏗️', title: 'Architect', description: 'Finish the System Design track.', earned: (c) => c.completedTracks.includes('system-design') },
+  {
+    key: 'agent-wrangler',
+    icon: '🤖',
+    title: 'Agent Wrangler',
+    description: 'Finish the Agentic Engineering track.',
+    earned: (c) => c.completedTracks.includes('agentic-engineering'),
   },
 ];
 

@@ -47,6 +47,28 @@ export function ProfilePage() {
       </section>
 
       <section>
+        <h2>Tracks</h2>
+        <div className="stats">
+          {p.tracks.map((t) => {
+            const percent = t.total ? Math.round((t.completed / t.total) * 100) : 0;
+            return (
+              <Link key={t.slug} to={`/learn?track=${t.slug}`} className="card track-progress">
+                <strong>
+                  {t.icon} {t.title}
+                </strong>
+                <div className="progress" role="progressbar" aria-valuenow={percent} aria-valuemin={0} aria-valuemax={100} aria-label={`${t.title} progress`}>
+                  <div className="progress-fill" style={{ width: `${percent}%` }} />
+                </div>
+                <small className="muted">
+                  {t.completed}/{t.total} quests
+                </small>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      <section>
         <h2>Achievements</h2>
         <div className="achievements">
           {p.achievements.map((a) => (

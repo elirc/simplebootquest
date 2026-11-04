@@ -2,11 +2,17 @@ import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { ContentError, gradeQuiz, loadCurriculum } from './index.js';
+import { ContentError, countWords, gradeQuiz, loadCurriculum } from './index.js';
 
-function fixture(files: Record<string, string>): string {
+const trackMd = '---\ntitle: Main\ndescription: The main track\n---\n';
+
+/** Writes files under a single track ("01-main/") unless a path already names a track. */
+function fixture(files: Record<string, string>, { wrap = true } = {}): string {
   const root = mkdtempSync(path.join(tmpdir(), 'sbq-content-'));
-  for (const [file, content] of Object.entries(files)) {
+  const all: Record<string, string> = wrap
+    ? Object.fromEntries([['01-main/track.md', trackMd], ...Object.entries(files).map(([f, c]) => [`01-main/${f}`, c])])
+    : files;
+  for (const [file, content] of Object.entries(all)) {
     const full = path.join(root, file);
     mkdirSync(path.dirname(full), { recursive: true });
     writeFileSync(full, content);
@@ -30,7 +36,8 @@ Lesson`;
 describe('loadCurriculum', () => {
   it('loads the real curriculum', () => {
     const c = loadCurriculum();
-    expect(c.chapters.length).toBeGreaterThan(0);
+    expect(c.tracks.length).toBeGreaterThan(0);
+    expect(c.chapters.length).toBe(c.tracks.flatMap((t) => t.chapters).length);
     expect(c.quests.every((q, i) => q.index === i)).toBe(true);
     expect(c.bySlug.size).toBe(c.quests.length);
   });
@@ -69,6 +76,49 @@ describe('loadCurriculum', () => {
   it('rejects badly named directories', () => {
     const root = fixture({ 'basics/chapter.md': chapter });
     expect(() => loadCurriculum(root)).toThrow(/must be named like/);
+  });
+
+  it('loads several tracks and rejects chapter slugs reused across them', () => {
+    const two = {
+      '01-a/track.md': trackMd,
+      '01-a/01-basics/chapter.md': chapter,
+      '01-a/01-basics/01-q/quest.md': quiz,
+      '02-b/track.md': trackMd.replace('Main', 'Second'),
+      '02-b/01-more/chapter.md': chapter,
+      '02-b/01-more/01-q/quest.md': quiz.replace('basics-quiz', 'more-quiz'),
+    };
+    const c = loadCurriculum(fixture(two, { wrap: false }));
+    expect(c.tracks.map((t) => [t.slug, t.title])).toEqual([['a', 'Main'], ['b', 'Second']]);
+    expect(c.quests.map((q) => q.trackSlug)).toEqual(['a', 'b']);
+    const clash = { ...two, '02-b/01-basics/chapter.md': chapter, '02-b/01-basics/01-q/quest.md': quiz.replace('basics-quiz', 'x-quiz') };
+    delete (clash as Record<string, string>)['02-b/01-more/chapter.md'];
+    delete (clash as Record<string, string>)['02-b/01-more/01-q/quest.md'];
+    expect(() => loadCurriculum(fixture(clash, { wrap: false }))).toThrow(/duplicate chapter slug "basics"/);
+  });
+
+  it('loads design write-ups with rubric, template and reference', () => {
+    const design = '---\nslug: d\ntitle: D\ntype: design\nxp: 30\nminWords: 200\nrubric: ["Has requirements", "Has a diagram"]\n---\nScenario';
+    const root = fixture({
+      '01-a/chapter.md': chapter,
+      '01-a/01-x/quest.md': design,
+      '01-a/01-x/template.md': '# Design\n',
+      '01-a/01-x/reference.md': '# Reference\n',
+    });
+    const q = loadCurriculum(root).quests[0]!;
+    expect(q).toMatchObject({ type: 'design', rubric: ['Has requirements', 'Has a diagram'], minWords: 200, template: '# Design\n', reference: '# Reference\n' });
+  });
+
+  it('requires a reference for design write-ups', () => {
+    const design = '---\nslug: d\ntitle: D\ntype: design\nxp: 30\nrubric: ["x"]\n---\n';
+    expect(() => loadCurriculum(fixture({ '01-a/chapter.md': chapter, '01-a/01-x/quest.md': design }))).toThrow(/reference\.md/);
+  });
+});
+
+describe('countWords', () => {
+  it('ignores markdown punctuation', () => {
+    expect(countWords('# Title\n\n- one two\n- **three** (four) — five\n')).toBe(6);
+    expect(countWords("it's a user's API-first design")).toBe(5);
+    expect(countWords('   ')).toBe(0);
   });
 });
 

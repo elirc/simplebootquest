@@ -56,13 +56,14 @@ export const api = {
   },
   curriculum: () => request<Curriculum>('GET', '/curriculum'),
   chapter: (slug: string) =>
-    request<{ slug: string; number: number; title: string; description: string; intro: string }>('GET', `/chapters/${slug}`),
+    request<{ slug: string; trackSlug: string; number: number; title: string; description: string; intro: string }>('GET', `/chapters/${slug}`),
   quest: (slug: string) => request<QuestDetail>('GET', `/quests/${slug}`),
   solution: (slug: string) => request<{ solution: string }>('GET', `/quests/${slug}/solution`),
   saveDraft: (slug: string, code: string) => request<void>('PUT', `/quests/${slug}/draft`, { code }),
   submitCode: (slug: string, code: string, passed: boolean) =>
     request<SubmissionResult>('POST', `/quests/${slug}/submissions`, { code, passed }),
   submitQuiz: (slug: string, answers: number[]) => request<QuizResponse>('POST', `/quests/${slug}/quiz`, { answers }),
+  submitDesign: (slug: string, document: string) => request<CompletionResult>('POST', `/quests/${slug}/design`, { document }),
   submitProject: (slug: string, repoUrl: string, liveUrl: string) =>
     request<CompletionResult>('POST', `/quests/${slug}/project`, { repoUrl, liveUrl }),
   profile: () => request<ProfileResponse>('GET', '/me/profile'),

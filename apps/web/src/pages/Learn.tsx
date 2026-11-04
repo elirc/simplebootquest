@@ -1,5 +1,5 @@
-import { Link } from 'react-router';
-import type { ChapterSummary, Curriculum, QuestSummary } from '@sbq/shared';
+import { Link, useSearchParams } from 'react-router';
+import type { ChapterSummary, QuestSummary, TrackSummary } from '@sbq/shared';
 import { api } from '../api';
 import { useAuth } from '../auth';
 import { ErrorBox } from '../components/ErrorBox';
@@ -13,9 +13,14 @@ export function chapterProgress(chapter: ChapterSummary) {
   return { done, total: chapter.quests.length, percent: Math.round((done / chapter.quests.length) * 100) };
 }
 
-export function nextQuest(curriculum: Curriculum): QuestSummary | undefined {
-  const all = curriculum.chapters.flatMap((c) => c.quests);
-  return all.find((q) => q.status !== 'completed');
+export function nextQuest(track: TrackSummary): QuestSummary | undefined {
+  return track.chapters.flatMap((c) => c.quests).find((q) => q.status !== 'completed');
+}
+
+export function trackProgress(track: TrackSummary) {
+  const quests = track.chapters.flatMap((c) => c.quests);
+  const done = quests.filter((q) => q.status === 'completed').length;
+  return { done, total: quests.length, xp: quests.reduce((s, q) => s + q.xp, 0), percent: quests.length ? Math.round((done / quests.length) * 100) : 0 };
 }
 
 export function QuestRow({ quest }: { quest: QuestSummary }) {
@@ -34,35 +39,64 @@ export function QuestRow({ quest }: { quest: QuestSummary }) {
 export function LearnPage() {
   const { user } = useAuth();
   const { state, reload } = useAsync(() => api.curriculum(), [user?.id]);
+  const [params, setParams] = useSearchParams();
 
   if (state.status === 'error' && !state.data) return <ErrorBox message={state.error.message} onRetry={reload} />;
   if (!state.data) return <Spinner label="Loading the curriculum…" />;
 
-  const curriculum = state.data;
-  const next = nextQuest(curriculum);
-  const allQuests = curriculum.chapters.flatMap((c) => c.quests);
-  const completed = allQuests.filter((q) => q.status === 'completed').length;
+  const { tracks } = state.data;
+  const track = tracks.find((t) => t.slug === params.get('track')) ?? tracks[0]!;
+  const next = nextQuest(track);
+  const p = trackProgress(track);
 
   return (
     <div className="learn">
+      <nav className="track-tabs" role="tablist" aria-label="Tracks">
+        {tracks.map((t) => {
+          const tp = trackProgress(t);
+          return (
+            <button
+              key={t.slug}
+              role="tab"
+              aria-selected={t.slug === track.slug}
+              className="track-tab"
+              onClick={() => setParams(t.slug === tracks[0]!.slug ? {} : { track: t.slug })}
+            >
+              <span className="track-icon" aria-hidden="true">
+                {t.icon}
+              </span>
+              <span>
+                <strong>{t.title}</strong>
+                <small className="muted">
+                  {tp.done}/{tp.total} quests
+                </small>
+              </span>
+            </button>
+          );
+        })}
+      </nav>
+
       <section className="card learn-header">
         <div>
-          <h1>{user ? `Welcome back, ${user.name}` : 'The curriculum'}</h1>
+          <h1>
+            {track.icon} {track.title}
+          </h1>
+          <p className="muted">{track.description}</p>
           <p className="muted">
-            {completed} of {allQuests.length} quests complete · {curriculum.totalXp} XP available
+            {p.done} of {p.total} quests complete · {p.xp} XP available
           </p>
           {user ? <XpBar xp={user.xp} /> : <p><Link to="/register">Create a free account</Link> to save your progress and earn XP.</p>}
         </div>
         {next && (
           <Link to={`/learn/${next.chapterSlug}/${next.slug}`} className="btn btn-primary btn-lg">
-            {completed === 0 ? 'Start' : 'Continue'}: {next.title} →
+            {p.done === 0 ? 'Start' : 'Continue'}: {next.title} →
           </Link>
         )}
       </section>
 
       <div className="chapter-grid">
-        {curriculum.chapters.map((chapter) => {
-          const p = chapterProgress(chapter);
+        {track.chapters.map((chapter) => {
+          const cp = chapterProgress(chapter);
           return (
             <article key={chapter.slug} className="card chapter-card">
               <header>
@@ -71,11 +105,11 @@ export function LearnPage() {
                   <Link to={`/learn/${chapter.slug}`}>{chapter.title}</Link>
                 </h2>
                 <p className="muted">{chapter.description}</p>
-                <div className="progress" role="progressbar" aria-valuenow={p.percent} aria-valuemin={0} aria-valuemax={100} aria-label={`${chapter.title} progress`}>
-                  <div className="progress-fill" style={{ width: `${p.percent}%` }} />
+                <div className="progress" role="progressbar" aria-valuenow={cp.percent} aria-valuemin={0} aria-valuemax={100} aria-label={`${chapter.title} progress`}>
+                  <div className="progress-fill" style={{ width: `${cp.percent}%` }} />
                 </div>
                 <small className="muted">
-                  {p.done}/{p.total} complete
+                  {cp.done}/{cp.total} complete
                 </small>
               </header>
               <ul className="quest-list">

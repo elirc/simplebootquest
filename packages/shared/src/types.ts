@@ -1,9 +1,10 @@
-export type QuestType = 'code' | 'quiz' | 'project';
+export type QuestType = 'code' | 'quiz' | 'project' | 'design';
 export type CodeLanguage = 'js' | 'ts' | 'jsx' | 'sql';
 export type QuestStatus = 'not_started' | 'in_progress' | 'completed';
 
 export interface QuestSummary {
   slug: string;
+  trackSlug: string;
   chapterSlug: string;
   title: string;
   type: QuestType;
@@ -15,14 +16,24 @@ export interface QuestSummary {
 
 export interface ChapterSummary {
   slug: string;
+  trackSlug: string;
   number: number;
   title: string;
   description: string;
   quests: QuestSummary[];
 }
 
-export interface Curriculum {
+export interface TrackSummary {
+  slug: string;
+  number: number;
+  title: string;
+  description: string;
+  icon: string;
   chapters: ChapterSummary[];
+}
+
+export interface Curriculum {
+  tracks: TrackSummary[];
   totalXp: number;
 }
 
@@ -41,6 +52,10 @@ export interface QuestDetail extends QuestSummary {
   setup?: string;
   questions?: QuizQuestionPublic[];
   requirements?: string[];
+  /** Design write-ups */
+  rubric?: string[];
+  template?: string;
+  minWords?: number;
   hints?: string[];
   resources?: { title: string; url: string }[];
   attempts: number;
@@ -91,6 +106,7 @@ export interface ProfileResponse {
   levelProgress: LevelProgress;
   completedQuests: number;
   totalQuests: number;
+  tracks: { slug: string; title: string; icon: string; completed: number; total: number }[];
   achievements: EarnedAchievement[];
   lockedAchievements: AchievementDefinition[];
   recent: { questSlug: string; chapterSlug: string; title: string; completedAt: string }[];

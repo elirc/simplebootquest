@@ -26,6 +26,7 @@ export interface CompletionInput {
  */
 export function createProgressService(db: Db, curriculum: Curriculum, clock: () => Date = () => new Date()) {
   const projectSlugs = new Set(curriculum.quests.filter((q) => q.type === 'project').map((q) => q.slug));
+  const designSlugs = new Set(curriculum.quests.filter((q) => q.type === 'design').map((q) => q.slug));
 
   async function completedSlugs(userId: string): Promise<Set<string>> {
     const rows = await db.questProgress.findMany({
@@ -37,6 +38,10 @@ export function createProgressService(db: Db, curriculum: Curriculum, clock: () 
 
   function chaptersCompleted(done: Set<string>): number {
     return curriculum.chapters.filter((c) => c.quests.every((q) => done.has(q.slug))).length;
+  }
+
+  function tracksCompleted(done: Set<string>): string[] {
+    return curriculum.tracks.filter((t) => t.chapters.every((c) => c.quests.every((q) => done.has(q.slug)))).map((t) => t.slug);
   }
 
   return {
@@ -119,6 +124,8 @@ export function createProgressService(db: Db, curriculum: Curriculum, clock: () 
             completedProjects: [...done].filter((s) => projectSlugs.has(s)).length,
             completedChapters: chaptersCompleted(done),
             totalChapters: curriculum.chapters.length,
+            completedTracks: tracksCompleted(done),
+            completedDesigns: [...done].filter((s) => designSlugs.has(s)).length,
             streak: user.streak,
             level: levelForXp(user.xp),
             xp: user.xp,

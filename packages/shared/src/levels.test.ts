@@ -29,8 +29,12 @@ describe('streaks', () => {
 });
 
 describe('achievements', () => {
-  const base = { completedCount: 0, completedProjects: 0, completedChapters: 0, totalChapters: 12, streak: 0, level: 1, xp: 0 };
+  const base = { completedCount: 0, completedProjects: 0, completedChapters: 0, totalChapters: 12, completedTracks: [] as string[], completedDesigns: 0, streak: 0, level: 1, xp: 0 };
   it('awards nothing at the start', () => expect(newlyEarned(base, [])).toEqual([]));
+  it('awards track and design achievements', () => {
+    expect(newlyEarned({ ...base, completedDesigns: 1, completedTracks: ['system-design'] }, [])).toEqual(['first-design', 'architect']);
+  });
+
   it('awards first quest once', () => {
     expect(newlyEarned({ ...base, completedCount: 1, streak: 1 }, [])).toEqual(['first-quest']);
     expect(newlyEarned({ ...base, completedCount: 1, streak: 1 }, ['first-quest'])).toEqual([]);

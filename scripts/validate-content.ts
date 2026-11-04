@@ -7,7 +7,7 @@
  * Run with: npm run validate:content
  */
 import { Worker } from 'node:worker_threads';
-import { loadCurriculum } from '@sbq/curriculum';
+import { countWords, loadCurriculum } from '@sbq/curriculum';
 import type { RunRequest, RunResult } from '@sbq/runner';
 
 const TIMEOUT_MS = 10_000;
@@ -60,6 +60,15 @@ async function main() {
   let checked = 0;
 
   for (const quest of curriculum.quests) {
+    if (quest.type === 'design') {
+      // Like "the starter must fail": submitting the untouched template must not be possible,
+      // and the reference design must itself meet the bar it sets.
+      const min = quest.minWords ?? 150;
+      if (countWords(quest.template ?? '') >= min) problems.push(`✖ ${quest.slug}: template alone meets the ${min}-word minimum`);
+      if (countWords(quest.reference ?? '') < min) problems.push(`✖ ${quest.slug}: reference design is shorter than ${min} words`);
+      if ((quest.rubric?.length ?? 0) < 4) problems.push(`✖ ${quest.slug}: rubric needs at least 4 items`);
+      continue;
+    }
     if (quest.type !== 'code') continue;
     const base = { language: quest.language!, tests: quest.tests!, setup: quest.setup };
 
@@ -82,6 +91,10 @@ async function main() {
       `(${Object.entries(counts).map(([k, v]) => `${v} ${k}`).join(', ')}), ${curriculum.totalXp} XP total`,
   );
   console.log(`Checked ${checked} code quests against their solutions and starters.`);
+  for (const track of curriculum.tracks) {
+    const n = track.chapters.reduce((sum, c) => sum + c.quests.length, 0);
+    console.log(`  ${track.icon} ${track.title}: ${track.chapters.length} chapters, ${n} quests`);
+  }
 
   if (problems.length) {
     console.error(`\n${problems.join('\n')}\n\n${problems.length} problem(s) found.`);

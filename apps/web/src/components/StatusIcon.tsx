@@ -1,6 +1,6 @@
 import type { QuestStatus, QuestType } from '@sbq/shared';
 
-const TYPE_ICON: Record<QuestType, string> = { code: '⌨️', quiz: '❓', project: '🛠️' };
+const TYPE_ICON: Record<QuestType, string> = { code: '⌨️', quiz: '❓', project: '🛠️', design: '📐' };
 
 export function StatusIcon({ status }: { status: QuestStatus }) {
   if (status === 'completed') return <span className="status status-done" aria-label="Completed">✓</span>;

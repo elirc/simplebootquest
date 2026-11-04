@@ -28,9 +28,18 @@ export interface Quest {
   setup?: string;
   questions?: QuizQuestion[];
   requirements?: string[];
+  /** Progressive hints, revealed one at a time in the UI. */
+  hints?: string[];
+  /** Further reading. */
+  resources?: Resource[];
   /** Position of the quest in the whole curriculum (0-based). */
   index: number;
   dir: string;
+}
+
+export interface Resource {
+  title: string;
+  url: string;
 }
 
 export interface Chapter {
@@ -70,16 +79,32 @@ const questSchema = z.object({
   boss: z.boolean().default(false),
   questions: z.array(questionSchema).optional(),
   requirements: z.array(z.string().min(1)).optional(),
+  hints: z.array(z.string().min(1)).optional(),
+  resources: z.array(z.object({ title: z.string().min(1), url: z.string().url() })).optional(),
 });
 
 export class ContentError extends Error {}
 
 const ORDERED_DIR = /^(\d+)-([a-z0-9-]+)$/;
 
-/** Default location: <repo>/content/chapters. */
+/**
+ * Default location: <repo>/content/chapters. Searches upward from this module
+ * and from the working directory, so it works both from source and from a
+ * bundled build (where this file lives somewhere else).
+ */
 export function defaultContentDir(): string {
-  const here = path.dirname(fileURLToPath(import.meta.url));
-  return path.resolve(here, '../../../content/chapters');
+  const starts = [path.dirname(fileURLToPath(import.meta.url)), process.cwd()];
+  for (const start of starts) {
+    let dir = start;
+    for (;;) {
+      const candidate = path.join(dir, 'content', 'chapters');
+      if (existsSync(candidate)) return candidate;
+      const parent = path.dirname(dir);
+      if (parent === dir) break;
+      dir = parent;
+    }
+  }
+  return path.resolve(starts[0]!, '../../../content/chapters');
 }
 
 function orderedDirs(dir: string): { name: string; number: number; slug: string; full: string }[] {
@@ -102,7 +127,7 @@ function where(file: string, err: z.ZodError): string {
   return `${file}: ${err.issues.map((i) => `${i.path.join('.') || '(root)'} ${i.message}`).join('; ')}`;
 }
 
-export function loadCurriculum(contentDir = defaultContentDir()): Curriculum {
+export function loadCurriculum(contentDir: string = defaultContentDir()): Curriculum {
   if (!existsSync(contentDir)) throw new ContentError(`Content directory not found: ${contentDir}`);
   const chapters: Chapter[] = [];
   const quests: Quest[] = [];
@@ -144,6 +169,8 @@ export function loadCurriculum(contentDir = defaultContentDir()): Curriculum {
         xp: data.xp,
         boss: data.boss,
         lesson: q.content.trim(),
+        hints: data.hints,
+        resources: data.resources,
         index: quests.length,
         dir: questDir.full,
       };

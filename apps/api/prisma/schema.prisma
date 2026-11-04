@@ -1,0 +1,69 @@
+// Database schema for SimpleBootQuest.
+//
+// Curriculum content (chapters, quests) lives in /content as files, NOT here.
+// The database only stores per-user state, and references quests by their
+// stable string slug.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id             String   @id @default(cuid())
+  email          String   @unique
+  name           String
+  passwordHash   String
+  xp             Int      @default(0)
+  streak         Int      @default(0)
+  longestStreak  Int      @default(0)
+  /// UTC day ("YYYY-MM-DD") of the last quest completion, used for streaks.
+  lastActiveDate String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  progress     QuestProgress[]
+  achievements UserAchievement[]
+
+  @@index([xp])
+}
+
+enum ProgressStatus {
+  IN_PROGRESS
+  COMPLETED
+}
+
+model QuestProgress {
+  id          String         @id @default(cuid())
+  userId      String
+  questSlug   String
+  status      ProgressStatus @default(IN_PROGRESS)
+  /// The learner's latest code (saved drafts and the passing submission).
+  code        String?
+  attempts    Int            @default(0)
+  xpAwarded   Int            @default(0)
+  repoUrl     String?
+  liveUrl     String?
+  completedAt DateTime?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, questSlug])
+  @@index([userId, status])
+}
+
+model UserAchievement {
+  userId   String
+  key      String
+  earnedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, key])
+}

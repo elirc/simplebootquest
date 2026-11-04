@@ -41,6 +41,8 @@ export interface QuestDetail extends QuestSummary {
   setup?: string;
   questions?: QuizQuestionPublic[];
   requirements?: string[];
+  hints?: string[];
+  resources?: { title: string; url: string }[];
   attempts: number;
   solutionAvailable: boolean;
   repoUrl?: string | null;

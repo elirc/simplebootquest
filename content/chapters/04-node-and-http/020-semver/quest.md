@@ -4,6 +4,8 @@ title: Semantic Versioning
 type: code
 language: js
 xp: 20
+hints: ["Use a regex with three capture groups to parse versions.", "For ranges, first check the version is >= the base, then check the upper bound."]
+resources: [{"title": "semver.org", "url": "https://semver.org/"}, {"title": "npm semver calculator", "url": "https://semver.npmjs.com/"}]
 ---
 # Semantic Versioning
 

@@ -23,6 +23,7 @@ questions:
   - prompt: "Which file should you commit so teammates install identical dependency versions?"
     options: ["node_modules/", "package-lock.json", ".npmrc"]
     answer: 1
+resources: [{"title": "Node.js: The event loop", "url": "https://nodejs.org/en/learn/asynchronous-work/event-loop-timers-and-nexttick"}, {"title": "npm docs: package.json", "url": "https://docs.npmjs.com/cli/configuring-npm/package-json"}]
 ---
 # How Node Works
 

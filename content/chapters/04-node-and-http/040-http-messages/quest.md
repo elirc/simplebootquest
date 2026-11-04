@@ -4,6 +4,8 @@ title: Raw HTTP Messages
 type: code
 language: js
 xp: 25
+hints: ["Split head and body on the first `\\r\\n\\r\\n`.", "Split each header on the first colon only."]
+resources: [{"title": "MDN: HTTP messages", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages"}]
 ---
 # Raw HTTP Messages
 

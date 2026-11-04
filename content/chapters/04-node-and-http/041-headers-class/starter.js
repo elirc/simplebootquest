@@ -1,0 +1,3 @@
+class HttpHeaders {
+  constructor(init = {}) {}
+}

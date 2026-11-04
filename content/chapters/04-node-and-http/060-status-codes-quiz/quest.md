@@ -27,6 +27,7 @@ questions:
   - prompt: "Your code threw an unexpected exception. Which status?"
     options: ["400 Bad Request", "500 Internal Server Error", "503 Service Unavailable"]
     answer: 1
+resources: [{"title": "MDN: HTTP status codes", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status"}, {"title": "http.cat", "url": "https://http.cat/"}]
 ---
 # Checkpoint: HTTP Status Codes
 

@@ -4,6 +4,8 @@ title: Build an EventEmitter
 type: code
 language: js
 xp: 25
+hints: ["Store arrays of listeners in a Map keyed by event name.", "`once` wraps the listener in a function that removes itself first."]
+resources: [{"title": "Node.js: Events", "url": "https://nodejs.org/api/events.html"}]
 ---
 # Build an EventEmitter
 

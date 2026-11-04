@@ -4,6 +4,8 @@ title: URLs & Query Strings
 type: code
 language: js
 xp: 20
+hints: ["`new URL(path, \"http://localhost\")` handles relative paths.", "Use `new Set(url.searchParams.keys())` to visit each key once."]
+resources: [{"title": "MDN: URL", "url": "https://developer.mozilla.org/en-US/docs/Web/API/URL"}]
 ---
 # URLs & Query Strings
 

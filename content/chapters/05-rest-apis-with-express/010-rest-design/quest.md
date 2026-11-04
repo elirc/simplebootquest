@@ -21,6 +21,7 @@ questions:
   - prompt: "Where should filtering and pagination options go?"
     options: ["In the query string: /todos?done=true&page=2", "In a GET request body", "In custom headers"]
     answer: 0
+resources: [{"title": "Microsoft REST API guidelines", "url": "https://github.com/microsoft/api-guidelines"}, {"title": "MDN: HTTP request methods", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods"}]
 ---
 # Designing REST APIs
 

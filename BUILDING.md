@@ -171,6 +171,8 @@ We chose the browser. **This is a deliberate trade-off, and the most important t
 1. **Transpile** the learner's code with [Sucrase](https://github.com/alangpierce/sucrase), a tiny, fast compiler that strips TypeScript types, converts JSX, and rewrites `export` statements. We chose it over the full TypeScript compiler, which is around 10 MB in the browser. **Trade-off:** Sucrase doesn't type-check, so TypeScript quests verify *behavior*, not types.
 2. **Concatenate** the learner's code and the quest's tests into one `async` function body. Because they share a scope, tests can call `add(1, 2)` directly. The learner doesn't have to learn an export/import ceremony on lesson one.
 3. **Inject helpers** as function parameters: `test`, `expect`, a captured `console`, and, depending on the language, JSX helpers (`h`, `render`, `text`) or SQL helpers (`query`, `result`).
+
+   > **A scoping bug worth learning from.** Function parameters and `const` declarations live in the same scope, so a learner writing `const text = ...` got *"Identifier 'text' has already been declared"*, a baffling error for a beginner. The fix wraps the code in a nested block: `{ learnerCode; { tests } }`. Inner blocks may shadow outer names, the tests still see everything the learner defined, and the helper functions Sucrase injects into *both* files (like `_nullishCoalesce`) no longer collide. A regression test pins it down. The lesson: **the platform's own globals are a leaky abstraction**, so design for learners who know nothing about them.
 4. **Run each registered test** with a per-test timeout, collecting pass or fail plus a readable error message.
 
 ### Why write our own `expect` instead of bundling Jest?

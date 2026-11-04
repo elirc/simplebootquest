@@ -30,6 +30,16 @@ describe('runQuest (js)', () => {
     vexpect(r.logs).toEqual(['hi { a: 1 }']);
   });
 
+  it('lets learner code shadow injected helpers', async () => {
+    const r = await runQuest({
+      language: 'js',
+      code: 'const text = "mine"; function find() { return 1; }',
+      tests: "test('shadowed', () => { expect(text).toBe('mine'); expect(find()).toBe(1); });",
+    });
+    vexpect(r.error).toBeUndefined();
+    vexpect(r.passed).toBe(true);
+  });
+
   it('reports syntax errors', async () => {
     const r = await runQuest({ language: 'js', code: 'function (', tests: "test('x', () => {});" });
     vexpect(r.passed).toBe(false);

@@ -4,6 +4,8 @@ title: Centralised Error Handling
 type: code
 language: js
 xp: 25
+hints: ["Check `instanceof HttpError` first, then the parse-error type, then everything else.", "`req.path` gives the path without the query string."]
+resources: [{"title": "Express: Error handling", "url": "https://expressjs.com/en/guide/error-handling.html"}]
 ---
 # Centralised Error Handling
 

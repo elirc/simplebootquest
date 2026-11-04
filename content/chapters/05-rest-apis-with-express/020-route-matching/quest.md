@@ -4,6 +4,8 @@ title: Route Matching
 type: code
 language: js
 xp: 20
+hints: ["Split both pattern and path on `/` and filter out empty segments.", "Segments starting with `:` capture the value; others must be equal."]
+resources: [{"title": "Express routing guide", "url": "https://expressjs.com/en/guide/routing.html"}]
 ---
 # Route Matching
 

@@ -175,7 +175,7 @@ export async function runQuest(req: RunRequest, options: RunOptions = {}): Promi
       helpers.db = db;
       helpers.result = resultRows;
       helpers.query = (sql: string) => rowsFrom(db.exec(sql));
-      program = transpile(req.tests, 'js', 'tests');
+      program = `"use strict";\n{\n${transpile(req.tests, 'js', 'tests')}\n}`;
     } else {
       helpers.h = h;
       helpers.Fragment = Fragment;
@@ -186,7 +186,10 @@ export async function runQuest(req: RunRequest, options: RunOptions = {}): Promi
       helpers.findAll = findAll;
       const user = transpile(req.code, req.language, 'your code');
       const tests = transpile(req.tests, req.language, 'tests');
-      program = `${user}\n;\n${tests}`;
+      // Helpers arrive as function parameters. Running the code inside a
+      // nested block lets learners declare their own `text`, `find`, etc.
+      // without a "has already been declared" SyntaxError.
+      program = `"use strict";\n{\n${user}\n;\n{\n${tests}\n}\n}`;
     }
 
     const names = Object.keys(helpers);

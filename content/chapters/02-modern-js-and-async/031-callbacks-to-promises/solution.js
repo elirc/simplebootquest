@@ -5,7 +5,7 @@ function promisify(fn) {
     });
 }
 
-async function loadUserName(id) {
+async function loadUserName(id, getUser) {
   const user = await promisify(getUser)(id);
   return user.name.toUpperCase();
 }

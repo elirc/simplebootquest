@@ -13,6 +13,6 @@ test('promisify rejects', async () => {
 });
 
 test('loadUserName', async () => {
-  await expect(loadUserName(1)).resolves.toBe('ADA');
-  await expect(loadUserName(2)).rejects.toThrow('Not found');
+  await expect(loadUserName(1, getUser)).resolves.toBe('ADA');
+  await expect(loadUserName(2, getUser)).rejects.toThrow('Not found');
 });

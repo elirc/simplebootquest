@@ -4,6 +4,8 @@ title: Middleware
 type: code
 language: js
 xp: 25
+hints: ["`compose` is easiest as a recursive `dispatch(i)` function.", "Check the method first, then the content-type header."]
+resources: [{"title": "Express: Writing middleware", "url": "https://expressjs.com/en/guide/writing-middleware.html"}]
 ---
 # Middleware
 

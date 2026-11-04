@@ -32,4 +32,4 @@ Node ships `util.promisify` to do this generically, and you'll write your own.
 ## Your task
 
 1. `promisify(fn)` takes an error-first callback function and returns a function that returns a promise. Pass along all the arguments.
-2. Use it to implement `loadUserName(id)`, which calls the provided callback-style `getUser(id, cb)` and resolves to the user's `name` in upper case.
+2. Use it to implement `loadUserName(id, getUser)`, which calls the callback-style `getUser(id, cb)` it is given and resolves to the user's `name` in upper case.

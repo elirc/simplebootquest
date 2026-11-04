@@ -4,6 +4,8 @@ title: Request Validation
 type: code
 language: js
 xp: 25
+hints: ["Loop over the schema fields, not the data, so unknown fields are stripped automatically.", "Return the first error for each field."]
+resources: [{"title": "Zod docs", "url": "https://zod.dev/"}]
 ---
 # Request Validation
 

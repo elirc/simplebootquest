@@ -18,9 +18,13 @@ export function runInWorker(request: RunRequest): Promise<RunResult> {
       });
     }, TIMEOUT_MS);
 
-    worker.onmessage = (event: MessageEvent<RunResult>) => {
+    // Results arrive on a private channel; messages posted by learner code
+    // with self.postMessage() land on worker.onmessage and are ignored.
+    const channel = new MessageChannel();
+    channel.port1.onmessage = (event: MessageEvent<RunResult>) => {
       clearTimeout(timer);
       worker.terminate();
+      channel.port1.close();
       resolve(event.data);
     };
     worker.onerror = (event) => {
@@ -28,6 +32,6 @@ export function runInWorker(request: RunRequest): Promise<RunResult> {
       worker.terminate();
       resolve({ passed: false, results: [], logs: [], error: event.message || 'The code runner crashed.', durationMs: Date.now() - started });
     };
-    worker.postMessage(request);
+    worker.postMessage(request, [channel.port2]);
   });
 }

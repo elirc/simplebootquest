@@ -4,8 +4,27 @@ import { AssertionError, deepEqual, expect } from './expect.js';
 import { format } from './format.js';
 import { Fragment, find, findAll, h, render, renderAll, text } from './jsx.js';
 import { fn } from './mock.js';
+import { act, cleanupMounted, createContext, mount, React, useCallback, useContext, useEffect, useId, useLayoutEffect, useMemo, useReducer, useRef, useState, waitFor } from './hooks.js';
+import { express, request } from './express.js';
 
 export { AssertionError, deepEqual, expect, format, Fragment, h, render, renderAll, text, find, findAll, fn };
+export { act, mount, React, useState, useEffect, useReducer, useRef, useMemo, useCallback, useContext, createContext, waitFor, express, request };
+
+/**
+ * The core test API. It is re-bound inside the tests' own scope under a
+ * random name, so learner code can't replace `expect` or `test` with a fake
+ * that always passes (the code and the tests share one function scope).
+ */
+const PROTECTED = ['expect', 'test', 'it', 'describe', 'beforeEach', 'afterEach', 'vi'] as const;
+
+/** Modules learners can import. Everything else throws a friendly error. */
+const MODULES: Record<string, unknown> = {
+  react: React,
+  express,
+  supertest: request,
+  vitest: undefined, // filled per run with the test API
+  '@testing-library/react': undefined,
+};
 
 export interface RunRequest {
   language: CodeLanguage;
@@ -183,6 +202,13 @@ async function runSuite(req: RunRequest, options: RunOptions, testsLabel = 'test
   };
 
   const exportsObj: Record<string, unknown> = {};
+  const vi = Object.freeze({ fn });
+  const testApi = Object.freeze({ test, it: test, describe, beforeEach: (hook: () => unknown) => current.before.push(hook), afterEach: (hook: () => unknown) => current.after.push(hook), expect, vi });
+  const modules: Record<string, unknown> = {
+    ...MODULES,
+    vitest: testApi,
+    '@testing-library/react': Object.freeze({ render: mount, act, waitFor }),
+  };
   const helpers: Record<string, unknown> = {
     test,
     it: test,
@@ -190,17 +216,21 @@ async function runSuite(req: RunRequest, options: RunOptions, testsLabel = 'test
     beforeEach: (hook: () => unknown) => current.before.push(hook),
     afterEach: (hook: () => unknown) => current.after.push(hook),
     expect,
-    vi: { fn },
+    vi,
+    express,
+    request,
     console: createConsole(logs),
     exports: exportsObj,
     module: { exports: exportsObj },
     require: (name: string) => {
-      throw new Error(`Imports aren't available in the browser runner (tried to import "${name}"). Everything you need is already in scope.`);
+      if (name in modules && modules[name] !== undefined) return modules[name];
+      throw new Error(`"${name}" isn't available in the browser runner. You can import from: ${Object.keys(modules).join(', ')}. Everything else you need is already in scope.`);
     },
     sleep: (ms: number) => new Promise((r) => setTimeout(r, ms)),
   };
 
   let program: string;
+  const guard = `__sbq_${Math.random().toString(36).slice(2)}${Date.now().toString(36)}`;
   let sqlDb: SqlDatabaseLike | undefined;
 
   try {
@@ -223,6 +253,7 @@ async function runSuite(req: RunRequest, options: RunOptions, testsLabel = 'test
       // The learner's SQL text, so tests can check that a technique was used.
       helpers.code = req.code;
       program = `"use strict";\n{\n${transpile(req.tests, 'js', testsLabel)}\n}`;
+      void guard;
     } else {
       helpers.h = h;
       helpers.Fragment = Fragment;
@@ -231,19 +262,23 @@ async function runSuite(req: RunRequest, options: RunOptions, testsLabel = 'test
       helpers.text = text;
       helpers.find = find;
       helpers.findAll = findAll;
+      Object.assign(helpers, { React, mount, act, waitFor, useState, useEffect, useReducer, useRef, useMemo, useCallback, useContext, useLayoutEffect, useId, createContext });
       const user = transpile(req.code, req.language, codeLabel);
       const tests = transpile(req.tests, req.language, testsLabel);
       // Helpers arrive as function parameters. Running the code inside a
       // nested block lets learners declare their own `text`, `find`, etc.
       // without a "has already been declared" SyntaxError.
-      program = `"use strict";\n{\n${user}\n;\n{\n${tests}\n}\n}`;
+      // The protected test API is re-declared in a block between the learner's
+      // code and the tests, under a per-run random name the learner can't guess.
+      program = `"use strict";\nconst ${guard} = arguments[arguments.length - 1];\n{\n${user}\n;\n{\nconst { ${PROTECTED.join(', ')} } = ${guard};\n{\n${tests}\n}\n}\n}`;
     }
 
     const names = Object.keys(helpers);
     const compiled = new AsyncFunction(...names, program);
-    await withTimeout(compiled(...names.map((n) => helpers[n])), testTimeoutMs * 2);
+    await withTimeout(compiled(...names.map((n) => helpers[n]), testApi), testTimeoutMs * 2);
   } catch (err) {
     sqlDb?.close();
+    cleanupMounted();
     return finish(errorMessage(err));
   }
 
@@ -269,6 +304,7 @@ async function runSuite(req: RunRequest, options: RunOptions, testsLabel = 'test
     results.push(error === null ? { name, passed: true, durationMs: Date.now() - t0 } : { name, passed: false, error: errorMessage(error), durationMs: Date.now() - t0 });
   }
   sqlDb?.close();
+  cleanupMounted();
   if (registered.length === 0) return finish('No tests were found. Write some with test(...) or it(...).');
   return finish();
 }

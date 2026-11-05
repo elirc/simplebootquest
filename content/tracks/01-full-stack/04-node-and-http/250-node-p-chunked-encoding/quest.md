@@ -4,6 +4,8 @@ title: "Practice: Chunked Transfer Encoding"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["`n.toString(16)` formats a number in hex, and `parseInt(text, 16)` reads it back.", "Decoding is a loop: read a size line, read that many characters, expect `\\\\r\\\\n`, repeat until size 0."]
 ---
 # Practice: Chunked Transfer Encoding

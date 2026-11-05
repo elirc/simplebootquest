@@ -4,6 +4,8 @@ title: "Practice: A Typed Fetch Wrapper"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["`fetch` only rejects for network failures. A 404 or 500 resolves normally with `ok: false`, so you must check it yourself."]
 resources: [{"title": "MDN: Using the Fetch API", "url": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch"}]
 ---

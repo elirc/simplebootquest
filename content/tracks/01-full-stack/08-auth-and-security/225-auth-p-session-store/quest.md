@@ -4,6 +4,8 @@ title: "Practice: A Session Store with Sliding Expiry"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Store `createdAt` and `idleUntil` for each session. `get` checks both, then pushes `idleUntil` forward."]
 ---
 # Practice: A Session Store with Sliding Expiry

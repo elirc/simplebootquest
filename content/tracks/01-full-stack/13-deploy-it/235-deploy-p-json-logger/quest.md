@@ -4,6 +4,8 @@ title: "Practice: A Structured JSON Logger"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 resources: [{"title": "pino logger", "url": "https://getpino.io/"}]
 ---
 # Practice: A Structured JSON Logger

@@ -4,6 +4,8 @@ title: "Practice: Matching Route Params"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["`.split(\"/\").filter(Boolean)` removes the empty strings from leading and trailing slashes.", "After the loop, check that the path had no extra segments left over."]
 ---
 # Practice: Matching Route Params

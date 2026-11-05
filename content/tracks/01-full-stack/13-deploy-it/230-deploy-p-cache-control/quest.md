@@ -4,6 +4,8 @@ title: "Practice: Cache Headers for a Deployed SPA"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 resources: [{"title": "MDN: Cache-Control", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control"}, {"title": "web.dev: HTTP caching", "url": "https://web.dev/articles/http-cache"}]
 ---
 # Practice: Cache Headers for a Deployed SPA

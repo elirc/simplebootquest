@@ -3,6 +3,8 @@ slug: "ut-q-coverage"
 title: "Quiz: Coverage vs Confidence"
 type: "quiz"
 xp: 15
+optional: true
+section: "Practice"
 resources: [{"title": "Vitest: Coverage", "url": "https://vitest.dev/guide/coverage"}, {"title": "Stryker Mutator", "url": "https://stryker-mutator.io/"}]
 questions: [{"prompt": "A suite has 100% line coverage. What does that guarantee?", "options": ["The code is bug-free", "Every line ran at least once, but not that results were checked", "Every branch was tested"], "answer": 1}, {"prompt": "What does a \"surviving mutant\" tell you?", "options": ["The code is correct", "No test noticed a deliberate bug, so a behaviour is untested", "The mutation tool is broken"], "answer": 1}, {"prompt": "Why can branch coverage find gaps that line coverage misses?", "options": ["It is faster", "`if (a || b)` on one line has several paths. Line coverage counts it once", "It counts comments"], "answer": 1}, {"prompt": "A team mandates 90% coverage. What is a common bad side effect?", "options": ["Tests get faster", "People write tests that execute code without meaningful assertions, just to hit the number", "Bugs disappear"], "answer": 1}, {"prompt": "Which tool runs mutation testing for JavaScript and TypeScript?", "options": ["ESLint", "Stryker", "Prettier"], "answer": 1}]
 ---

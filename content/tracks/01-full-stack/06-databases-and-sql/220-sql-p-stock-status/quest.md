@@ -4,6 +4,8 @@ title: "Practice: Stock Status Labels"
 type: "code"
 language: "sql"
 xp: 20
+optional: true
+section: "Practice"
 ---
 # Practice: Stock Status Labels
 

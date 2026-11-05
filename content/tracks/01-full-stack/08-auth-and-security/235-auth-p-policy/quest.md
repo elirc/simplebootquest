@@ -4,6 +4,8 @@ title: "Practice: Attribute-Based Permissions"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Compute a few booleans up front (isAuthor, isStaff, isAdmin, isDraft). Then each rule is one line.", "The `default` case of the switch should deny: secure systems default to \"no\"."]
 ---
 # Practice: Attribute-Based Permissions

@@ -4,6 +4,8 @@ title: "Practice: Bulk Operations with Partial Failure"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["`Promise.all` runs everything at once and fails fast. Use a plain `for` loop with `await` and a try/catch per item instead."]
 resources: [{"title": "MDN: 207 Multi-Status", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/207"}]
 ---

@@ -4,6 +4,8 @@ title: "Practice: Validating a Config Object"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Check each rule independently and push to an errors array."]
 ---
 ## Your task

@@ -4,6 +4,8 @@ title: "Practice: Highlighting Search Matches"
 type: "code"
 language: "jsx"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["`\"a-B-a\".split(/(b)/i)` keeps the captured matches in the array, at odd indexes.", "The escape regex is `/[.*+?^${}()|[\\\\]\\\\\\\\]/g`, and the replacement `\"\\\\\\\\$&\"` inserts a backslash before the match."]
 ---
 # Practice: Highlighting Search Matches

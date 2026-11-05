@@ -6,8 +6,20 @@ import type { Db } from '../db.ts';
 import { DUMMY_HASH, TOKEN_COOKIE, cookieOptions, hashPassword, requireAuth, signToken, toPublicUser, verifyPassword } from '../auth.ts';
 import { HttpError, parse } from '../errors.ts';
 
+/**
+ * Names appear on the public leaderboard, so keep them to plain names:
+ * letters (any language), digits, spaces and a little punctuation. No URLs,
+ * no markup, no emoji spam.
+ */
+export const displayName = z
+  .string()
+  .trim()
+  .min(1, 'Name is required')
+  .max(40, 'Name must be at most 40 characters')
+  .regex(/^[\p{L}\p{N}][\p{L}\p{N} .'_-]*$/u, 'Use letters, numbers, spaces and . \' _ - only');
+
 const RegisterBody = z.object({
-  name: z.string().trim().min(1, 'Name is required').max(50, 'Name must be at most 50 characters'),
+  name: displayName,
   email: z.string().trim().toLowerCase().email('Email is invalid').max(254),
   password: z.string().min(8, 'Password must be at least 8 characters').max(128, 'Password must be at most 128 characters'),
 });
@@ -17,7 +29,7 @@ const LoginBody = z.object({
   password: z.string().min(1, 'Password is required'),
 });
 
-export function authRouter(db: Db, config: Config) {
+export function authRouter(db: Db, config: Config, clock: () => Date = () => new Date()) {
   const router = Router();
 
   // Slow down password guessing. Disabled in tests so suites can log in freely.
@@ -50,7 +62,7 @@ export function authRouter(db: Db, config: Config) {
     if (!user || !ok) throw new HttpError(401, 'Invalid email or password');
 
     res.cookie(TOKEN_COOKIE, signToken(config, user.id), cookieOptions(config));
-    res.json({ user: toPublicUser(user) });
+    res.json({ user: toPublicUser(user, clock()) });
   });
 
   router.post('/logout', (_req, res) => {
@@ -62,7 +74,7 @@ export function authRouter(db: Db, config: Config) {
   router.get('/me', requireAuth, async (req, res) => {
     const user = await db.user.findUnique({ where: { id: req.userId } });
     if (!user) throw new HttpError(401, 'You need to log in first');
-    res.json({ user: toPublicUser(user) });
+    res.json({ user: toPublicUser(user, clock()) });
   });
 
   return router;

@@ -4,6 +4,8 @@ title: "Practice: 404 vs 405"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Write a small `matches(pattern, path)` helper first: same number of segments, and each one is equal or a `:param`."]
 ---
 # Practice: 404 vs 405

@@ -4,6 +4,8 @@ title: "Practice: Build a Mini Router"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Store each route as `{ method, parts, handlers }`, with the pattern pre-split into segments.", "For each handler, pass a `next` that records whether it was called (and with what), then decide whether to continue."]
 ---
 # Practice: Build a Mini Router

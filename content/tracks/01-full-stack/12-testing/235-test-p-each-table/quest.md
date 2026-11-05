@@ -4,6 +4,8 @@ title: "Practice: Parsing test.each Tables"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 resources: [{"title": "Vitest: test.each", "url": "https://vitest.dev/api/#test-each"}]
 ---
 # Practice: Parsing test.each Tables

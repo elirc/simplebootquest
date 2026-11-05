@@ -4,6 +4,8 @@ title: "Practice: Keep the Latest Record"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["ISO date strings compare correctly with `>`."]
 ---
 ## Your task

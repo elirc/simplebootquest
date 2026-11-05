@@ -4,6 +4,8 @@ title: "Practice: A Star Rating Input"
 type: "code"
 language: "jsx"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["`type=\"button\"` matters inside forms: the default type is \"submit\"."]
 ---
 # Practice: A Star Rating Input

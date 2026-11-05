@@ -5,6 +5,8 @@ type: "code"
 language: "js"
 mode: "write-tests"
 xp: 20
+optional: true
+section: "Practice"
 hints: ["One mutant only shows up when a `once` listener removes itself DURING emit, so test a once listener followed by a normal one."]
 ---
 # Practice: Testing an Event Emitter

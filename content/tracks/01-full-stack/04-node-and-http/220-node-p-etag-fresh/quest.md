@@ -4,6 +4,8 @@ title: "Practice: Conditional GET with ETags"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Strip a leading `W/` from both sides before comparing.", "`Date.parse` understands HTTP dates like `Mon, 01 Jan 2024 00:00:00 GMT`."]
 resources: [{"title": "MDN: ETag", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag"}]
 ---

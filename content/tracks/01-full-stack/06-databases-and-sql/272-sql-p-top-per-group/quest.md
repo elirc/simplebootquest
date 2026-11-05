@@ -4,6 +4,8 @@ title: "Practice: Top N per Group"
 type: "code"
 language: "sql"
 xp: 20
+optional: true
+section: "Practice"
 hints: ["The starter looks right but isn't portable: SQLite happens to return the title from the max row, while PostgreSQL rejects it. Use ROW_NUMBER."]
 ---
 # Practice: Top N per Group

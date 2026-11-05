@@ -4,6 +4,8 @@ title: "Practice: A Fixed-Window Rate Limiter"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Store `{ count, resetAt }` per key in a `Map`.", "Start a new window when there is none yet, or when `now() >= resetAt`."]
 ---
 # Practice: A Fixed-Window Rate Limiter

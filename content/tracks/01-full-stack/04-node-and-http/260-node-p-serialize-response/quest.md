@@ -4,6 +4,8 @@ title: "Practice: Writing a Raw HTTP Response"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Build an array of lines and `join(\"\\\\r\\\\n\")` it. The header block ends with an extra `\\\\r\\\\n`."]
 ---
 # Practice: Writing a Raw HTTP Response

@@ -4,6 +4,8 @@ title: "Practice: Spiral Order"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["After each side, move that boundary inwards and re-check the others."]
 ---
 ## Your task

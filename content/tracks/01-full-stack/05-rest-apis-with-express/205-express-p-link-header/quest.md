@@ -4,6 +4,8 @@ title: "Practice: Pagination Links"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 resources: [{"title": "GitHub Docs: Using pagination in the REST API", "url": "https://docs.github.com/en/rest/using-the-rest-api/using-pagination-in-the-rest-api"}]
 ---
 # Practice: Pagination Links

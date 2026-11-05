@@ -4,6 +4,8 @@ title: "Practice: Parsing the Cookie Header"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["`indexOf(\"=\")` then two `slice` calls handles values with `=` in them.", "Wrap `decodeURIComponent` in try/catch: it throws `URIError` on malformed input."]
 resources: [{"title": "MDN: Cookie header", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cookie"}]
 ---

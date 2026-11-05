@@ -4,6 +4,8 @@ title: "Practice: A Snapshot Serializer"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Recurse with `indent + \"  \"` for children. The closing bracket uses the current `indent`."]
 ---
 # Practice: A Snapshot Serializer

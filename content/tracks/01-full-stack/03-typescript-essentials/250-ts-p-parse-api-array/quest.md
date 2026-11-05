@@ -4,6 +4,8 @@ title: "Practice: Parsing an Untrusted API Response"
 type: "code"
 language: "ts"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Write a per-item `toUser(item): User | null` and count the nulls."]
 ---
 ## Your task

@@ -1,5 +1,6 @@
+import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
-import type { ChapterSummary, QuestSummary, TrackSummary } from '@sbq/shared';
+import type { ChapterSummary, QuestSummary, SearchResult, TrackSummary } from '@sbq/shared';
 import { api } from '../api';
 import { useAuth } from '../auth';
 import { ErrorBox } from '../components/ErrorBox';
@@ -8,19 +9,21 @@ import { StatusIcon, TypeIcon } from '../components/StatusIcon';
 import { useAsync } from '../components/useAsync';
 import { XpBar } from '../components/XpBar';
 
-export function chapterProgress(chapter: ChapterSummary) {
-  const done = chapter.quests.filter((q) => q.status === 'completed').length;
-  return { done, total: chapter.quests.length, percent: Math.round((done / chapter.quests.length) * 100) };
-}
-
-export function nextQuest(track: TrackSummary): QuestSummary | undefined {
-  return track.chapters.flatMap((c) => c.quests).find((q) => q.status !== 'completed');
+/** Progress through a chapter's core quests (practice is optional). */
+export function chapterProgress(chapter: Pick<ChapterSummary, 'coreTotal' | 'coreCompleted'>) {
+  const { coreCompleted: done, coreTotal: total } = chapter;
+  return { done, total, percent: total ? Math.round((done / total) * 100) : 100 };
 }
 
 export function trackProgress(track: TrackSummary) {
-  const quests = track.chapters.flatMap((c) => c.quests);
-  const done = quests.filter((q) => q.status === 'completed').length;
-  return { done, total: quests.length, xp: quests.reduce((s, q) => s + q.xp, 0), percent: quests.length ? Math.round((done / quests.length) * 100) : 0 };
+  const done = track.chapters.reduce((s, c) => s + c.coreCompleted, 0);
+  const total = track.chapters.reduce((s, c) => s + c.coreTotal, 0);
+  const all = track.chapters.reduce((s, c) => s + c.total, 0);
+  return { done, total, all, xp: track.chapters.reduce((s, c) => s + c.xp, 0), percent: total ? Math.round((done / total) * 100) : 0 };
+}
+
+export function nextQuest(track: TrackSummary): QuestSummary | undefined {
+  return track.chapters.find((c) => c.next)?.next ?? undefined;
 }
 
 export function QuestRow({ quest }: { quest: QuestSummary }) {
@@ -30,9 +33,114 @@ export function QuestRow({ quest }: { quest: QuestSummary }) {
         <StatusIcon status={quest.status} />
         <TypeIcon type={quest.type} boss={quest.boss} />
         <span className="quest-row-title">{quest.title}</span>
+        {quest.optional && <span className="tag">practice</span>}
         <span className="xp-pill">+{quest.xp} XP</span>
       </Link>
     </li>
+  );
+}
+
+/** Search every quest in every track (server-side, debounced). */
+function QuestSearch() {
+  const [q, setQ] = useState('');
+  const [results, setResults] = useState<SearchResult[] | null>(null);
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    const query = q.trim();
+    if (query.length < 2) {
+      setResults(null);
+      return;
+    }
+    let ignore = false;
+    const timer = setTimeout(() => {
+      api
+        .search(query)
+        .then((r) => {
+          if (!ignore) {
+            setResults(r.results);
+            setTotal(r.total);
+          }
+        })
+        .catch(() => !ignore && setResults([]));
+    }, 250);
+    return () => {
+      ignore = true;
+      clearTimeout(timer);
+    };
+  }, [q]);
+
+  return (
+    <div className="quest-search">
+      <label htmlFor="quest-search" className="sr-only">
+        Search quests
+      </label>
+      <input
+        id="quest-search"
+        type="search"
+        placeholder="Search all quests: 'useEffect', 'JOIN', 'middleware'…"
+        value={q}
+        onChange={(e) => setQ(e.target.value)}
+        autoComplete="off"
+      />
+      {results && (
+        <div className="card search-results" aria-live="polite">
+          {results.length === 0 ? (
+            <p className="muted">No quests match "{q.trim()}".</p>
+          ) : (
+            <>
+              <p className="muted">
+                {total > results.length ? `Top ${results.length} of ${total} matches` : `${total} match${total === 1 ? '' : 'es'}`}
+              </p>
+              <ul className="quest-list">
+                {results.map((r) => (
+                  <li key={r.slug}>
+                    <Link to={`/learn/${r.chapterSlug}/${r.slug}`} className="quest-row">
+                      <StatusIcon status={r.status} />
+                      <TypeIcon type={r.type} boss={r.boss} />
+                      <span className="quest-row-title">
+                        {r.title}
+                        <small className="muted"> · {r.trackTitle} › {r.chapterTitle}</small>
+                      </span>
+                      {r.optional && <span className="tag">practice</span>}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** "Review" prompt: spaced repetition of quests finished a few days ago. */
+function ReviewPrompt() {
+  const { state } = useAsync(() => api.review(), []);
+  if (!state.data || state.data.items.length === 0) return null;
+  const { items, dueCount } = state.data;
+  return (
+    <section className="card review">
+      <h2>🔁 Review time</h2>
+      <p className="muted">
+        {dueCount} quest{dueCount === 1 ? ' is' : 's are'} due for review. Re-solving something you learned a few days ago is the fastest way to make it
+        stick. No XP, just stronger memory.
+      </p>
+      <ul className="quest-list">
+        {items.map((q) => (
+          <li key={q.slug}>
+            <Link to={`/learn/${q.chapterSlug}/${q.slug}`} className="quest-row">
+              <TypeIcon type={q.type} boss={q.boss} />
+              <span className="quest-row-title">
+                {q.title}
+                <small className="muted"> · {q.chapterTitle}</small>
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }
 
@@ -44,13 +152,24 @@ export function LearnPage() {
   if (state.status === 'error' && !state.data) return <ErrorBox message={state.error.message} onRetry={reload} />;
   if (!state.data) return <Spinner label="Loading the curriculum…" />;
 
-  const { tracks } = state.data;
+  const { tracks, resume } = state.data;
   const track = tracks.find((t) => t.slug === params.get('track')) ?? tracks[0]!;
   const next = nextQuest(track);
   const p = trackProgress(track);
 
   return (
     <div className="learn">
+      <QuestSearch />
+
+      {resume && (
+        <Link to={`/learn/${resume.chapterSlug}/${resume.slug}`} className="card resume">
+          <span className="muted">{resume.reason === 'in_progress' ? 'Pick up where you left off' : 'Up next'}</span>
+          <strong>{resume.title} →</strong>
+        </Link>
+      )}
+
+      {user && <ReviewPrompt />}
+
       <nav className="track-tabs" role="tablist" aria-label="Tracks">
         {tracks.map((t) => {
           const tp = trackProgress(t);
@@ -68,7 +187,7 @@ export function LearnPage() {
               <span>
                 <strong>{t.title}</strong>
                 <small className="muted">
-                  {tp.done}/{tp.total} quests
+                  {tp.done}/{tp.total} core quests
                 </small>
               </span>
             </button>
@@ -83,7 +202,7 @@ export function LearnPage() {
           </h1>
           <p className="muted">{track.description}</p>
           <p className="muted">
-            {p.done} of {p.total} quests complete · {p.xp} XP available
+            {p.done} of {p.total} core quests complete · {p.all - p.total} optional practice quests · {p.xp} XP available
           </p>
           {user ? <XpBar xp={user.xp} /> : <p><Link to="/register">Create a free account</Link> to save your progress and earn XP.</p>}
         </div>
@@ -109,19 +228,18 @@ export function LearnPage() {
                   <div className="progress-fill" style={{ width: `${cp.percent}%` }} />
                 </div>
                 <small className="muted">
-                  {cp.done}/{cp.total} complete
+                  {cp.done}/{cp.total} core complete
+                  {chapter.total > chapter.coreTotal && ` · ${chapter.total - chapter.coreTotal} practice`}
                 </small>
               </header>
               <ul className="quest-list">
-                {chapter.quests.slice(0, 6).map((q) => (
+                {chapter.preview.map((q) => (
                   <QuestRow key={q.slug} quest={q} />
                 ))}
               </ul>
-              {chapter.quests.length > 6 && (
-                <Link to={`/learn/${chapter.slug}`} className="see-all">
-                  See all {chapter.quests.length} quests →
-                </Link>
-              )}
+              <Link to={`/learn/${chapter.slug}`} className="see-all">
+                See all {chapter.total} quests →
+              </Link>
             </article>
           );
         })}

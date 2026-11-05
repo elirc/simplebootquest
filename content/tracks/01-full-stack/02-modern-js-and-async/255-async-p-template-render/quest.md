@@ -4,6 +4,8 @@ title: "Practice: A Tiny Template Engine"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["One regex with capture groups for the path and an optional filter."]
 ---
 # Practice: A Tiny Template Engine

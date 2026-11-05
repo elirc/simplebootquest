@@ -4,6 +4,8 @@ title: "Practice: Making Change"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Use `Math.floor(left / coin)` for each coin, from largest to smallest."]
 ---
 ## Your task

@@ -4,6 +4,8 @@ title: "Practice: Readiness Checks with Timeouts"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Use `Promise.all` over checks that each catch their own errors, so one failure does not reject the whole thing.", "Race each check against a timer that rejects with `new Error(\"timeout\")`."]
 ---
 # Practice: Readiness Checks with Timeouts

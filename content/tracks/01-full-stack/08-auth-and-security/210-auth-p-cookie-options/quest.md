@@ -4,6 +4,8 @@ title: "Practice: Serialising Secure Cookies"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 resources: [{"title": "MDN: Set-Cookie", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie"}]
 ---
 # Practice: Serialising Secure Cookies

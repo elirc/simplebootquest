@@ -4,6 +4,8 @@ title: "Practice: camelCase"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Split on a regex like `/[\\s_-]+/` and drop empty strings."]
 ---
 # Practice: camelCase

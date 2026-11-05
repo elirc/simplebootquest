@@ -3,6 +3,8 @@ slug: "api-q-optimistic-ui"
 title: "Quiz: Optimistic UI and Failure Handling"
 type: "quiz"
 xp: 15
+optional: true
+section: "Practice"
 resources: [{"title": "TanStack Query: Optimistic updates", "url": "https://tanstack.com/query/latest/docs/framework/react/guides/optimistic-updates"}]
 questions: [{"prompt": "When is an optimistic update a bad idea?", "options": ["Toggling a todo as done", "Charging a credit card", "Starring a repository"], "answer": 1}, {"prompt": "The optimistic request fails. What should happen?", "options": ["Keep the optimistic state", "Roll back to the snapshot and show an error", "Retry forever silently"], "answer": 1}, {"prompt": "Why refetch after the mutation settles, even on success?", "options": ["To waste bandwidth", "The server may have changed other fields (updatedAt, computed values), so refetching syncs the cache", "It is required for cookies"], "answer": 1}, {"prompt": "A user double-clicks \"Create\". How do you avoid two todos?", "options": ["Hope it does not happen", "Disable the button while submitting, and/or send an idempotency key", "Debounce the server"], "answer": 1}, {"prompt": "Where should the rollback snapshot be taken?", "options": ["After the server responds", "Before applying the optimistic change (e.g. in onMutate)", "In the error boundary"], "answer": 1}]
 ---

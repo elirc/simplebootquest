@@ -1,7 +1,10 @@
 import type {
+  ChapterDetail,
   CompletionResult,
   Curriculum,
-  LeaderboardEntry,
+  LeaderboardResponse,
+  ReviewItem,
+  SearchResult,
   ProfileResponse,
   PublicUser,
   QuestDetail,
@@ -44,7 +47,7 @@ async function request<T>(method: string, path: string, body?: unknown): Promise
 }
 
 export type SubmissionResult = CompletionResult & { attempts?: number; solutionAvailable?: boolean };
-export type QuizResponse = QuizResult & { explanations: (string | null)[] };
+export type QuizResponse = QuizResult & { explanations: (string | null)[] | null };
 
 export const api = {
   auth: {
@@ -55,8 +58,10 @@ export const api = {
     logout: () => request<void>('POST', '/auth/logout'),
   },
   curriculum: () => request<Curriculum>('GET', '/curriculum'),
-  chapter: (slug: string) =>
-    request<{ slug: string; trackSlug: string; number: number; title: string; description: string; intro: string }>('GET', `/chapters/${slug}`),
+  chapter: (slug: string) => request<ChapterDetail>('GET', `/chapters/${slug}`),
+  search: (q: string) => request<{ results: SearchResult[]; total: number }>('GET', `/search?q=${encodeURIComponent(q)}`),
+  review: () => request<{ items: ReviewItem[]; dueCount: number }>('GET', '/me/review'),
+  updateSettings: (settings: { name?: string; showOnLeaderboard?: boolean }) => request<{ user: PublicUser }>('PATCH', '/me/settings', settings),
   quest: (slug: string) => request<QuestDetail>('GET', `/quests/${slug}`),
   solution: (slug: string) => request<{ solution: string }>('GET', `/quests/${slug}/solution`),
   saveDraft: (slug: string, code: string) => request<void>('PUT', `/quests/${slug}/draft`, { code }),
@@ -67,5 +72,5 @@ export const api = {
   submitProject: (slug: string, repoUrl: string, liveUrl: string) =>
     request<CompletionResult>('POST', `/quests/${slug}/project`, { repoUrl, liveUrl }),
   profile: () => request<ProfileResponse>('GET', '/me/profile'),
-  leaderboard: () => request<{ entries: LeaderboardEntry[] }>('GET', '/leaderboard'),
+  leaderboard: (period: 'week' | 'all' = 'week') => request<LeaderboardResponse>('GET', `/leaderboard?period=${period}`),
 };

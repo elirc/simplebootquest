@@ -4,6 +4,8 @@ title: "Practice: EXISTS"
 type: "code"
 language: "sql"
 xp: 20
+optional: true
+section: "Practice"
 ---
 # Practice: EXISTS
 

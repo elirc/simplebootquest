@@ -4,6 +4,8 @@ title: "Practice: Deferred Promises"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Capture resolve/reject in variables inside the executor.", "Use `.finally` for cleanup that runs either way."]
 resources: [{"title": "MDN: Promise.withResolvers", "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/withResolvers"}]
 ---

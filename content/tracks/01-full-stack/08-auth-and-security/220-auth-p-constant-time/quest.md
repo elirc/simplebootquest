@@ -4,6 +4,8 @@ title: "Practice: Constant-Time Comparison"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["`x ^ y` is 0 only when x equals y. OR-ing many of those together stays 0 only if every pair matched."]
 resources: [{"title": "Node.js: crypto.timingSafeEqual", "url": "https://nodejs.org/api/crypto.html#cryptotimingsafeequala-b"}]
 ---

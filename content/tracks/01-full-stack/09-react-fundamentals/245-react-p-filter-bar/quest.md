@@ -4,6 +4,8 @@ title: "Practice: Filters and Derived State"
 type: "code"
 language: "jsx"
 xp: 15
+optional: true
+section: "Practice"
 resources: [{"title": "React docs: Choosing the state structure", "url": "https://react.dev/learn/choosing-the-state-structure"}]
 ---
 # Practice: Filters and Derived State

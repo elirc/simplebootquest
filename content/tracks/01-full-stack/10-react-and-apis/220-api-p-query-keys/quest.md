@@ -4,6 +4,8 @@ title: "Practice: Query Keys and Invalidation"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Write a recursive `stable(value)` that rebuilds objects with sorted keys, then `JSON.stringify` it.", "Store the original key next to the data, so `invalidate` can test each entry against the prefix."]
 resources: [{"title": "TanStack Query: Query keys", "url": "https://tanstack.com/query/latest/docs/framework/react/guides/query-keys"}]
 ---

@@ -4,6 +4,8 @@ title: "Practice: Batching to Avoid N+1 Queries"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Keep a `Map<id, waiters[]>` for the current batch. The first `load` of a batch schedules a flush with `queueMicrotask`.", "Resolve from a `Map` of the returned rows by id, since the batch function may return them in any order."]
 resources: [{"title": "DataLoader on GitHub", "url": "https://github.com/graphql/dataloader"}]
 ---

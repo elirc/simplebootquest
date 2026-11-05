@@ -4,6 +4,8 @@ title: "Practice: Composing Async Middleware"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Write a recursive `dispatch(i)` that calls `middlewares[i](ctx, () => dispatch(i + 1))`.", "Track the highest index dispatched so far. Dispatching an index that is not greater means `next` ran twice."]
 resources: [{"title": "koa-compose source (≈50 lines)", "url": "https://github.com/koajs/compose/blob/master/index.js"}]
 ---

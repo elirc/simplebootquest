@@ -4,6 +4,8 @@ title: "Practice: Ignoring Stale Results"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["A counter of the latest call id is enough for latestOnly."]
 ---
 # Practice: Ignoring Stale Results

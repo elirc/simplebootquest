@@ -204,7 +204,9 @@ function QuizQuest({ quest, onCompleted }: { quest: QuestDetail; onCompleted: ()
   return (
     <div className="quiz">
       {questions.map((q, i) => {
-        const verdict = result ? (result.correct[i] ? 'correct' : 'incorrect') : null;
+        // Per-question verdicts only arrive once every answer is right (the
+        // server returns just a score until then, so the key can't be guessed).
+        const verdict = result?.correct ? (result.correct[i] ? 'correct' : 'incorrect') : null;
         return (
           <fieldset key={i} className={`card quiz-question ${verdict ?? ''}`}>
             <legend>
@@ -225,15 +227,16 @@ function QuizQuest({ quest, onCompleted }: { quest: QuestDetail; onCompleted: ()
                 <Markdown>{option}</Markdown>
               </label>
             ))}
-            {verdict === 'incorrect' && <p className="quiz-feedback">Not quite — re-read the lesson and try again.</p>}
-            {verdict === 'correct' && result?.explanations[i] && <p className="quiz-feedback ok">✓ {result.explanations[i]}</p>}
+            {verdict === 'correct' && result?.explanations?.[i] && <p className="quiz-feedback ok">✓ {result.explanations[i]}</p>}
           </fieldset>
         );
       })}
       {error && <ErrorBox message={error} />}
       {result && (
         <p className={`quiz-score ${result.completed ? 'ok' : 'fail'}`} aria-live="polite">
-          {result.completed ? `🎉 ${result.score}/${questions.length} — perfect!` : `${result.score}/${questions.length} correct. Fix the highlighted questions and resubmit.`}
+          {result.completed
+            ? `🎉 ${result.score}/${questions.length}, perfect!`
+            : `${result.score}/${questions.length} correct. Re-read the lesson, rethink your answers, and try again. Explanations for every question unlock once you get them all right.`}
         </p>
       )}
       {user ? (

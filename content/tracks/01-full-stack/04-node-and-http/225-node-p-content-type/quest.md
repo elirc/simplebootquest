@@ -4,6 +4,8 @@ title: "Practice: Parsing Content-Type"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Split on `;`: the first piece is the type, the rest are `name=value` parameters."]
 ---
 # Practice: Parsing Content-Type

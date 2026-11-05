@@ -4,6 +4,8 @@ title: "Practice: Semantic Versioning"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Compare major, then minor, then patch. Only if all three are equal does the pre-release matter."]
 resources: [{"title": "Semantic Versioning 2.0.0", "url": "https://semver.org/"}, {"title": "npm: semver calculator", "url": "https://semver.npmjs.com/"}]
 ---

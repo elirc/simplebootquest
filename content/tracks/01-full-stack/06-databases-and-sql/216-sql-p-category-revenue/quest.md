@@ -4,6 +4,8 @@ title: "Practice: Revenue by Category"
 type: "code"
 language: "sql"
 xp: 20
+optional: true
+section: "Practice"
 hints: ["`COUNT(DISTINCT oi.order_id)` counts each order once, even if it has several items from the same category."]
 ---
 # Practice: Revenue by Category

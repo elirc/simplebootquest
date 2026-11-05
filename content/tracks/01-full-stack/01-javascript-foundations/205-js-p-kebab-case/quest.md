@@ -4,6 +4,8 @@ title: "Practice: kebab-case"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Insert a space before each capital that follows a lowercase letter or digit, then split."]
 ---
 # Practice: kebab-case

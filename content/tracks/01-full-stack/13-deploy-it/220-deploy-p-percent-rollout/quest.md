@@ -4,6 +4,8 @@ title: "Practice: Percentage Rollouts"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Never use `Math.random()` for rollouts: a user would flip between variants on every request."]
 ---
 # Practice: Percentage Rollouts

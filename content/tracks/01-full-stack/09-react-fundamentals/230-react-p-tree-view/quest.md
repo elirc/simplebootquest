@@ -4,6 +4,8 @@ title: "Practice: A Recursive Tree View"
 type: "code"
 language: "jsx"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Write a helper component that renders one level and calls itself for `node.children`, passing a different `role`."]
 ---
 # Practice: A Recursive Tree View

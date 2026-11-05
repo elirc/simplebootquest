@@ -4,6 +4,8 @@ title: "Practice: Parsing .env Files"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Only ` #` (a space before the hash) starts an inline comment, so `abc#123` stays intact.", "Check the first character of the value to choose between double-quoted, single-quoted and unquoted parsing."]
 resources: [{"title": "dotenv on npm", "url": "https://www.npmjs.com/package/dotenv"}]
 ---

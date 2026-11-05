@@ -1142,3 +1142,82 @@ kbd {
     display: none;
   }
 }
+
+/* ---- Council iteration: search, resume, review, sections, tips ---- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.quest-search {
+  position: relative;
+  margin-bottom: 1rem;
+}
+.quest-search input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+}
+.search-results {
+  margin-top: 0.5rem;
+  max-height: 60vh;
+  overflow: auto;
+}
+.resume {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+  text-decoration: none;
+  color: inherit;
+  border-left: 4px solid var(--accent);
+}
+.resume strong {
+  font-size: 1.1rem;
+}
+.review {
+  margin-bottom: 1rem;
+}
+.review h2 {
+  margin-top: 0;
+}
+.tag {
+  font-size: 0.7rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  margin-left: 0.5rem;
+  white-space: nowrap;
+}
+.filter-bar {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+.section {
+  margin-bottom: 1rem;
+}
+.section summary {
+  cursor: pointer;
+  padding: 0.25rem 0;
+}
+.error-tip {
+  margin: 0.4rem 0 0;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  font-size: 0.9rem;
+}
+.setting {
+  display: block;
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+}

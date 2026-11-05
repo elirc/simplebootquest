@@ -4,6 +4,8 @@ title: "Practice: Pagination Controls"
 type: "code"
 language: "jsx"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Collect the page numbers you want in a Set, sort them, then walk the list and insert `…` (or the single missing page) between non-adjacent numbers."]
 ---
 # Practice: Pagination Controls

@@ -4,6 +4,8 @@ title: "Practice: Assertion Functions"
 type: "code"
 language: "ts"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["The return type is written `asserts value is NonNullable<T>`."]
 ---
 # Practice: Assertion Functions

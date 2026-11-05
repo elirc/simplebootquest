@@ -4,6 +4,8 @@ title: "Practice: Intersection, Union & Difference"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Build each one from Sets: `new Set(b).has(x)`."]
 ---
 ## Your task

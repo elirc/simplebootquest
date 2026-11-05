@@ -4,6 +4,8 @@ title: "Practice: Interfaces, implements & Access Modifiers"
 type: "code"
 language: "ts"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["`constructor(public readonly id: string, private balance: number) {}`"]
 ---
 # Practice: Interfaces, implements & Access Modifiers

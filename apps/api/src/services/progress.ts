@@ -3,6 +3,7 @@ import {
   levelForXp,
   newlyEarned,
   nextStreak,
+  reviewDueAt,
   toUtcDay,
   type AchievementDefinition,
   type CompletionResult,
@@ -36,12 +37,15 @@ export function createProgressService(db: Db, curriculum: Curriculum, clock: () 
     return new Set(rows.map((r) => r.questSlug));
   }
 
+  // A chapter is complete when its *core* quests are done; practice is optional.
+  const coreDone = (quests: Quest[], done: Set<string>) => quests.every((q) => q.optional || done.has(q.slug));
+
   function chaptersCompleted(done: Set<string>): number {
-    return curriculum.chapters.filter((c) => c.quests.every((q) => done.has(q.slug))).length;
+    return curriculum.chapters.filter((c) => coreDone(c.quests, done)).length;
   }
 
   function tracksCompleted(done: Set<string>): string[] {
-    return curriculum.tracks.filter((t) => t.chapters.every((c) => c.quests.every((q) => done.has(q.slug)))).map((t) => t.slug);
+    return curriculum.tracks.filter((t) => t.chapters.every((c) => coreDone(c.quests, done))).map((t) => t.slug);
   }
 
   return {
@@ -82,6 +86,10 @@ export function createProgressService(db: Db, curriculum: Curriculum, clock: () 
       };
 
       return db.$transaction(async (tx) => {
+        // Serialize completions per user. Without this lock, two quests finished
+        // at the same moment (two tabs) can't see each other's rows, and a
+        // "chapter complete" achievement could be missed forever.
+        await tx.$queryRaw`SELECT id FROM "User" WHERE id = ${userId} FOR UPDATE`;
         await tx.questProgress.upsert({
           where: { userId_questSlug: { userId, questSlug: quest.slug } },
           create: { userId, questSlug: quest.slug, attempts: 0 },
@@ -94,12 +102,16 @@ export function createProgressService(db: Db, curriculum: Curriculum, clock: () 
         });
 
         if (flipped.count === 0) {
-          // Already completed: keep their latest code/links, award nothing.
-          if (Object.keys(extra).length) {
-            await tx.questProgress.update({ where: { userId_questSlug: { userId, questSlug: quest.slug } }, data: extra });
-          }
+          // Already completed: this is a review (re-practice). Keep their latest
+          // code/links, count the review for spaced repetition, award nothing.
+          const row = await tx.questProgress.findUniqueOrThrow({ where: { userId_questSlug: { userId, questSlug: quest.slug } } });
+          const due = row.completedAt ? reviewDueAt(row.reviewedAt ?? row.completedAt, row.reviews) : null;
+          await tx.questProgress.update({
+            where: { userId_questSlug: { userId, questSlug: quest.slug } },
+            data: { ...extra, ...(due && due <= now ? { reviews: { increment: 1 }, reviewedAt: now } : {}) },
+          });
           const user = await tx.user.findUniqueOrThrow({ where: { id: userId } });
-          return { completed: true, alreadyCompleted: true, xpAwarded: 0, user: toPublicUser(user), newAchievements: [] };
+          return { completed: true, alreadyCompleted: true, xpAwarded: 0, user: toPublicUser(user, now), newAchievements: [] };
         }
 
         const before = await tx.user.findUniqueOrThrow({ where: { id: userId } });
@@ -140,7 +152,7 @@ export function createProgressService(db: Db, curriculum: Curriculum, clock: () 
           completed: true,
           alreadyCompleted: false,
           xpAwarded: quest.xp,
-          user: toPublicUser(user),
+          user: toPublicUser(user, now),
           newAchievements: keys.map((k) => achievementDefinition(k)).filter((a): a is AchievementDefinition => Boolean(a)),
         };
       });

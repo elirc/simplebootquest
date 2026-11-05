@@ -4,6 +4,8 @@ title: "Practice: ETags for JSON Responses"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["`Math.imul` multiplies as 32-bit integers, which avoids precision loss. `>>> 0` turns the result unsigned."]
 ---
 # Practice: ETags for JSON Responses

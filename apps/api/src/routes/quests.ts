@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { z } from 'zod';
 import { countWords, gradeQuiz, type Curriculum, type Quest } from '@sbq/curriculum';
-import type { QuestDetail, QuestStatus, QuestSummary, QuizResult, TrackSummary } from '@sbq/shared';
+import type { ChapterDetail, ChapterSummary, Curriculum as CurriculumResponse, QuestDetail, QuestStatus, QuestSummary, QuizResult, ResumeTarget, SearchResult, TrackSummary } from '@sbq/shared';
 import type { Db } from '../db.ts';
 import { requireAuth } from '../auth.ts';
 import { HttpError, notFound, parse } from '../errors.ts';
@@ -43,9 +43,13 @@ function summary(quest: Quest, status: QuestStatus): QuestSummary {
     language: quest.language,
     xp: quest.xp,
     boss: quest.boss,
+    optional: quest.optional,
+    ...(quest.section ? { section: quest.section } : {}),
     status,
   };
 }
+
+type StatusRow = { questSlug: string; status: 'IN_PROGRESS' | 'COMPLETED' };
 
 export function questsRouter(db: Db, curriculum: Curriculum, progress: ProgressService) {
   const router = Router();
@@ -60,40 +64,99 @@ export function questsRouter(db: Db, curriculum: Curriculum, progress: ProgressS
   const link = (from: Quest, q: Quest | undefined) =>
     q && q.trackSlug === from.trackSlug ? { slug: q.slug, chapterSlug: q.chapterSlug, title: q.title } : null;
 
+  const statusMap = async (userId: string | undefined): Promise<Map<string, StatusRow>> => {
+    if (!userId) return new Map();
+    const rows = await db.questProgress.findMany({ where: { userId }, select: { questSlug: true, status: true } });
+    return new Map(rows.map((r) => [r.questSlug, r]));
+  };
+
+  const chapterSummary = (c: Curriculum['chapters'][number], statuses: Map<string, StatusRow>): ChapterSummary => {
+    const quests = c.quests.map((q) => summary(q, toStatus(statuses.get(q.slug))));
+    const core = quests.filter((q) => !q.optional);
+    const pending = core.filter((q) => q.status !== 'completed');
+    return {
+      slug: c.slug,
+      trackSlug: c.trackSlug,
+      number: c.number,
+      title: c.title,
+      description: c.description,
+      coreTotal: core.length,
+      coreCompleted: core.length - pending.length,
+      total: quests.length,
+      completed: quests.filter((q) => q.status === 'completed').length,
+      xp: quests.reduce((sum, q) => sum + q.xp, 0),
+      next: pending[0] ?? null,
+      preview: (pending.length ? pending : core).slice(0, 5),
+    };
+  };
+
+  /**
+   * The overview is deliberately small: chapters with counts and a short
+   * preview, not every quest. With thousands of quests the full list would be
+   * megabytes; each chapter's quests come from /chapters/:slug instead.
+   */
   router.get('/curriculum', async (req, res) => {
-    const rows = req.userId
-      ? await db.questProgress.findMany({ where: { userId: req.userId }, select: { questSlug: true, status: true } })
-      : [];
-    const bySlug = new Map(rows.map((r) => [r.questSlug, r]));
+    const statuses = await statusMap(req.userId);
     const tracks: TrackSummary[] = curriculum.tracks.map((t) => ({
       slug: t.slug,
       number: t.number,
       title: t.title,
       description: t.description,
       icon: t.icon,
-      chapters: t.chapters.map((c) => ({
-        slug: c.slug,
-        trackSlug: t.slug,
-        number: c.number,
-        title: c.title,
-        description: c.description,
-        quests: c.quests.map((q) => summary(q, toStatus(bySlug.get(q.slug)))),
-      })),
+      chapters: t.chapters.map((c) => chapterSummary(c, statuses)),
     }));
-    res.json({ tracks, totalXp: curriculum.totalXp });
+    let resume: ResumeTarget | null = null;
+    if (req.userId) {
+      // Continue where you left off: the most recently touched unfinished quest,
+      // else the next core quest after the most recently completed one.
+      const latest = await db.questProgress.findFirst({ where: { userId: req.userId }, orderBy: { updatedAt: 'desc' } });
+      const quest = latest ? curriculum.bySlug.get(latest.questSlug) : undefined;
+      if (quest && latest!.status === 'IN_PROGRESS') {
+        resume = { slug: quest.slug, chapterSlug: quest.chapterSlug, title: quest.title, reason: 'in_progress' };
+      } else {
+        const trackSlug = quest?.trackSlug ?? curriculum.tracks[0]?.slug;
+        const next = curriculum.quests.find((q) => q.trackSlug === trackSlug && !q.optional && statuses.get(q.slug)?.status !== 'COMPLETED');
+        if (next) resume = { slug: next.slug, chapterSlug: next.chapterSlug, title: next.title, reason: 'next' };
+      }
+    }
+    const body: CurriculumResponse = { tracks, totalXp: curriculum.totalXp, totalQuests: curriculum.quests.length, resume };
+    res.json(body);
   });
 
-  router.get('/chapters/:slug', (req, res) => {
+  router.get('/chapters/:slug', async (req, res) => {
     const chapter = curriculum.chapters.find((c) => c.slug === req.params.slug);
     if (!chapter) throw notFound('Chapter');
-    res.json({
-      slug: chapter.slug,
-      trackSlug: chapter.trackSlug,
-      number: chapter.number,
-      title: chapter.title,
-      description: chapter.description,
+    const statuses = await statusMap(req.userId);
+    const { next: _next, preview: _preview, ...counts } = chapterSummary(chapter, statuses);
+    const detail: ChapterDetail = {
+      ...counts,
       intro: chapter.intro,
-    });
+      quests: chapter.quests.map((q) => summary(q, toStatus(statuses.get(q.slug)))),
+    };
+    res.json(detail);
+  });
+
+  const searchIndex = curriculum.quests.map((q) => ({
+    quest: q,
+    haystack: `${q.title} ${q.slug} ${q.chapterTitle} ${q.section ?? ''}`.toLowerCase(),
+    trackTitle: curriculum.tracks.find((t) => t.slug === q.trackSlug)?.title ?? '',
+  }));
+
+  /** Search quest titles across every track. Every word must match. */
+  router.get('/search', async (req, res) => {
+    const q = typeof req.query.q === 'string' ? req.query.q.trim().toLowerCase().slice(0, 100) : '';
+    const words = q.split(/\s+/).filter(Boolean);
+    if (words.length === 0) {
+      res.json({ results: [] });
+      return;
+    }
+    const matches = searchIndex.filter((e) => words.every((w) => e.haystack.includes(w)));
+    // Titles that start with the query rank first; core before practice.
+    matches.sort((a, b) => Number(!a.quest.title.toLowerCase().startsWith(words[0]!)) - Number(!b.quest.title.toLowerCase().startsWith(words[0]!)) || Number(a.quest.optional) - Number(b.quest.optional) || a.quest.index - b.quest.index);
+    const top = matches.slice(0, 30);
+    const statuses = await statusMap(req.userId);
+    const results: SearchResult[] = top.map((e) => ({ ...summary(e.quest, toStatus(statuses.get(e.quest.slug))), chapterTitle: e.quest.chapterTitle, trackTitle: e.trackTitle }));
+    res.json({ results, total: matches.length });
   });
 
   router.get('/quests/:slug', async (req, res) => {
@@ -192,14 +255,17 @@ export function questsRouter(db: Db, curriculum: Curriculum, progress: ProgressS
     const { answers } = parse(QuizBody, req.body);
     const correct = gradeQuiz(quest, answers);
     const score = correct.filter(Boolean).length;
-    const allCorrect = score === correct.length;
+    const total = correct.length;
+    const allCorrect = score === total;
 
+    // Only the score is revealed until every answer is right. Returning which
+    // questions were wrong would let anyone enumerate the answer key in a few
+    // submissions (see docs/COUNCIL.md). Once passed, every explanation is shown.
     const result: QuizResult = allCorrect
-      ? { ...(await progress.complete(req.userId!, quest)), correct, score }
-      : { ...{ completed: false, alreadyCompleted: false, xpAwarded: 0, user: null, newAchievements: [] }, correct, score };
+      ? { ...(await progress.complete(req.userId!, quest)), correct, score, total }
+      : { completed: false, alreadyCompleted: false, xpAwarded: 0, user: null, newAchievements: [], correct: null, score, total };
     if (!allCorrect) await progress.recordAttempt(req.userId!, quest);
-    // Explanations are revealed for the questions the learner got right.
-    res.json({ ...result, explanations: quest.questions!.map((q, i) => (correct[i] ? (q.explanation ?? null) : null)) });
+    res.json({ ...result, explanations: allCorrect ? quest.questions!.map((q) => q.explanation ?? null) : null });
   });
 
   /**

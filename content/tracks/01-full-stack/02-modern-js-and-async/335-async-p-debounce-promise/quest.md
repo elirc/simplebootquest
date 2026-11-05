@@ -4,6 +4,8 @@ title: "Practice: Debounced Async Functions"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Keep a list of resolve/reject pairs for the current burst."]
 ---
 # Practice: Debounced Async Functions

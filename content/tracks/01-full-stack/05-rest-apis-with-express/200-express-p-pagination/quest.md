@@ -4,6 +4,8 @@ title: "Practice: Pagination Parameters"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["A regex like `/^\\\\d+$/` only accepts digit strings, which rules out decimals, negatives and arrays at once."]
 ---
 # Practice: Pagination Parameters

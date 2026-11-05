@@ -4,6 +4,8 @@ title: "Practice: Splitting Messages"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Reserve room for the prefix (\"(1/3) \" is 6 characters), then wrap greedily."]
 ---
 # Practice: Splitting Messages

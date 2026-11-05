@@ -4,6 +4,8 @@ title: "Practice: Deleting Safely"
 type: "code"
 language: "sql"
 xp: 20
+optional: true
+section: "Practice"
 hints: ["Inside the subquery, refer to the outer row as `products.id`."]
 ---
 # Practice: Deleting Safely

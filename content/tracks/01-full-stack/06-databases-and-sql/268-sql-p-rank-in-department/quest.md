@@ -4,6 +4,8 @@ title: "Practice: Ranking Within Groups"
 type: "code"
 language: "sql"
 xp: 20
+optional: true
+section: "Practice"
 ---
 # Practice: Ranking Within Groups
 

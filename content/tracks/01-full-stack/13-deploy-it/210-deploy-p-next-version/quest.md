@@ -4,6 +4,8 @@ title: "Practice: Versions from Conventional Commits"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 resources: [{"title": "Conventional Commits", "url": "https://www.conventionalcommits.org/"}]
 ---
 # Practice: Versions from Conventional Commits

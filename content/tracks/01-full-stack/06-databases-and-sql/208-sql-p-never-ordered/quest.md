@@ -4,6 +4,8 @@ title: "Practice: Customers Who Never Ordered"
 type: "code"
 language: "sql"
 xp: 20
+optional: true
+section: "Practice"
 ---
 # Practice: Customers Who Never Ordered
 

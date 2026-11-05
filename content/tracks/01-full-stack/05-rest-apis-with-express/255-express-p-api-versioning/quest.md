@@ -4,6 +4,8 @@ title: "Practice: API Versioning"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Anchor the URL regex so `/videos` is not mistaken for a version: `/^\\\\/v(\\\\d+)(\\\\/.*)?$/`."]
 ---
 # Practice: API Versioning

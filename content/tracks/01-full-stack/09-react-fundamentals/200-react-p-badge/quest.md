@@ -4,6 +4,8 @@ title: "Practice: A Notification Badge"
 type: "code"
 language: "jsx"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["A component can `return null` to render nothing."]
 ---
 # Practice: A Notification Badge

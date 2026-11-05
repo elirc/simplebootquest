@@ -4,6 +4,8 @@ title: "Practice: Picking a Language"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Parse every entry into `{ tag, q, index }` first, then sort by q descending and index ascending.", "Check an exact match before trying the primary subtag."]
 ---
 # Practice: Picking a Language

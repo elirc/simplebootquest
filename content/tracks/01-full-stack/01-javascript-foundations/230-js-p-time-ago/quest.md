@@ -4,6 +4,8 @@ title: "Practice: \"5 minutes ago\""
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Check the biggest unit first and return as soon as the count is at least 1."]
 ---
 # Practice: "5 minutes ago"

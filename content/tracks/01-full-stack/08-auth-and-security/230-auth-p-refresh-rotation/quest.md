@@ -4,6 +4,8 @@ title: "Practice: Refresh Token Rotation"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 resources: [{"title": "Auth0: Refresh token rotation", "url": "https://auth0.com/docs/secure/tokens/refresh-tokens/refresh-token-rotation"}]
 ---
 # Practice: Refresh Token Rotation

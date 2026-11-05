@@ -4,6 +4,8 @@ title: "Practice: UNION ALL for Activity Feeds"
 type: "code"
 language: "sql"
 xp: 20
+optional: true
+section: "Practice"
 ---
 # Practice: UNION ALL for Activity Feeds
 

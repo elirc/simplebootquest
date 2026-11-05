@@ -4,6 +4,8 @@ title: "Practice: Leap Years & Days in a Month"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Write the rule with `&&` and `||` exactly as the sentence reads."]
 ---
 # Practice: Leap Years & Days in a Month

@@ -4,6 +4,8 @@ title: "Practice: Parameterised Queries with a Tagged Template"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["`strings` always has one more element than `values`. Start with `strings[0]`, then for each value append its placeholder and `strings[i + 1]`.", "Use a small class for raw fragments, so a plain string can never be mistaken for one."]
 resources: [{"title": "MDN: Tagged templates", "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates"}]
 ---

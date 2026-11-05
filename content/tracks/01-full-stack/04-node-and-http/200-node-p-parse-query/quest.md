@@ -4,6 +4,8 @@ title: "Practice: Parsing Query Strings"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Split on `&` first, then split each part on the FIRST `=` only.", "Replace `+` with a space before calling `decodeURIComponent`, because `decodeURIComponent` leaves `+` alone."]
 resources: [{"title": "MDN: URLSearchParams", "url": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams"}]
 ---

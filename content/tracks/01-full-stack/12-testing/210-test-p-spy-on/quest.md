@@ -4,6 +4,8 @@ title: "Practice: Build vi.spyOn"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Use a `function` (not an arrow function) for the spy, so `this` can be forwarded with `original.apply(this, args)`."]
 resources: [{"title": "Vitest: vi.spyOn", "url": "https://vitest.dev/api/vi.html#vi-spyon"}]
 ---

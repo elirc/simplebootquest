@@ -4,6 +4,8 @@ title: "Practice: Retry Until a Condition"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["`new Error(message, { cause })` attaches the underlying error."]
 ---
 ## Your task

@@ -4,6 +4,8 @@ title: "Practice: Matrix Diagonals"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["The new cell `[r][c]` comes from `m[n - 1 - c][r]`."]
 ---
 ## Your task

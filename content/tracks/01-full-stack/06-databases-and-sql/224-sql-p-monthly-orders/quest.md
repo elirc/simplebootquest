@@ -4,6 +4,8 @@ title: "Practice: Orders per Month"
 type: "code"
 language: "sql"
 xp: 20
+optional: true
+section: "Practice"
 hints: ["\"Count the rows that match a condition\" is `SUM(CASE WHEN ... THEN 1 ELSE 0 END)`."]
 ---
 # Practice: Orders per Month

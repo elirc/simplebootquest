@@ -4,6 +4,8 @@ title: "Practice: Building a Prisma `where` from Query Params"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Start from `{ userId }` and add keys one by one. Never spread the raw query into the filter."]
 resources: [{"title": "Prisma: Filtering and sorting", "url": "https://www.prisma.io/docs/orm/prisma-client/queries/filtering-and-sorting"}]
 ---

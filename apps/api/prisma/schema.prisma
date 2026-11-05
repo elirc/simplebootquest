@@ -23,6 +23,8 @@ model User {
   longestStreak  Int      @default(0)
   /// UTC day ("YYYY-MM-DD") of the last quest completion, used for streaks.
   lastActiveDate String?
+  /// Learners can hide themselves from the public leaderboard.
+  showOnLeaderboard Boolean @default(true)
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
@@ -49,6 +51,9 @@ model QuestProgress {
   repoUrl     String?
   liveUrl     String?
   completedAt DateTime?
+  /// Spaced review: how many times the learner re-practised it after completing.
+  reviews     Int            @default(0)
+  reviewedAt  DateTime?
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
 
@@ -56,6 +61,7 @@ model QuestProgress {
 
   @@unique([userId, questSlug])
   @@index([userId, status])
+  @@index([completedAt])
 }
 
 model UserAchievement {

@@ -4,6 +4,8 @@ title: "Practice: Binary Search"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Loop while `lo <= hi`; move `lo` to `mid + 1` or `hi` to `mid - 1`."]
 ---
 # Practice: Binary Search

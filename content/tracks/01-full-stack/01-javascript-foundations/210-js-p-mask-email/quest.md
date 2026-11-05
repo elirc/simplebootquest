@@ -4,6 +4,8 @@ title: "Practice: Masking Emails"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["`\"*\".repeat(n)` builds the stars."]
 ---
 # Practice: Masking Emails

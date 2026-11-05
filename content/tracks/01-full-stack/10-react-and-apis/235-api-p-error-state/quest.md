@@ -4,6 +4,8 @@ title: "Practice: Helpful Error States"
 type: "code"
 language: "jsx"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Keep the mapping in a plain function, so it can be tested without rendering and reused for toasts."]
 ---
 # Practice: Helpful Error States

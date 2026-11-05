@@ -4,6 +4,8 @@ title: "Practice: Base64url Encoding"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["`btoa` only accepts characters 0–255, so turn UTF-8 bytes into a \"binary string\" with `String.fromCharCode`.", "Padding length is `(4 - len % 4) % 4`."]
 resources: [{"title": "RFC 4648 §5: Base64url", "url": "https://www.rfc-editor.org/rfc/rfc4648#section-5"}]
 ---

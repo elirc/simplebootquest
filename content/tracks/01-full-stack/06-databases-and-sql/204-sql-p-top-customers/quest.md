@@ -4,6 +4,8 @@ title: "Practice: Big Spenders"
 type: "code"
 language: "sql"
 xp: 20
+optional: true
+section: "Practice"
 hints: ["`WHERE` filters rows before grouping (use it for the status). `HAVING` filters groups after (use it for the total)."]
 ---
 # Practice: Big Spenders

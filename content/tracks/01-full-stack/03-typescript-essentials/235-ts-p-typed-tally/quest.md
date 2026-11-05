@@ -4,6 +4,8 @@ title: "Practice: Typed Grouping Helpers"
 type: "code"
 language: "ts"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["A Map preserves non-string keys like numbers and booleans."]
 ---
 ## Your task

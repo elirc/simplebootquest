@@ -4,6 +4,8 @@ title: "Practice: Validating ISBNs"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Validate the format with a regex first, then compute the weighted sum."]
 ---
 # Practice: Validating ISBNs

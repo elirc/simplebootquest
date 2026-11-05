@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router';
 import { api } from '../api';
 import { useAuth } from '../auth';
@@ -5,6 +6,29 @@ import { ErrorBox } from '../components/ErrorBox';
 import { Spinner } from '../components/Spinner';
 import { useAsync } from '../components/useAsync';
 import { XpBar } from '../components/XpBar';
+
+function LeaderboardSetting({ visible }: { visible: boolean }) {
+  const { setUser } = useAuth();
+  const [saving, setSaving] = useState(false);
+  return (
+    <label className="setting">
+      <input
+        type="checkbox"
+        checked={visible}
+        disabled={saving}
+        onChange={async (e) => {
+          setSaving(true);
+          try {
+            setUser((await api.updateSettings({ showOnLeaderboard: e.target.checked })).user);
+          } finally {
+            setSaving(false);
+          }
+        }}
+      />{' '}
+      Show me on the public leaderboard
+    </label>
+  );
+}
 
 export function ProfilePage() {
   const { user } = useAuth();
@@ -22,6 +46,7 @@ export function ProfilePage() {
           <h1>{p.user.name}</h1>
           <p className="muted">Learning since {new Date(p.user.createdAt).toLocaleDateString()}</p>
           <XpBar xp={p.user.xp} />
+          <LeaderboardSetting visible={user?.showOnLeaderboard ?? p.user.showOnLeaderboard} />
         </div>
       </section>
 

@@ -4,6 +4,8 @@ title: "Practice: A Safe Request Logger"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Work on the raw query string pairs rather than re-encoding everything. That keeps the other parameters byte-for-byte identical."]
 ---
 # Practice: A Safe Request Logger

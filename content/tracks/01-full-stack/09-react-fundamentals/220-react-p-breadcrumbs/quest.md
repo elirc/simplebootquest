@@ -4,6 +4,8 @@ title: "Practice: Breadcrumbs"
 type: "code"
 language: "jsx"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["`{i > 0 && <span ...>/</span>}` renders nothing for the first item, because `false` renders as nothing."]
 ---
 # Practice: Breadcrumbs

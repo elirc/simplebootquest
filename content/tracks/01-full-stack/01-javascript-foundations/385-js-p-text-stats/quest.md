@@ -4,6 +4,8 @@ title: "Practice: Text Statistics"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Split on `/[.!?]+/` and ignore empty pieces to count sentences."]
 ---
 ## Your task

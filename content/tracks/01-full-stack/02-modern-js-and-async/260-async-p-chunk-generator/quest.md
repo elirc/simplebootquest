@@ -4,6 +4,8 @@ title: "Practice: Lazy Chunks & IDs"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Yield a batch as soon as it is full, and the leftovers at the end."]
 ---
 ## Your task

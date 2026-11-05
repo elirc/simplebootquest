@@ -4,6 +4,8 @@ title: "Practice: Keyset (Cursor) Pagination"
 type: "code"
 language: "sql"
 xp: 20
+optional: true
+section: "Practice"
 hints: ["`(year, id) > (1989, 6)` works in SQLite and PostgreSQL. The long form is `year > 1989 OR (year = 1989 AND id > 6)`."]
 resources: [{"title": "Use The Index, Luke: Paging through results", "url": "https://use-the-index-luke.com/no-offset"}]
 ---

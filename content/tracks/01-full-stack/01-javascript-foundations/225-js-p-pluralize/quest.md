@@ -4,6 +4,8 @@ title: "Practice: Pluralize"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["`/[^aeiou]y$/` matches a consonant followed by y."]
 ---
 # Practice: Pluralize

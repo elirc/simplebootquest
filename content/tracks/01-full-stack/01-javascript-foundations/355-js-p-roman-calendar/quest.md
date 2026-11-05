@@ -4,6 +4,8 @@ title: "Practice: Week Numbers & Weekdays"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Work in UTC so local time zones can't shift the day."]
 ---
 ## Your task

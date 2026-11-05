@@ -4,6 +4,8 @@ title: "Practice: Unions Instead of Enums"
 type: "code"
 language: "ts"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["A state machine is just a lookup table: `Record<Status, Status[]>`."]
 ---
 # Practice: Unions Instead of Enums

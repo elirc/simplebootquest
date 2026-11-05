@@ -4,6 +4,8 @@ title: "Practice: Updating with a Condition"
 type: "code"
 language: "sql"
 xp: 20
+optional: true
+section: "Practice"
 hints: ["ISO date strings compare correctly as text: `created_at < '2026-02-10'`."]
 ---
 # Practice: Updating with a Condition

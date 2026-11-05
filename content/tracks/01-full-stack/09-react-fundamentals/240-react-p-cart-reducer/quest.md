@@ -4,6 +4,8 @@ title: "Practice: A Shopping Cart Reducer"
 type: "code"
 language: "jsx"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Return new objects with spread (`{ ...i, qty: i.qty + 1 }`) and new arrays with `map` and `filter`."]
 ---
 # Practice: A Shopping Cart Reducer

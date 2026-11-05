@@ -45,6 +45,27 @@ export function nextStreak(
   return 1;
 }
 
+/**
+ * The streak to *display*. The stored streak is only rewritten when a quest is
+ * completed, so a learner who stopped five days ago would still see their old
+ * number. A streak is alive only if the last activity was today or yesterday.
+ */
+export function effectiveStreak(streak: number, lastActiveDate: string | null, today: string): number {
+  if (!lastActiveDate) return 0;
+  const gap = daysBetween(lastActiveDate, today);
+  return gap <= 1 ? streak : 0;
+}
+
+/** Spaced review intervals in days: review after 3 days, then 7, 21, 60. */
+export const REVIEW_INTERVALS_DAYS = [3, 7, 21, 60] as const;
+
+/** When a completed quest is next due for review, or null once it has graduated. */
+export function reviewDueAt(lastPractised: Date, reviews: number): Date | null {
+  const days = REVIEW_INTERVALS_DAYS[reviews];
+  if (days === undefined) return null;
+  return new Date(lastPractised.getTime() + days * 86_400_000);
+}
+
 export function toUtcDay(date: Date): string {
   return date.toISOString().slice(0, 10);
 }

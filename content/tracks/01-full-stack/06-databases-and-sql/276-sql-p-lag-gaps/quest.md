@@ -4,6 +4,8 @@ title: "Practice: Comparing with the Previous Row"
 type: "code"
 language: "sql"
 xp: 20
+optional: true
+section: "Practice"
 ---
 # Practice: Comparing with the Previous Row
 

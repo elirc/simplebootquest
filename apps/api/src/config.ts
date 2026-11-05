@@ -12,6 +12,12 @@ const schema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   /** Directory of the built React app to serve in production. */
   WEB_DIST: z.string().optional(),
+  /**
+   * How many reverse proxies sit in front of the app. Express trusts that many
+   * X-Forwarded-For hops for req.ip. Trusting a proxy that isn't there lets
+   * clients spoof their IP and dodge rate limits, so it's explicit config.
+   */
+  TRUST_PROXY: z.coerce.number().int().min(0).max(5).default(0),
 });
 
 export type Config = {
@@ -21,6 +27,7 @@ export type Config = {
   nodeEnv: 'development' | 'test' | 'production';
   isProduction: boolean;
   webDist?: string;
+  trustProxy: number;
 };
 
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
@@ -37,5 +44,6 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
     nodeEnv: c.NODE_ENV,
     isProduction: c.NODE_ENV === 'production',
     webDist: c.WEB_DIST,
+    trustProxy: c.TRUST_PROXY,
   };
 }

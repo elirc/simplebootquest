@@ -4,6 +4,8 @@ title: "Practice: Pivoting with Conditional Aggregation"
 type: "code"
 language: "sql"
 xp: 20
+optional: true
+section: "Practice"
 hints: ["With a LEFT JOIN, customers without orders have `o.status` NULL, so every CASE gives 0 for them, which is what you want."]
 ---
 # Practice: Pivoting with Conditional Aggregation

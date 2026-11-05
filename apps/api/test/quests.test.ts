@@ -11,8 +11,39 @@ describe('curriculum', () => {
     expect(res.body.tracks.map((t: { slug: string }) => t.slug)).toEqual(curriculum.tracks.map((t) => t.slug));
     const chapters = res.body.tracks.flatMap((t: { chapters: unknown[] }) => t.chapters);
     expect(chapters).toHaveLength(curriculum.chapters.length);
-    expect(res.body.tracks[0].chapters[0].quests[0].status).toBe('not_started');
+    expect(res.body.tracks[0].chapters[0].preview[0].status).toBe('not_started');
+    expect(res.body.tracks[0].chapters[0].next.slug).toBe(curriculum.chapters[0]!.quests.find((q) => !q.optional)!.slug);
     expect(res.body.totalXp).toBe(curriculum.totalXp);
+    expect(res.body.resume).toBeNull();
+    // The overview never carries every quest (it would be megabytes at scale).
+    expect(JSON.stringify(res.body).length).toBeLessThan(200_000);
+  });
+
+  it('returns one chapter with all its quests and core/practice counts', async () => {
+    const chapter = curriculum.chapters[0]!;
+    const res = await request(app).get(`/api/chapters/${chapter.slug}`);
+    expect(res.status).toBe(200);
+    expect(res.body.quests).toHaveLength(chapter.quests.length);
+    expect(res.body.coreTotal).toBe(chapter.quests.filter((q) => !q.optional).length);
+    expect(res.body.total).toBe(chapter.quests.length);
+    expect((await request(app).get('/api/chapters/nope')).status).toBe(404);
+  });
+
+  it('searches quest titles across tracks', async () => {
+    const target = curriculum.quests[3]!;
+    const res = await request(app).get('/api/search').query({ q: target.title });
+    expect(res.status).toBe(200);
+    expect(res.body.results.map((r: { slug: string }) => r.slug)).toContain(target.slug);
+    expect(res.body.results[0]).toHaveProperty('chapterTitle');
+    expect((await request(app).get('/api/search').query({ q: '   ' })).body.results).toEqual([]);
+  });
+
+  it('suggests where a signed-in learner should resume', async () => {
+    const agent = await registeredAgent();
+    const quest = firstCodeQuest();
+    expect((await agent.get('/api/curriculum')).body.resume).toMatchObject({ reason: 'next' });
+    await agent.put(`/api/quests/${quest.slug}/draft`).send({ code: 'let x' });
+    expect((await agent.get('/api/curriculum')).body.resume).toMatchObject({ slug: quest.slug, reason: 'in_progress' });
   });
 
   it('keeps prev/next links inside a track', async () => {
@@ -134,6 +165,42 @@ describe('streaks', () => {
     clock.set('2026-03-14T20:00:00Z');
     expect((await submit(d!.slug)).body.user.streak).toBe(1);
   });
+
+  it('shows a broken streak as 0 without waiting for the next completion', async () => {
+    const [a] = curriculum.quests.filter((q) => q.type === 'code');
+    const agent = await registeredAgent();
+    clock.set('2026-03-10T09:00:00Z');
+    await agent.post(`/api/quests/${a!.slug}/submissions`).send({ code: 'x', passed: true });
+    clock.set('2026-03-11T22:00:00Z');
+    expect((await agent.get('/api/auth/me')).body.user.streak).toBe(1);
+    clock.set('2026-03-13T08:00:00Z');
+    expect((await agent.get('/api/auth/me')).body.user.streak).toBe(0);
+  });
+});
+
+describe('spaced review', () => {
+  it('brings completed quests back after 3 days, counts a re-solve as a review, then spaces it out', async () => {
+    const quest = firstCodeQuest();
+    const agent = await registeredAgent();
+    const submit = () => agent.post(`/api/quests/${quest.slug}/submissions`).send({ code: 'x', passed: true });
+    clock.set('2026-04-01T10:00:00Z');
+    await submit();
+    expect((await agent.get('/api/me/review')).body.items).toEqual([]);
+
+    clock.set('2026-04-04T11:00:00Z');
+    const due = await agent.get('/api/me/review');
+    expect(due.body.items.map((i: { slug: string }) => i.slug)).toEqual([quest.slug]);
+
+    const again = await submit();
+    expect(again.body).toMatchObject({ alreadyCompleted: true, xpAwarded: 0 });
+    expect((await agent.get('/api/me/review')).body.items).toEqual([]);
+
+    // Next interval is 7 days after the review.
+    clock.set('2026-04-10T11:00:00Z');
+    expect((await agent.get('/api/me/review')).body.items).toEqual([]);
+    clock.set('2026-04-11T12:00:00Z');
+    expect((await agent.get('/api/me/review')).body.items[0]).toMatchObject({ slug: quest.slug, reviews: 1 });
+  });
 });
 
 describe('quizzes', () => {
@@ -145,12 +212,16 @@ describe('quizzes', () => {
 
     const fail = await agent.post(`/api/quests/${quiz.slug}/quiz`).send({ answers: wrong });
     expect(fail.body.completed).toBe(false);
-    expect(fail.body.correct[0]).toBe(false);
     expect(fail.body.score).toBe(right.length - 1);
-    expect(fail.body.explanations[0]).toBeNull();
+    expect(fail.body.total).toBe(right.length);
+    // Which answers were wrong is NOT revealed (it would leak the answer key).
+    expect(fail.body.correct).toBeNull();
+    expect(fail.body.explanations).toBeNull();
 
     const pass = await agent.post(`/api/quests/${quiz.slug}/quiz`).send({ answers: right });
     expect(pass.body).toMatchObject({ completed: true, xpAwarded: quiz.xp, score: right.length });
+    expect(pass.body.correct.every(Boolean)).toBe(true);
+    expect(pass.body.explanations).toHaveLength(right.length);
   });
 });
 
@@ -214,8 +285,23 @@ describe('profile and leaderboard', () => {
     expect(profile.body.achievements[0].key).toBe('first-quest');
     expect(profile.body.recent[0].questSlug).toBe(firstCodeQuest().slug);
 
-    const board = await request(app).get('/api/leaderboard');
-    expect(board.body.entries.map((e: { name: string }) => e.name)).toEqual(['Ada', 'Grace']);
-    expect(JSON.stringify(board.body)).not.toContain('@');
+    const all = await request(app).get('/api/leaderboard?period=all');
+    expect(all.body.entries.map((e: { name: string }) => e.name)).toEqual(['Ada', 'Grace']);
+    expect(JSON.stringify(all.body)).not.toContain('@');
+
+    // The weekly board only counts XP earned in the last 7 days.
+    const week = await ada.get('/api/leaderboard');
+    expect(week.body.period).toBe('week');
+    expect(week.body.entries.map((e: { name: string }) => e.name)).toEqual(['Ada']);
+    expect(week.body.me).toMatchObject({ rank: 1, you: true, xp: firstCodeQuest().xp });
+  });
+
+  it('lets learners hide from the leaderboard and rename themselves', async () => {
+    const ada = await registeredAgent('Ada');
+    expect((await ada.patch('/api/me/settings').send({ showOnLeaderboard: false, name: 'Ada L' })).body.user).toMatchObject({ showOnLeaderboard: false, name: 'Ada L' });
+    const board = await request(app).get('/api/leaderboard?period=all');
+    expect(board.body.entries.map((e: { name: string }) => e.name)).not.toContain('Ada L');
+    expect((await ada.patch('/api/me/settings').send({ name: '<a href=x>spam</a>' })).status).toBe(400);
+    expect((await ada.patch('/api/me/settings').send({ xp: 1_000_000 })).status).toBe(400);
   });
 });

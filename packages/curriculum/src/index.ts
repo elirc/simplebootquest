@@ -22,6 +22,10 @@ export interface Quest {
   language?: CodeLanguage;
   xp: number;
   boss: boolean;
+  /** Optional practice: doesn't count toward chapter completion. */
+  optional: boolean;
+  /** Section heading inside the chapter (e.g. "Practice: Arrays"). */
+  section?: string;
   lesson: string;
   starter?: string;
   tests?: string;
@@ -112,6 +116,8 @@ const questSchema = z.object({
   mode: z.enum(['implement', 'write-tests']).optional(),
   xp: z.number().int().positive(),
   boss: z.boolean().default(false),
+  optional: z.boolean().default(false),
+  section: z.string().min(1).max(60).optional(),
   questions: z.array(questionSchema).optional(),
   requirements: z.array(z.string().min(1)).optional(),
   rubric: z.array(z.string().min(1)).optional(),
@@ -237,6 +243,8 @@ export function loadCurriculum(contentDir: string = defaultContentDir()): Curric
           language: data.language,
           xp: data.xp,
           boss: data.boss,
+          optional: data.optional,
+          section: data.section,
           lesson: content,
           hints: data.hints,
           resources: data.resources,

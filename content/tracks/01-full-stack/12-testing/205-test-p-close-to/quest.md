@@ -4,6 +4,8 @@ title: "Practice: Build toBeCloseTo"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["`Infinity - Infinity` is `NaN`, which is why infinities need their own check."]
 resources: [{"title": "Vitest: toBeCloseTo", "url": "https://vitest.dev/api/expect.html#tobecloseto"}]
 ---

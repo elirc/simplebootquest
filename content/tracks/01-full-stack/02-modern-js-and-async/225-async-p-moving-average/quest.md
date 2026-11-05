@@ -4,6 +4,8 @@ title: "Practice: Moving Averages"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Keep a running window sum: add the new value, subtract the one leaving the window."]
 ---
 ## Your task

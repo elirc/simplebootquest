@@ -4,6 +4,8 @@ title: "Practice: Moving Rows Between Tables"
 type: "code"
 language: "sql"
 xp: 20
+optional: true
+section: "Practice"
 ---
 # Practice: Moving Rows Between Tables
 

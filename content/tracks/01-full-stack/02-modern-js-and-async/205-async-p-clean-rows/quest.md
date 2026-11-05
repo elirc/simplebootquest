@@ -4,6 +4,8 @@ title: "Practice: Cleaning CSV Rows"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["`Number(\"abc\")` is NaN, and `NaN >= 0` is false, which filters it out for free."]
 ---
 # Practice: Cleaning CSV Rows

@@ -4,6 +4,8 @@ title: "Practice: A Typed, Chainable Query Builder"
 type: "code"
 language: "ts"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Push each value into an array and use its new length as the placeholder number.", "Values are never placed in the SQL text; identifiers are allow-listed by regex."]
 ---
 # Practice: A Typed, Chainable Query Builder

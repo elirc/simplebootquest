@@ -3,6 +3,8 @@ slug: "ut-q-what-to-mock"
 title: "Quiz: What to Mock (and What Not To)"
 type: "quiz"
 xp: 15
+optional: true
+section: "Practice"
 resources: [{"title": "Martin Fowler: Mocks Aren't Stubs", "url": "https://martinfowler.com/articles/mocksArentStubs.html"}]
 questions: [{"prompt": "Which should usually be mocked in a unit test?", "options": ["A pure `calculateTotal` function", "The HTTP call to a payment provider", "Array.prototype.map"], "answer": 1}, {"prompt": "A test mocks every helper the function calls and asserts each was called. What is the risk?", "options": ["None", "The test is tied to the implementation: refactors break it even when the behaviour is unchanged", "It is too fast"], "answer": 1}, {"prompt": "What is a \"fake\" (as opposed to a mock)?", "options": ["A test that always passes", "A simple working implementation, like an in-memory repository", "A mocked HTTP response"], "answer": 1}, {"prompt": "How should you test code that depends on Prisma?", "options": ["Mock every Prisma method chain", "Put Prisma behind a small repository interface: fake it in unit tests, and use a real test database in integration tests", "Do not test it"], "answer": 1}, {"prompt": "Why inject `now()` instead of mocking `Date` globally?", "options": ["Global mocks can leak between tests and hide dependencies. Injection makes the dependency explicit and local", "Date cannot be mocked", "It is required by Vitest"], "answer": 0}]
 ---

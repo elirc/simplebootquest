@@ -4,6 +4,8 @@ title: "Practice: Sum a Range"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Swap a and b if needed, so the loop always counts up."]
 ---
 ## Your task

@@ -4,6 +4,8 @@ title: "Practice: Scoping Queries to the Current User"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Write one helper, `own(userId, id)`, that finds by BOTH fields or throws. Reuse it in get, update and remove."]
 resources: [{"title": "OWASP: Insecure Direct Object Reference Prevention", "url": "https://cheatsheetseries.owasp.org/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html"}]
 ---

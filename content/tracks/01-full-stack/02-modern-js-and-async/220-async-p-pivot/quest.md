@@ -4,6 +4,8 @@ title: "Practice: Pivot Tables"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["`(acc[key] ??= {})` creates the row object on first use."]
 ---
 ## Your task

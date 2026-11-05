@@ -4,6 +4,8 @@ title: "Practice: Partial → Required at Runtime"
 type: "code"
 language: "ts"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Collect the missing keys first, then throw once."]
 ---
 # Practice: Partial → Required at Runtime

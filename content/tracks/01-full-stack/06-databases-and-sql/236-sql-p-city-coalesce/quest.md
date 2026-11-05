@@ -4,6 +4,8 @@ title: "Practice: Grouping with Missing Values"
 type: "code"
 language: "sql"
 xp: 20
+optional: true
+section: "Practice"
 ---
 # Practice: Grouping with Missing Values
 

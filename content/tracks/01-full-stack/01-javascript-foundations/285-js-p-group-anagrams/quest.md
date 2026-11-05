@@ -4,6 +4,8 @@ title: "Practice: Group Anagrams"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Use the sorted letters as a Map key."]
 ---
 ## Your task

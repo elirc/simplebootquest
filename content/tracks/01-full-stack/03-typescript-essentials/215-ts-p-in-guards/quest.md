@@ -4,6 +4,8 @@ title: "Practice: Narrowing with in & instanceof"
 type: "code"
 language: "ts"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Check the most specific shapes or classes first."]
 ---
 # Practice: Narrowing with in & instanceof

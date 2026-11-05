@@ -5,6 +5,8 @@ type: "code"
 language: "js"
 mode: "write-tests"
 xp: 20
+optional: true
+section: "Practice"
 hints: ["`\"1,234,567.89\"` has two commas, and a bug that only removes the first one is common."]
 ---
 # Practice: Testing a Money Parser

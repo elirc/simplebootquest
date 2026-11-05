@@ -4,6 +4,8 @@ title: "Practice: Second Largest"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Track two variables: first and second."]
 ---
 ## Your task

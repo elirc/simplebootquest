@@ -4,6 +4,8 @@ title: "Practice: Deep Clone"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Check the special types (Date, Map, Set, Array) before plain objects."]
 ---
 # Practice: Deep Clone

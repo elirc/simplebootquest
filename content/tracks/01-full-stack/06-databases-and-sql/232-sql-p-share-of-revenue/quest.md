@@ -4,6 +4,8 @@ title: "Practice: Percent of Total"
 type: "code"
 language: "sql"
 xp: 20
+optional: true
+section: "Practice"
 hints: ["Aggregate per category in a CTE first, then apply `SUM(...) OVER ()` to the CTE."]
 ---
 # Practice: Percent of Total

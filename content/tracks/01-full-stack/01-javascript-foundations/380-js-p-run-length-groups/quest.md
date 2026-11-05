@@ -4,6 +4,8 @@ title: "Practice: Consecutive Groups"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Remove duplicate days first, then compare each day with the previous one."]
 ---
 ## Your task

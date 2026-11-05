@@ -4,6 +4,8 @@ title: "Practice: A Supertest-Style Request Helper"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Wrap everything in `new Promise((resolve, reject) => ...)`. `res.json`, `res.send` and `res.end` call `resolve`.", "Run the handler with `Promise.resolve().then(() => handler(req, res))`, so sync throws and async rejections are handled the same way."]
 resources: [{"title": "Supertest on GitHub", "url": "https://github.com/ladjs/supertest"}]
 ---

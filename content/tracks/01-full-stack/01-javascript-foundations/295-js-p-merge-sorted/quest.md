@@ -4,6 +4,8 @@ title: "Practice: Merge Two Sorted Arrays"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Push the smaller of `a[i]` and `b[j]` and advance that pointer."]
 ---
 # Practice: Merge Two Sorted Arrays

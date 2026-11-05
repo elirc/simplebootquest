@@ -4,6 +4,8 @@ title: "Practice: A DataLoader-Style Batcher"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Collect waiters per id in a Map, and dispatch once in a microtask."]
 resources: [{"title": "DataLoader", "url": "https://github.com/graphql/dataloader"}]
 ---

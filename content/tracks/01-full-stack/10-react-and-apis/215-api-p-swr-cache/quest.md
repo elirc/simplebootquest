@@ -4,6 +4,8 @@ title: "Practice: Stale-While-Revalidate"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Keep two Maps: one for entries `{ data, at }`, and one for in-flight promises.", "Remove the in-flight promise in a `.finally()`, whether it succeeded or not."]
 resources: [{"title": "TanStack Query: Important defaults", "url": "https://tanstack.com/query/latest/docs/framework/react/guides/important-defaults"}]
 ---

@@ -4,6 +4,8 @@ title: "Practice: Test Data Builders with Sequences"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Merge recursively only when BOTH sides are plain objects. Everything else is replaced."]
 ---
 # Practice: Test Data Builders with Sequences

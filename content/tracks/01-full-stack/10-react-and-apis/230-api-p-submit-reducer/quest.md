@@ -4,6 +4,8 @@ title: "Practice: Form Submission State"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Returning the exact same object for a no-op action lets React skip re-rendering."]
 ---
 # Practice: Form Submission State

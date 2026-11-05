@@ -4,6 +4,8 @@ title: "Practice: Drag-and-Drop Ordering"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Remove with `splice(from, 1)`, then insert with `splice(target, 0, item)`.", "Compare each new position against a `Map` of the original positions to find what changed."]
 ---
 # Practice: Drag-and-Drop Ordering

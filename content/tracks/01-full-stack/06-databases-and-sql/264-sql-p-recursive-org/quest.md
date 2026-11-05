@@ -4,6 +4,8 @@ title: "Practice: Recursive CTEs"
 type: "code"
 language: "sql"
 xp: 20
+optional: true
+section: "Practice"
 resources: [{"title": "SQLite: Recursive common table expressions", "url": "https://www.sqlite.org/lang_with.html#recursive_common_table_expressions"}]
 ---
 # Practice: Recursive CTEs

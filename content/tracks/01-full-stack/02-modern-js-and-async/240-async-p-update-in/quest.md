@@ -4,6 +4,8 @@ title: "Practice: Immutable updateIn"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Recursion: copy this level, and set `copy[key]` to the update of the rest of the path."]
 resources: [{"title": "Immer", "url": "https://immerjs.github.io/immer/"}]
 ---

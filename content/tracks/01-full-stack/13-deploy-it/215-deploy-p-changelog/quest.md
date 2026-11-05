@@ -4,6 +4,8 @@ title: "Practice: Generating a Changelog"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 resources: [{"title": "Keep a Changelog", "url": "https://keepachangelog.com/"}]
 ---
 # Practice: Generating a Changelog

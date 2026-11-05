@@ -4,6 +4,8 @@ title: "Practice: Ignoring Stale Responses"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Give each call an increasing id. When it finishes, compare its id with the current one."]
 resources: [{"title": "React docs: Fetching data with Effects (race conditions)", "url": "https://react.dev/learn/synchronizing-with-effects#fetching-data"}]
 ---

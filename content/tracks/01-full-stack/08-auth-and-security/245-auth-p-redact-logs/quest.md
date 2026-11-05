@@ -4,6 +4,8 @@ title: "Practice: Redacting Secrets from Logs"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Track the objects on the CURRENT path in a WeakSet (add before recursing, delete after). That detects cycles without flagging shared references.", "Check the key before recursing, so you never descend into a redacted value."]
 ---
 # Practice: Redacting Secrets from Logs

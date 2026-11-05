@@ -4,6 +4,8 @@ title: "Practice: Ordinal Numbers"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Check `n % 100` for 11–13 before looking at the last digit."]
 ---
 # Practice: Ordinal Numbers

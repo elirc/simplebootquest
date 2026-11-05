@@ -4,6 +4,8 @@ title: "Practice: What Changed?"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Index both arrays by id with Maps."]
 ---
 # Practice: What Changed?

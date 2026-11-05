@@ -4,6 +4,8 @@ title: "Practice: Loading Config from the Environment"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["`Number.isInteger(Number(\"80.5\"))` is false, and so is `Number.isInteger(NaN)`, which covers both bad cases.", "Compare DEBUG against an allow-list instead of using `Boolean(...)`."]
 resources: [{"title": "The Twelve-Factor App: Config", "url": "https://12factor.net/config"}]
 ---

@@ -4,6 +4,8 @@ title: "Practice: Graceful Shutdown"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Track a \"settled\" version of each promise (`p.then(() => {}, () => {})`) so failures never break `drain`.", "Remove each entry from a `Set` when it settles, and have `drain` await everything still in the set."]
 resources: [{"title": "Node.js: server.close()", "url": "https://nodejs.org/api/net.html#serverclosecallback"}]
 ---

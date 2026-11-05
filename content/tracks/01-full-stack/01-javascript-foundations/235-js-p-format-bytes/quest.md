@@ -4,6 +4,8 @@ title: "Practice: Formatting File Sizes"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Divide by 1024 while the value is at least 1024."]
 ---
 ## Your task

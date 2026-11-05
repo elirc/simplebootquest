@@ -4,6 +4,8 @@ title: "Practice: Factorial with Validation"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["BigInt literals end with `n`: `1n`, `2n`."]
 ---
 ## Your task

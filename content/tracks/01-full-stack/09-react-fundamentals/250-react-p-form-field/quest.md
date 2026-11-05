@@ -4,6 +4,8 @@ title: "Practice: An Accessible Form Field"
 type: "code"
 language: "jsx"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Build the describedby list with `[hintId, errorId].filter(Boolean).join(\" \") || undefined`."]
 ---
 # Practice: An Accessible Form Field

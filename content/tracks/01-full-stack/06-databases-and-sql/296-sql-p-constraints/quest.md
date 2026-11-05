@@ -4,6 +4,8 @@ title: "Practice: Constraints Are Your Last Line of Defence"
 type: "code"
 language: "sql"
 xp: 20
+optional: true
+section: "Practice"
 ---
 # Practice: Constraints Are Your Last Line of Defence
 

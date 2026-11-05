@@ -4,6 +4,8 @@ title: "Practice: Inventory Value"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Sort by qty, then by sku with `||` for ties."]
 ---
 ## Your task

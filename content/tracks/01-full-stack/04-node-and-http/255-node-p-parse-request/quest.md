@@ -4,6 +4,8 @@ title: "Practice: Parsing a Raw HTTP Request"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Split head from body at the first `\\\\r\\\\n\\\\r\\\\n`, then split the head into lines.", "A regex like `/^([A-Z]+) (\\\\S+) (HTTP\\\\/\\\\d\\\\.\\\\d)$/` validates the request line and captures the parts."]
 resources: [{"title": "MDN: HTTP messages", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages"}]
 ---

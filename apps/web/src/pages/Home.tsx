@@ -12,7 +12,7 @@ const FEATURES = [
 
 export function HomePage() {
   const { user } = useAuth();
-  const { state } = useAsync(() => api.curriculum(), []);
+  const { state } = useAsync(() => api.curriculum(), [user?.id]);
 
   return (
     <div className="home">
@@ -27,9 +27,15 @@ export function HomePage() {
           A focused, hands-on path from your first variable to a deployed CRUD app with auth, a database and a React frontend.
         </p>
         <div className="hero-actions">
-          <Link to={user ? '/learn' : '/register'} className="btn btn-primary btn-lg">
-            {user ? 'Continue learning' : 'Start for free'}
-          </Link>
+          {user && state.data?.resume ? (
+            <Link to={`/learn/${state.data.resume.chapterSlug}/${state.data.resume.slug}`} className="btn btn-primary btn-lg">
+              Continue: {state.data.resume.title} →
+            </Link>
+          ) : (
+            <Link to={user ? '/learn' : '/register'} className="btn btn-primary btn-lg">
+              {user ? 'Continue learning' : 'Start for free'}
+            </Link>
+          )}
           <Link to="/learn" className="btn btn-secondary btn-lg">
             Browse the curriculum
           </Link>
@@ -73,7 +79,7 @@ export function HomePage() {
                         <span>
                           <strong>{c.title}</strong>
                         </span>
-                        <span className="muted path-count">{c.quests.length} quests</span>
+                        <span className="muted path-count">{c.coreTotal} quests{c.total > c.coreTotal ? ` + ${c.total - c.coreTotal} practice` : ''}</span>
                       </Link>
                     </li>
                   ))}

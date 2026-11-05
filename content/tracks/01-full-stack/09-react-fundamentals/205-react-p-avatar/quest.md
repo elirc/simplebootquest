@@ -4,6 +4,8 @@ title: "Practice: Avatar with a Fallback"
 type: "code"
 language: "jsx"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Split on `/\\\\s+/` after trimming, so several spaces between words still work."]
 ---
 # Practice: Avatar with a Fallback

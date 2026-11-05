@@ -4,6 +4,8 @@ title: "Practice: Normalising Emails"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Don't try to write The Perfect Email Regex. A few structural checks plus a confirmation email is what real apps do."]
 ---
 # Practice: Normalising Emails

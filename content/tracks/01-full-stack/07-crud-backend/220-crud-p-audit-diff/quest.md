@@ -4,6 +4,8 @@ title: "Practice: An Audit Log Diff"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Union the keys of both objects with a `Set`, then sort."]
 ---
 # Practice: An Audit Log Diff

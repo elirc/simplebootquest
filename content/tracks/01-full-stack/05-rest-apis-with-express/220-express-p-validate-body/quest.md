@@ -4,6 +4,8 @@ title: "Practice: A Tiny Schema Validator"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Loop over the SCHEMA, not the input. That way unknown keys are stripped automatically.", "Use `continue` after pushing an error, so each field gets at most one."]
 resources: [{"title": "Zod documentation", "url": "https://zod.dev"}]
 ---

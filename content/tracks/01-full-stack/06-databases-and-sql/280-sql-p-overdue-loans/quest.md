@@ -4,6 +4,8 @@ title: "Practice: Date Arithmetic"
 type: "code"
 language: "sql"
 xp: 20
+optional: true
+section: "Practice"
 hints: ["`CAST(x AS INTEGER)` drops the fractional part."]
 ---
 # Practice: Date Arithmetic

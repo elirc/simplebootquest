@@ -4,6 +4,8 @@ title: "Practice: Type-Safe-ish Route Building"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Split the pattern on `/`, map each segment, and join it back. Optional segments that are missing are simply skipped."]
 ---
 # Practice: Type-Safe-ish Route Building

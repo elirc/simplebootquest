@@ -4,6 +4,8 @@ title: "Practice: A Bounded Counter Class"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["A private `#set(v)` helper can clamp and record history in one place."]
 ---
 ## Your task

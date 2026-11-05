@@ -4,6 +4,8 @@ title: "Practice: Build toMatchObject"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 resources: [{"title": "Vitest: toMatchObject", "url": "https://vitest.dev/api/expect.html#tomatchobject"}]
 ---
 # Practice: Build toMatchObject

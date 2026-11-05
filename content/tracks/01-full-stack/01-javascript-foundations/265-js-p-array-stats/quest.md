@@ -4,6 +4,8 @@ title: "Practice: Array Statistics"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Sort a copy numerically, then pick the middle element(s)."]
 ---
 ## Your task

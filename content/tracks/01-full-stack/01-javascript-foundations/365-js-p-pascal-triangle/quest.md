@@ -4,6 +4,8 @@ title: "Practice: Pascal's Triangle"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Each row starts and ends with 1; inner values come from the previous row."]
 ---
 ## Your task

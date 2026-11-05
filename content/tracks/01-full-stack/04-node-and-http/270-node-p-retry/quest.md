@@ -4,6 +4,8 @@ title: "Practice: Retrying with Exponential Backoff"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["`2 ** i` is exponentiation. `Array.from({ length: n }, (_, i) => ...)` builds the list.", "An infinite `for` loop with `return` on success and `throw` when out of retries is the cleanest shape."]
 ---
 # Practice: Retrying with Exponential Backoff

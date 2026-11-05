@@ -4,6 +4,8 @@ title: "Practice: Async map, filter & reduce"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["For asyncFilter, resolve all the booleans first with `Promise.all`, then filter by index."]
 ---
 # Practice: Async map, filter & reduce

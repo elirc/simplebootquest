@@ -4,6 +4,8 @@ title: "Practice: Consistent Response Envelopes"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Only add a key when it was provided. `{ data }` vs `{ data, meta }` keeps `meta: undefined` out of the JSON shape."]
 ---
 # Practice: Consistent Response Envelopes

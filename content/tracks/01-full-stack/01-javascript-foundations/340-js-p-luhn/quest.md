@@ -4,6 +4,8 @@ title: "Practice: The Luhn Checksum"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Iterate from the right using `digits.length - 1 - i`."]
 ---
 # Practice: The Luhn Checksum

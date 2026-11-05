@@ -4,6 +4,8 @@ title: "Practice: Sparse Fieldsets"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Build a `Set` of wanted fields, add `id`, then walk `allowed` in order and keep the ones in the set."]
 ---
 # Practice: Sparse Fieldsets

@@ -4,6 +4,8 @@ title: "Practice: Normalised Client State"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Copy `byId` with spread and `ids` with `[...ids]` first, then change the copies.", "`const { [id]: _, ...rest } = obj` removes a computed key without mutating."]
 resources: [{"title": "Redux docs: Normalizing state shape", "url": "https://redux.js.org/usage/structuring-reducers/normalizing-state-shape"}]
 ---

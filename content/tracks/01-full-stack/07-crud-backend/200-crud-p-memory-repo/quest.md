@@ -4,6 +4,8 @@ title: "Practice: An In-Memory Repository"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["A `Map` keyed by id makes findById, update and delete simple.", "Destructure the forbidden fields out of `data` before merging: `const { id, createdAt, ...rest } = data`."]
 ---
 # Practice: An In-Memory Repository

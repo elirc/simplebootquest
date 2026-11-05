@@ -4,6 +4,8 @@ title: "Practice: Currying & Partial Application"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["`fn.length` is the number of declared parameters."]
 ---
 # Practice: Currying & Partial Application

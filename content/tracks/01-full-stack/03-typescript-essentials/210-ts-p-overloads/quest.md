@@ -4,6 +4,8 @@ title: "Practice: Function Overloads"
 type: "code"
 language: "ts"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Overload signatures come first; one implementation handles every case."]
 resources: [{"title": "TS Handbook: Function overloads", "url": "https://www.typescriptlang.org/docs/handbook/2/functions.html#function-overloads"}]
 ---

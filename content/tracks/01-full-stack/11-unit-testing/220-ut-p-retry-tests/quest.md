@@ -5,6 +5,8 @@ type: "code"
 language: "js"
 mode: "write-tests"
 xp: 20
+optional: true
+section: "Practice"
 hints: ["A mutant may call `fn` one extra time. Only `toHaveBeenCalledTimes` will notice."]
 ---
 # Practice: Testing Retry Logic

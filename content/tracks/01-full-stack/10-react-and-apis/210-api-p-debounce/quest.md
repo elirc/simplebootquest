@@ -4,6 +4,8 @@ title: "Practice: Debouncing Search Input"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Store the timer id and the latest args. Every call clears the old timer and starts a new one."]
 ---
 # Practice: Debouncing Search Input

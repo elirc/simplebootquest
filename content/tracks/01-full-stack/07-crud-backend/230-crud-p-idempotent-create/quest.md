@@ -4,6 +4,8 @@ title: "Practice: Idempotent Creates with Client IDs"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Use a composite key string like `${userId}:${clientId}`, the in-memory equivalent of `@@unique([userId, clientId])` in Prisma."]
 ---
 # Practice: Idempotent Creates with Client IDs

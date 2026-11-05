@@ -4,6 +4,8 @@ title: "Practice: Deep Merge"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Recurse only when both sides are plain objects."]
 ---
 # Practice: Deep Merge

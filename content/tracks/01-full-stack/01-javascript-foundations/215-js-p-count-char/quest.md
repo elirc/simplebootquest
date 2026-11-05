@@ -4,6 +4,8 @@ title: "Practice: Counting Characters"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Update the best letter only when a count becomes strictly greater."]
 ---
 ## Your task

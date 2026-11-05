@@ -4,6 +4,8 @@ title: "Practice: Validation Middleware"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Both factories are the same apart from which property of `req` they read and write. Write one helper that takes the property name."]
 ---
 # Practice: Validation Middleware

@@ -4,6 +4,8 @@ title: "Practice: Building Query Strings"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["`Object.entries` gives you `[key, value]` pairs in insertion order.", "Normalise every value to an array first: `Array.isArray(v) ? v : [v]`. Then there is only one code path."]
 ---
 # Practice: Building Query Strings

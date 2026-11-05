@@ -4,6 +4,8 @@ title: "Practice: Spotting Flaky Tests"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 resources: [{"title": "Google Testing Blog: Flaky tests at Google", "url": "https://testing.googleblog.com/2016/05/flaky-tests-at-google-and-how-we.html"}]
 ---
 # Practice: Spotting Flaky Tests

@@ -4,6 +4,8 @@ title: "Practice: Renaming & Inverting Keys"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["`Object.entries` → `map` → `Object.fromEntries`."]
 ---
 # Practice: Renaming & Inverting Keys

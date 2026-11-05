@@ -4,6 +4,8 @@ title: "Practice: Rotating Arrays"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Normalise k with `((k % n) + n) % n`."]
 ---
 ## Your task

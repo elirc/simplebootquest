@@ -4,6 +4,8 @@ title: "Practice: Exporting CSV Safely"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Write a `cell(value)` helper and use it for headers and values alike."]
 resources: [{"title": "OWASP: CSV Injection", "url": "https://owasp.org/www-community/attacks/CSV_Injection"}]
 ---

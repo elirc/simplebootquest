@@ -4,6 +4,8 @@ title: "Practice: Truncating by Words"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Split on whitespace, slice, then fix the last kept word."]
 ---
 ## Your task

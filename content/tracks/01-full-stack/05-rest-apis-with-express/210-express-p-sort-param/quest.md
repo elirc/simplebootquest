@@ -4,6 +4,8 @@ title: "Practice: Safe Sorting"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Check `allowed.includes(field)` AFTER stripping the leading `-`."]
 ---
 # Practice: Safe Sorting

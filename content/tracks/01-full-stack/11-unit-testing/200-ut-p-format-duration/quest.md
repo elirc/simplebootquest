@@ -5,6 +5,8 @@ type: "code"
 language: "js"
 mode: "write-tests"
 xp: 20
+optional: true
+section: "Practice"
 hints: ["A single happy-path test catches only some mutants. Test 60, 3600 and 3601 separately."]
 ---
 # Practice: Testing a Duration Formatter

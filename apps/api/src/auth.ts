@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import type { CookieOptions, RequestHandler } from 'express';
-import { levelForXp, type PublicUser } from '@sbq/shared';
+import { effectiveStreak, levelForXp, toUtcDay, type PublicUser } from '@sbq/shared';
 import type { Config } from './config.ts';
 import { HttpError } from './errors.ts';
 
@@ -70,16 +70,20 @@ export function toPublicUser(user: {
   xp: number;
   streak: number;
   longestStreak: number;
+  lastActiveDate?: string | null;
+  showOnLeaderboard?: boolean;
   createdAt: Date;
-}): PublicUser {
+}, now: Date = new Date()): PublicUser {
   return {
     id: user.id,
     email: user.email,
     name: user.name,
     xp: user.xp,
     level: levelForXp(user.xp),
-    streak: user.streak,
+    // The stored streak only changes on completion; show what it is *today*.
+    streak: effectiveStreak(user.streak, user.lastActiveDate ?? null, toUtcDay(now)),
     longestStreak: user.longestStreak,
+    showOnLeaderboard: user.showOnLeaderboard ?? true,
     createdAt: user.createdAt.toISOString(),
   };
 }

@@ -4,6 +4,8 @@ title: "Practice: Totals per Customer"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["A Map keyed by customer is a good accumulator."]
 ---
 ## Your task

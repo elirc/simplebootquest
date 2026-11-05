@@ -4,6 +4,8 @@ title: "Practice: Validating a Checkout"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Merge with a `Map<productId, quantity>` first. Maps keep insertion order."]
 ---
 # Practice: Validating a Checkout

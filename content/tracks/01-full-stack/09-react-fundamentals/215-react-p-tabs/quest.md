@@ -4,6 +4,8 @@ title: "Practice: Accessible Tabs"
 type: "code"
 language: "jsx"
 xp: 15
+optional: true
+section: "Practice"
 resources: [{"title": "WAI-ARIA Authoring Practices: Tabs", "url": "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"}]
 ---
 # Practice: Accessible Tabs

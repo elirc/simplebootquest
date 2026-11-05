@@ -4,6 +4,8 @@ title: "Practice: CORS Middleware"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Set `Vary` first, unconditionally. Then branch on whether the origin is allowed.", "Only short-circuit (no `next()`) for an allowed preflight."]
 resources: [{"title": "MDN: Cross-Origin Resource Sharing", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS"}]
 ---

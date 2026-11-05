@@ -4,6 +4,8 @@ title: "Practice: Memoizing Multi-Argument Functions"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["On a hit, delete and re-insert the key, so it moves to the end of the Map."]
 ---
 ## Your task

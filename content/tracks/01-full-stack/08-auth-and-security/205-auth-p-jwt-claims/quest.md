@@ -4,6 +4,8 @@ title: "Practice: Checking JWT Claims"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["`exp` is in SECONDS, while `now` is in milliseconds. Divide `now` by 1000.", "Wrap the decoding in try/catch, because `atob` and `JSON.parse` both throw on garbage."]
 resources: [{"title": "RFC 7519: JSON Web Token claims", "url": "https://www.rfc-editor.org/rfc/rfc7519#section-4.1"}, {"title": "jwt.io debugger", "url": "https://jwt.io"}]
 ---

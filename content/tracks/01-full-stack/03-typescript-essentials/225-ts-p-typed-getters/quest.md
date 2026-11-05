@@ -4,6 +4,8 @@ title: "Practice: Template Literal Keys"
 type: "code"
 language: "ts"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Return a closure per key that reads `obj[key]` when called."]
 resources: [{"title": "TS Handbook: Key remapping", "url": "https://www.typescriptlang.org/docs/handbook/2/mapped-types.html#key-remapping-via-as"}]
 ---

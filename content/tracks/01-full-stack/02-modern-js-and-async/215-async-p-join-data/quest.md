@@ -4,6 +4,8 @@ title: "Practice: Joining Two Datasets"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Destructure `{ authorId, ...post }` in the map callback."]
 ---
 # Practice: Joining Two Datasets

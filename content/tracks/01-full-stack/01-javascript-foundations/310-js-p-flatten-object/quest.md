@@ -4,6 +4,8 @@ title: "Practice: Flatten & Unflatten Objects"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Recurse into plain objects, passing the path prefix down."]
 ---
 # Practice: Flatten & Unflatten Objects

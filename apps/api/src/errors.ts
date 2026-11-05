@@ -19,7 +19,9 @@ export const notFound = (what = 'Resource') => new HttpError(404, `${what} not f
 export function parse<T extends z.ZodTypeAny>(schema: T, data: unknown): z.infer<T> {
   const result = schema.safeParse(data);
   if (!result.success) {
-    const details = Object.fromEntries(result.error.issues.map((i) => [i.path.join('.') || '_', i.message]));
+    // One message per field: the first failing rule ("required" before "format").
+    const details: Record<string, string> = {};
+    for (const i of result.error.issues) details[i.path.join('.') || '_'] ??= i.message;
     throw new HttpError(400, 'Validation failed', details);
   }
   return result.data;

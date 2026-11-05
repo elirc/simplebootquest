@@ -4,6 +4,8 @@ title: "Practice: A Command-Line Argument Parser"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Use an index-based `for` loop so you can skip the next word (`i++`) after consuming it as a value.", "Strip the leading dashes with `word.replace(/^--?/, \"\")`."]
 resources: [{"title": "Node.js: util.parseArgs", "url": "https://nodejs.org/api/util.html#utilparseargsconfig"}]
 ---

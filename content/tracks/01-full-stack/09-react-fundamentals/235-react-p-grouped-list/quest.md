@@ -4,6 +4,8 @@ title: "Practice: Grouping a List by Date"
 type: "code"
 language: "jsx"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Sort a copy newest first. Then each item either joins the last group (same label) or starts a new one.", "Yesterday is `today` minus 86,400,000 ms, formatted with `toISOString().slice(0, 10)`."]
 ---
 # Practice: Grouping a List by Date

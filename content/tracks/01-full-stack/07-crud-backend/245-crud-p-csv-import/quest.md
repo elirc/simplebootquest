@@ -4,6 +4,8 @@ title: "Practice: Parsing CSV Imports"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Track two states: inside quotes or not. Inside quotes, only `\"` is special (and `\"\"` is an escaped quote).", "Write a function that turns text into an array of string arrays first. Mapping to objects is the easy part."]
 resources: [{"title": "RFC 4180: Common Format for CSV Files", "url": "https://www.rfc-editor.org/rfc/rfc4180"}]
 ---

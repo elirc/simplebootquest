@@ -4,6 +4,8 @@ title: "Practice: Optional Properties & Defaults"
 type: "code"
 language: "ts"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["`??` keeps 0 and empty strings; `||` doesn't."]
 ---
 # Practice: Optional Properties & Defaults

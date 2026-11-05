@@ -4,6 +4,8 @@ title: "Practice: Sort by Frequency"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["`text.match(/[a-z']+/g)` extracts the words (it can return null)."]
 ---
 ## Your task

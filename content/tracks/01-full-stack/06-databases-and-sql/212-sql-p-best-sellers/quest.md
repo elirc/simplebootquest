@@ -4,6 +4,8 @@ title: "Practice: Best-Selling Products"
 type: "code"
 language: "sql"
 xp: 20
+optional: true
+section: "Practice"
 hints: ["Units sold is `SUM(quantity)`, not `COUNT(*)`: one line item can contain 10 cables."]
 ---
 # Practice: Best-Selling Products

@@ -4,6 +4,8 @@ title: "Practice: Querying a User List"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Treat each filter as \"pass\" when it is undefined."]
 ---
 ## Your task

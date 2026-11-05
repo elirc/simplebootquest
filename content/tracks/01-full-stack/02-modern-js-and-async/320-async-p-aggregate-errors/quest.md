@@ -4,6 +4,8 @@ title: "Practice: Collecting Every Failure"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["`new AggregateError(errors, message)`"]
 ---
 # Practice: Collecting Every Failure

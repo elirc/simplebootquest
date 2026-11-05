@@ -4,6 +4,8 @@ title: "Practice: A Priority Task Queue"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Keep the queue sorted by priority (descending), then by insertion order."]
 ---
 ## Your task

@@ -4,6 +4,8 @@ title: "Practice: Counting Direct Reports"
 type: "code"
 language: "sql"
 xp: 20
+optional: true
+section: "Practice"
 ---
 # Practice: Counting Direct Reports
 

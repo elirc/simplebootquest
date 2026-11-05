@@ -4,6 +4,8 @@ title: "Practice: Unique Slugs"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Do the accent stripping BEFORE replacing non-alphanumerics, or `é` becomes a dash."]
 resources: [{"title": "MDN: String.prototype.normalize()", "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/normalize"}]
 ---

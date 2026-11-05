@@ -4,6 +4,8 @@ title: "Practice: Content Types for Static Files"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Take the last path segment first, so dots in directory names are ignored.", "`lastIndexOf(\".\")` returning 0 means a dotfile, and -1 means no extension."]
 ---
 # Practice: Content Types for Static Files

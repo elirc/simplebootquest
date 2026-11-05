@@ -4,6 +4,8 @@ title: "Practice: Abstract Classes & the Template Method"
 type: "code"
 language: "ts"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Let `header()` return an array of lines, so Markdown can return two."]
 ---
 # Practice: Abstract Classes & the Template Method

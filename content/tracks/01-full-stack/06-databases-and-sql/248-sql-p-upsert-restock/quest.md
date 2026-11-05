@@ -4,6 +4,8 @@ title: "Practice: Restocking with an Upsert"
 type: "code"
 language: "sql"
 xp: 20
+optional: true
+section: "Practice"
 ---
 # Practice: Restocking with an Upsert
 

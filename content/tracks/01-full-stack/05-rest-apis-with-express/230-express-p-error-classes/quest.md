@@ -4,6 +4,8 @@ title: "Practice: HTTP Error Classes"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Subclasses call `super(status, message, code)` with the values they're fixed to.", "Check `instanceof HttpError` first, then `Array.isArray(err.issues)`, then fall through to 500."]
 ---
 # Practice: HTTP Error Classes

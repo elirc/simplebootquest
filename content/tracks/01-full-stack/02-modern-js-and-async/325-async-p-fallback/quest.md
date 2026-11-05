@@ -4,6 +4,8 @@ title: "Practice: Primary with Fallback"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Race the primary against a timeout, and catch either failure."]
 ---
 # Practice: Primary with Fallback

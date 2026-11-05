@@ -4,6 +4,8 @@ title: "Practice: Reviving Dates from JSON"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["A replacer function can return a new object with sorted keys."]
 ---
 # Practice: Reviving Dates from JSON

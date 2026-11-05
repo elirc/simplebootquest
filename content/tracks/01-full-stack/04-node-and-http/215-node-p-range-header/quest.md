@@ -4,6 +4,8 @@ title: "Practice: Range Requests"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["A regex like `/^bytes=(\\\\d*)-(\\\\d*)$/` captures both sides, either of which may be empty.", "Handle the three shapes separately: `a-b`, `a-` and `-n`."]
 resources: [{"title": "MDN: HTTP range requests", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Range_requests"}]
 ---

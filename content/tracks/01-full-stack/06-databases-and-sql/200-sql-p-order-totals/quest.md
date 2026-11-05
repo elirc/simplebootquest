@@ -4,6 +4,8 @@ title: "Practice: Order Totals"
 type: "code"
 language: "sql"
 xp: 20
+optional: true
+section: "Practice"
 hints: ["Join all three tables, then `GROUP BY o.id`.", "You can do arithmetic inside an aggregate: `SUM(oi.quantity * oi.unit_price_cents)`."]
 ---
 # Practice: Order Totals

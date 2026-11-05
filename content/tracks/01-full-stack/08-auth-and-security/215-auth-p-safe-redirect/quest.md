@@ -4,6 +4,8 @@ title: "Practice: Preventing Open Redirects"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["An allow-list check (\"starts with one `/`, then not `/` or `\\\\`\") is much safer than trying to block every bad pattern."]
 resources: [{"title": "OWASP: Unvalidated Redirects and Forwards", "url": "https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html"}]
 ---

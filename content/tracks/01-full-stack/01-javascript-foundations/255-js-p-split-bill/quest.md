@@ -4,6 +4,8 @@ title: "Practice: Splitting a Bill Fairly"
 type: "code"
 language: "js"
 xp: 15
+optional: true
+section: "Practice"
 hints: ["Floor the base share, then hand out the remainder one cent at a time."]
 ---
 # Practice: Splitting a Bill Fairly

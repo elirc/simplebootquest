@@ -2,7 +2,7 @@
 
 **Learn full-stack CRUD web development by building, one quest at a time.**
 
-SimpleBootQuest is a hands-on, gamified learning platform inspired by sites like boot.dev, but deliberately smaller and more focused. There's no sprawling curriculum covering every language and paradigm. There's one path: **building full-stack CRUD web apps with JavaScript, TypeScript, Node.js, and React.**
+SimpleBootQuest is a hands-on, gamified learning platform inspired by sites like boot.dev, but deliberately smaller and more focused. There's no sprawling curriculum covering every language and paradigm. There's one main path, **building full-stack CRUD web apps with JavaScript, TypeScript, Node.js, and React**, plus two supplementary tracks that grow you from junior to mid-level and beyond: **System Design** and **Agentic Engineering** (working effectively with AI coding agents).
 
 You write real code, the platform checks it, you earn XP, and you move on to the next quest. By the end, you can design, build, and deploy a complete web app from database to UI.
 
@@ -27,7 +27,19 @@ You write real code, the platform checks it, you earn XP, and you move on to the
 
 ## The Learning Path
 
-The curriculum is split into **chapters**. Each chapter is a set of short **quests** (lessons and exercises) and ends with a **boss fight** (a small project).
+There are three **tracks**. Start with the Full-Stack Path, and dip into the other two whenever you like. XP, levels and streaks are shared across all three.
+
+| Track | Quests | Formats | What you'll learn |
+|-------|--------|---------|-------------------|
+| ⌨️ **Full-Stack Path** | 255 | Code, quizzes, projects | JavaScript → TypeScript → Node → Express → SQL → auth → React → testing → deploy |
+| 🏗️ **System Design** | 46 | Quizzes, design docs | Requirements & estimates, scaling a Node API, databases at scale, caching, queues, reliability, API design, multi-tenancy, and six case studies |
+| 🤖 **Agentic Engineering** | 42 | Quizzes, write-ups | How coding agents work, writing specs, context files (CLAUDE.md / AGENTS.md), workflows, verifying and reviewing AI code, safety & prompt injection, debugging, team practices |
+
+**Design write-ups** are a quest type of their own: you write a design document (in Markdown, in the browser), review it against a rubric, and then unlock a reference design to compare trade-offs with. It's the same artefact engineers write at work before building something big.
+
+### ⌨️ Full-Stack Path
+
+The core path is split into **chapters**. Each chapter is a set of short **quests** (lessons and exercises) and ends with a **boss fight** (a small project).
 
 | # | Chapter | What you'll learn |
 |---|---------|-------------------|
@@ -102,7 +114,7 @@ simplebootquest/
 │   ├── runner/           # Runs learner code against quest tests (browser + Node)
 │   └── curriculum/       # Loads and validates the content files
 ├── content/
-│   └── chapters/         # The curriculum: one folder per chapter and quest
+│   └── tracks/           # The curriculum: one folder per track, chapter and quest
 ├── scripts/
 │   └── validate-content.ts   # Proves every solution passes and every starter fails
 └── BUILDING.md           # How (and why) the app was built
@@ -156,7 +168,7 @@ API integration tests need a database named `simplebootquest_test`. Create it wi
 
 ### Writing content
 
-Each quest is a folder in `content/tracks/<NN-track>/<NN-chapter>/<NN-quest>/` containing a `quest.md` (frontmatter + lesson in Markdown). Code quests also have `starter.*`, `tests.*` and `solution.*` files, and SQL quests have a `setup.sql`. Quizzes and projects keep their questions and requirements in the frontmatter. Quests can add `hints` and `resources` to their frontmatter, too. Run `npm run validate:content` after every change.
+Each quest is a folder in `content/tracks/<NN-track>/<NN-chapter>/<NN-quest>/` containing a `quest.md` (frontmatter + lesson in Markdown). Each track folder has a `track.md`, and each chapter a `chapter.md`. Code quests also have `starter.*`, `tests.*` and `solution.*` files, and SQL quests have a `setup.sql`. Design write-ups (`type: design`) have a `rubric` in the frontmatter, plus a `template.md` and a `reference.md`. Quizzes and projects keep their questions and requirements in the frontmatter. Quests can add `hints` and `resources` to their frontmatter, too. Run `npm run validate:content` after every change.
 
 ### A note on code checking
 
@@ -170,7 +182,8 @@ Learner code runs **in the browser**, inside a Web Worker, so there's no server 
 - [x] Test runner for JS, TypeScript, JSX and SQL quests
 - [x] User accounts and progress tracking
 - [x] XP, levels, streaks, achievements and leaderboard
-- [x] 12-chapter curriculum: 255 quests (214 code, 30 quizzes, 11 projects), with progressive hints and further reading
+- [x] Full-Stack Path: 12 chapters, 255 quests (214 code, 30 quizzes, 11 projects), with progressive hints and further reading
+- [x] Parallel tracks: System Design (46 quests) and Agentic Engineering (42 quests), with design write-ups and reference designs
 - [ ] Even more quests in the later chapters (React, testing, deploy)
 - [ ] Server-side sandboxed verification
 - [ ] Peer review for projects

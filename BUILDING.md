@@ -28,6 +28,7 @@ Every step below calls out which of these it's practicing.
 - [Step 8 — The React frontend](#step-8--the-react-frontend)
 - [Step 9 — Verify like a user, then automate it](#step-9--verify-like-a-user-then-automate-it)
 - [Step 10 — Scaling the content (and what it taught us)](#step-10--scaling-the-content-and-what-it-taught-us)
+- [Step 11 — Parallel tracks and a new quest type](#step-11--parallel-tracks-and-a-new-quest-type)
 - [Recap: the build order, and why](#recap-the-build-order-and-why)
 - [Exercises: extend it yourself](#exercises-extend-it-yourself)
 
@@ -203,7 +204,7 @@ To test components we don't need a real DOM. `src/jsx.ts` is a ~100-line JSX run
 Each quest is a folder:
 
 ```
-content/chapters/
+content/tracks/01-full-stack/       # (later: one folder per track, see Step 11)
 └── 01-javascript-foundations/
     ├── chapter.md                 # frontmatter: title, description
     └── 03-control-flow/
@@ -477,6 +478,50 @@ Quests were authored as Python data structures and written to disk with a ~60-li
 - **Progressive hints** (`hints:` in frontmatter) are revealed one at a time in the UI, from a gentle nudge to nearly the answer.
 - **"Go deeper" resources** (`resources:`) link to MDN, react.dev, the Postgres docs, OWASP cheat sheets, and so on.
 - **The solution unlocks** after 3 attempts, framed as "compare approaches", not "copy this".
+
+---
+
+## Step 11 — Parallel tracks and a new quest type
+
+*Skills: boundaries, sequencing, verification.*
+
+The product grew from one path into three **tracks**: the Full-Stack Path plus **System Design** and **Agentic Engineering**. The new tracks use a quest type the app didn't have: the **design write-up**. This step is a good example of extending a system that already has users and data.
+
+### Ask before building
+
+The request was one sentence ("add a system design and agentic engineering track"). Before writing anything, five questions were asked: *How do the tracks relate to the existing path? Which quest formats? What emphasis (building agents, or working with them)? What level? How big?* Each answer removed a whole branch of possible work. For example, "quizzes and design write-ups only" meant no new code runner, and "working *with* coding agents" defined the content of an entire track. Clarifying questions are cheap; building the wrong thing isn't.
+
+### Adding a level to the content tree
+
+Content moved from `content/chapters/` to `content/tracks/<NN-track>/<NN-chapter>/<NN-quest>/` with a single `git mv`. Because progress is keyed by **quest slug** (Step 4), not by path, every learner's progress survived the move untouched. That's the third time the same early decision has paid off.
+
+New invariants that come with a new level of nesting, enforced by the loader:
+
+- Chapter slugs must be unique **across** tracks, because they appear in URLs (`/learn/:chapterSlug`).
+- Prev/next links must not cross from the end of one track into the start of another (the API checks `trackSlug`).
+
+### A new quest type, end to end
+
+Adding `type: 'design'` touched every layer. That's why a shared `QuestType` union in `packages/shared` matters: the moment it was extended, **TypeScript pointed at every place that needed updating**, including an icon map in the UI that would otherwise have rendered `undefined`. Exhaustive types turn "did I find every place?" into a compiler error.
+
+| Layer | Change |
+|-------|--------|
+| Content | `rubric`, `minWords` in frontmatter; `template.md`, `reference.md` files |
+| Loader | Validates design quests; a reference is required |
+| Validator | The template alone must be under the word minimum (the "starter must fail" rule, adapted), and the reference must meet it |
+| API | `POST /quests/:slug/design` enforces the word count server-side; the reference is only served after completion |
+| UI | Markdown editor with preview, live word count, rubric checklist, autosaved drafts, reference tab |
+| Gamification | Design and per-track achievements |
+
+### Grading what can't be auto-graded
+
+A design document can't be unit-tested. Rather than pretend otherwise (say, with keyword matching that rewards stuffing buzzwords), the design is honest about it:
+
+- **Self-review against an explicit rubric**: the same skill as reviewing your own PR.
+- **A reference design**, revealed only *after* submitting, so learners commit to their own thinking first. It's framed as "compare trade-offs", not "here's the answer".
+- **A server-side minimum length**: the one objective check that stops empty submissions.
+
+A future improvement would be peer review, or an LLM grader that gives feedback against the rubric. Either way, the trade-off is written down.
 
 ---
 

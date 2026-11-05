@@ -29,11 +29,13 @@ You write real code, the platform checks it, you earn XP, and you move on to the
 
 There are three **tracks**. Start with the Full-Stack Path, and dip into the other two whenever you like. XP, levels and streaks are shared across all three.
 
+Every chapter has a focused **core** path plus optional **practice** sections for extra reps: thousands of exercises whose answers are all computed and verified (see [BUILDING.md, Step 14](./BUILDING.md#step-14--a-design-council-a-real-runtime-and-content-at-10)). You can finish a chapter without touching the practice.
+
 | Track | Quests | Formats | What you'll learn |
 |-------|--------|---------|-------------------|
-| ⌨️ **Full-Stack Path** | 497 | Code, write-the-tests, quizzes, projects | JavaScript → TypeScript → Node → Express → SQL → auth → React → unit testing → testing in depth → deploy |
-| 🏗️ **System Design** | 91 | Quizzes, design docs | Requirements & estimates, scaling a Node API, databases at scale, caching, queues, reliability, API design, multi-tenancy, security & cost, and ten case studies |
-| 🤖 **Agentic Engineering** | 87 | Quizzes, write-ups | How coding agents work, writing specs, context files (CLAUDE.md / AGENTS.md), workflows, verifying and reviewing AI code, safety & prompt injection, debugging, team practices, career growth |
+| ⌨️ **Full-Stack Path** | 4,702 (289 core) | Code (real Express routes & React hooks), write-the-tests, debugging, predict-the-output, quizzes, projects | JavaScript → TypeScript → Node → Express → SQL → auth → React → unit testing → testing in depth → deploy |
+| 🏗️ **System Design** | 1,495 (91 core) | Quizzes, estimation drills, design docs | Requirements & estimates, scaling a Node API, databases at scale, caching, queues, reliability, API design, multi-tenancy, security & cost, and ten case studies |
+| 🤖 **Agentic Engineering** | 823 (87 core) | Quizzes, review-the-AI's-diff drills, write-ups | How coding agents work, writing specs, context files (CLAUDE.md / AGENTS.md), workflows, verifying and reviewing AI code, safety & prompt injection, debugging, team practices, career growth |
 
 **Design write-ups** are a quest type of their own: you write a design document (in Markdown, in the browser), review it against a rubric, and then unlock a reference design to compare trade-offs with. It's the same artefact engineers write at work before building something big.
 
@@ -43,6 +45,7 @@ The core path is split into **chapters**. Each chapter is a set of short **quest
 
 | # | Chapter | What you'll learn |
 |---|---------|-------------------|
+| 0 | **Your Dev Environment** | The terminal, git for every change, npm, reading stack traces, debugging methodically |
 | 1 | **JavaScript Foundations** | Variables, functions, arrays, objects, control flow, modules |
 | 2 | **Modern JS & Async** | ES6+, destructuring, promises, `async`/`await`, `fetch`, error handling |
 | 3 | **TypeScript Essentials** | Types, interfaces, generics, narrowing, typing functions and APIs |
@@ -161,7 +164,8 @@ Open http://localhost:5173.
 | `npm run dev` | API + web with hot reload |
 | `npm test` | All unit/integration tests, then content validation |
 | `npm run typecheck` | TypeScript across every package |
-| `npm run validate:content` | Check every quest: solutions pass, starters fail |
+| `npm run validate:content` | Check every quest: solutions pass, starters fail, published slugs never disappear |
+| `npm run content:practice` | Regenerate the optional practice sections (`-- sql` for one chapter) |
 | `npm run build` | Production build of web + API |
 | `npm start` | Run the production server (serves the API and the built web app) |
 
@@ -169,7 +173,7 @@ API integration tests need a database named `simplebootquest_test`. Create it wi
 
 ### Writing content
 
-Each quest is a folder in `content/tracks/<NN-track>/<NN-chapter>/<NN-quest>/` containing a `quest.md` (frontmatter + lesson in Markdown). Each track folder has a `track.md`, and each chapter a `chapter.md`. Code quests also have `starter.*`, `tests.*` and `solution.*` files, and SQL quests have a `setup.sql`. "Write the tests" quests (`mode: write-tests`) have a `subject.*` (the correct code), `mutant-N.*` files (buggy copies, each starting with `// mutant: <description>`) and a `solution.*` test suite that must catch every mutant. Design write-ups (`type: design`) have a `rubric` in the frontmatter, plus a `template.md` and a `reference.md`. Quizzes and projects keep their questions and requirements in the frontmatter. Quests can add `hints` and `resources` to their frontmatter, too. Run `npm run validate:content` after every change.
+Each quest is a folder in `content/tracks/<NN-track>/<NN-chapter>/<NN-quest>/` containing a `quest.md` (frontmatter + lesson in Markdown). Each track folder has a `track.md`, and each chapter a `chapter.md`. Code quests also have `starter.*`, `tests.*` and `solution.*` files, and SQL quests have a `setup.sql`. "Write the tests" quests (`mode: write-tests`) have a `subject.*` (the correct code), `mutant-N.*` files (buggy copies, each starting with `// mutant: <description>`) and a `solution.*` test suite that must catch every mutant. Design write-ups (`type: design`) have a `rubric` in the frontmatter, plus a `template.md` and a `reference.md`. Quizzes and projects keep their questions and requirements in the frontmatter. Quests can add `hints` and `resources` to their frontmatter, too. Set `optional: true` and a `section` in the frontmatter for practice quests. They don't count toward chapter completion. Generated practice lives in folders numbered `1000+` (and promoted core quests in `900–979`); don't edit those by hand, change the generators in `scripts/practice/` instead. Run `npm run validate:content` after every change, and `-- --write-lock` when you add new quests.
 
 ### A note on code checking
 
@@ -183,10 +187,15 @@ Learner code runs **in the browser**, inside a Web Worker, so there's no server 
 - [x] Test runner for JS, TypeScript, JSX and SQL quests
 - [x] User accounts and progress tracking
 - [x] XP, levels, streaks, achievements and leaderboard
-- [x] Full-Stack Path: 13 chapters, 497 quests (426 code, 60 quizzes, 11 projects), with progressive hints and further reading
+- [x] Full-Stack Path: 14 chapters, 4,702 quests (289 core), with progressive hints and further reading
 - [x] "Write the tests" quests graded by mutation testing
-- [x] Parallel tracks: System Design (91 quests) and Agentic Engineering (87 quests), with design write-ups and reference designs
+- [x] Parallel tracks: System Design (1,495 quests) and Agentic Engineering (823 quests), with design write-ups and reference designs
 - [x] A practice block in every chapter: extra drills, quizzes and write-ups before each boss fight
+- [x] Adversarial design review by a five-member council ([docs/COUNCIL.md](./docs/COUNCIL.md)), and the fixes it called for
+- [x] Real React hooks and an Express + Supertest runtime in the in-browser runner, hardened against tampering
+- [x] Search, resume where you left off, spaced review, weekly leaderboard with opt-out, beginner-friendly error tips
+- [x] 7,000+ quests: generated practice with computed answers, verified before it's written
+- [ ] Local verifier CLI (`npx sbq check`) so boss projects are verified, not self-reported
 - [ ] Server-side sandboxed verification
 - [ ] Peer review for projects
 

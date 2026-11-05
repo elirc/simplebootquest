@@ -335,13 +335,15 @@ export function mount(element: Child): MountedUi {
     } finally {
       root.batching--;
     }
+    // Updates made synchronously in the handler (before its first await) are
+    // applied right away, like React does at the end of an event.
+    applyUpdates(root);
     if (result instanceof Promise) {
       return result.then(async (v) => {
         await settle();
         return v;
       }) as T;
     }
-    applyUpdates(root);
     return result;
   };
   const event = (el: RenderedElement, extra: Record<string, unknown> = {}) => ({

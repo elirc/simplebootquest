@@ -61,8 +61,8 @@ describe('curriculum', () => {
     expect(res.status).toBe(200);
     expect(res.body).toMatchObject({ slug: quest.slug, type: 'code', code: quest.starter, tests: quest.tests, solutionAvailable: false });
     expect(res.body.solution).toBeUndefined();
-    expect(res.body.next.slug).toBe(curriculum.quests[1]!.slug);
-    expect(res.body.prev).toBeNull();
+    expect(res.body.next.slug).toBe(curriculum.quests[quest.index + 1]!.slug);
+    expect(res.body.prev?.slug ?? null).toBe(quest.index === 0 ? null : curriculum.quests[quest.index - 1]!.slug);
   });
 
   it('never sends quiz answers to the client', async () => {

@@ -68,3 +68,12 @@ The second convergence was **trust**. A public all-time leaderboard on top of se
 ## Outcome metric
 
 The devil's advocate's sharpest point: *quest count is the cheapest number to move.* From now on, progress reports should lead with **outcomes**: how many learners submit a working live URL for the CRUD boss, the review-queue completion rate, and the week-1 retention. Not "N quests added".
+
+## Postscript: the 10× content request
+
+After this review, the next request was "10× the content in every section". That pulls against the devil's advocate's warning about quantity over outcomes. We reconciled the two like this:
+
+- **Core path unchanged in spirit.** All new volume is **optional practice**, in collapsible sections, and it doesn't count toward chapter completion. A few generated quests (real Express routes, real React hooks and data fetching) were deliberately **promoted into the core path**, because that's what the council asked for.
+- **Correct by construction.** Every generated answer is computed (by Node, sql.js, the TypeScript compiler, or the runner's Express and React runtimes), and every generated code quest is run before it's written: the solution must pass and the starter must fail. See BUILDING.md, Step 14.
+- **Variety over volume.** Generators draw from realistic datasets and parameter spaces, and *wrong* options come from running misconception variants, so each item is a genuinely different exercise, not a reworded copy.
+- **The outcome metric still stands.** More practice is only worth it if learners ship working apps. Measure that.

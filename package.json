@@ -15,15 +15,16 @@
     "typecheck": "npm run typecheck --workspaces --if-present",
     "validate:content": "tsx scripts/validate-content.ts",
     "db:migrate": "npm run db:migrate -w @sbq/api",
-    "db:deploy": "npm run db:deploy -w @sbq/api"
+    "db:deploy": "npm run db:deploy -w @sbq/api",
+    "content:practice": "tsx scripts/practice/generate.ts"
   },
   "devDependencies": {
-    "concurrently": "^9.2.0",
-    "tsx": "^4.20.0",
-    "typescript": "~5.9.2",
     "@sbq/curriculum": "0.1.0",
     "@sbq/runner": "0.1.0",
-    "sql.js": "^1.13.0"
+    "concurrently": "^9.2.0",
+    "sql.js": "^1.13.0",
+    "tsx": "^4.20.0",
+    "typescript": "~5.9.2"
   },
   "engines": {
     "node": ">=20"

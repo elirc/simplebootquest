@@ -31,6 +31,7 @@ Every step below calls out which of these it's practicing.
 - [Step 11 — Parallel tracks and a new quest type](#step-11--parallel-tracks-and-a-new-quest-type)
 - [Step 12 — Grading tests with mutation testing](#step-12--grading-tests-with-mutation-testing)
 - [Step 13 — Doubling the content without lowering the bar](#step-13--doubling-the-content-without-lowering-the-bar)
+- [Step 14 — A design council, a real runtime, and content at 10×](#step-14--a-design-council-a-real-runtime-and-content-at-10)
 - [Recap: the build order, and why](#recap-the-build-order-and-why)
 - [Exercises: extend it yourself](#exercises-extend-it-yourself)
 
@@ -590,6 +591,67 @@ Each chapter was validated and committed on its own ("Chapter 6: add SQL practic
 
 ---
 
+## Step 14 — A design council, a real runtime, and content at 10×
+
+*Skills: design review, prioritisation, security, generating content you can trust.*
+
+### Five adversarial reviewers
+
+Before adding more, we asked five independent reviewers (AI agents, each with one lens) to attack the design: **security**, **pedagogy**, **architecture**, **learner UX**, and a **devil's advocate** who argued against every core bet. The findings and every accept/reject decision are in [docs/COUNCIL.md](./docs/COUNCIL.md). Read it: it's what a real design review produces.
+
+The strongest signal was **convergence**. Three reviewers independently found the same gap: learners only ever practised *pure functions* in the browser, and never ran real Express routes, React hooks or Supertest tests before the boss projects. When independent reviewers agree, fix that first.
+
+### Closing the biggest gap: a real runtime in the runner
+
+Rather than giving up on the in-browser runner (Step 3), we made it more real:
+
+- **React hooks** (`packages/runner/src/hooks.ts`): `useState`, `useEffect`, `useReducer`, `useRef`, `useContext`… with a `mount()` harness (`click`, `type`, `submit`, `rerender`, `waitFor`) shaped like React Testing Library. It stores hook state per component instance, keyed by position and `key`, and runs effects after render, just like React.
+- **Express and Supertest** (`packages/runner/src/express.ts`): `express()`, routers, `express.json()`, Express 5 async error handling, and `request(app).post(…).send(…).expect(201)`. No sockets: requests are dispatched in memory.
+- `import { useState } from 'react'`, `import express from 'express'` and `import request from 'supertest'` now resolve, so learners write the same code they'd write in a real project.
+
+**Lesson**: when a constraint (no server-side sandbox) blocks a goal (real-world practice), look for the version of the goal you *can* reach before reaching for heavy infrastructure.
+
+### Security fixes the review found
+
+The security reviewer *proved* an exploit: `const expect = () => …` in learner code replaced the test API, so any quest passed. Fixes:
+- The core test API is re-bound **inside the tests' scope** under a random per-run name the learner can't guess.
+- Results travel over a private `MessageChannel`, so `self.postMessage({ passed: true })` is ignored.
+- `fetch`, `XMLHttpRequest`, `WebSocket` and friends are disabled while learner code runs. The worker is same-origin, so it would otherwise act with the learner's session cookie.
+- Quizzes return only a **score** until passed, because per-question feedback let anyone enumerate the answer key.
+- There's now a per-user write rate limit, and `TRUST_PROXY` is explicit config.
+
+Each fix has a regression test that reproduces the original attack.
+
+### Features for the learner
+
+- **Optional practice**: practice quests (`optional: true`) don't count toward chapter completion, and chapters show *Core* and *Practice* sections. This fixed the "95 required quests in chapter 1" problem **without deleting anything**, so no one's progress was lost.
+- **Search**, **resume where you left off**, and a **spaced-review queue**: completed quests come back after 3, 7, 21 and 60 days, interleaved across chapters.
+- A **weekly leaderboard** with an opt-out and honest "self-reported" labelling, and a **streak** computed when it's read (no more stale 🔥 12).
+- A **beginner-friendly error explainer** under failing tests.
+- **Chapter 0: Your Dev Environment**: terminal, git, npm and debugging, which every boss assumed.
+
+### Data integrity at scale
+
+- `content/slugs.lock` records every published slug, and the validator fails if one disappears. A renamed slug would orphan progress and let XP be earned twice.
+- Completions take a `SELECT … FOR UPDATE` lock on the user row, so concurrent completions can't miss an achievement.
+- `/api/curriculum` became a small overview (counts and previews). Each chapter's quests come from `/api/chapters/:slug`. With 10× the content, the old response would have been megabytes.
+
+### Generating 10× the content without lowering the bar
+
+The request was 10× more content. Writing ~6,000 quests by hand isn't possible, and padding is exactly what the devil's advocate warned about. So practice is **generated**, by deterministic generators in `scripts/practice/` (`npm run content:practice`), under three rules:
+
+1. **Every answer is computed, never typed.** Data and debug quests run the reference solution in Node. SQL expected rows come from sql.js (the same SQLite as the browser). Express answers come from running the app through the runner's Express. TypeScript answers come from **the real TypeScript compiler**. "Predict the output" options come from running the snippet, *and* from running **misconception variants** (an off-by-one loop, `==` instead of `===`), so the wrong options are mistakes people really make.
+2. **Self-check before writing.** Every generated code quest runs through the real runner: the solution must pass and the starter must fail. It found real bugs in the generators *and* in the runtime. For example, React's rule that state updates made before an `await` in an event handler apply immediately was missing from our hooks runtime. Mutants that don't change any test's outcome ("equivalent mutants") are dropped automatically.
+3. **Practice is optional and sectioned.** The core path stays focused. Practice sits in collapsible sections ("Predict the Output", "SQL Queries", "Test It (Mutation Graded)", "Design Drills"…) for learners who want more reps.
+
+The result: **675 → 7,020 quests** (2,870 code quests, all run by the validator in about 100 seconds), while the required core path is **467 quests**. Loading all of it takes about 2 seconds and 80 MB at startup, and the curriculum overview the browser downloads is 7 KB gzipped.
+
+A few generated quests are **promoted into the core path** (folders 900–979, before the boss), so the core path now includes real Express routes, real hooks and real data fetching.
+
+**Trade-off, stated honestly**: generated practice is narrower than hand-written lessons. It drills skills; it doesn't explain them. That's why it lives next to the hand-written core path, not in place of it, and why docs/COUNCIL.md says to measure **outcomes** (working deployed apps, retention), not quest counts.
+
+---
+
 ## Recap: the build order, and why
 
 | # | Step | Why at this point |
@@ -604,6 +666,7 @@ Each chapter was validated and committed on its own ("Chapter 6: add SQL practic
 | 8 | Frontend | Consumes a tested API with shared types |
 | 9 | Browser verification + CI | Proves the whole thing works, and keeps it working |
 | 10–13 | Content at scale, new tracks, new quest types | Only once the core loop is proven does adding content pay off |
+| 14 | Adversarial design review, then fix what reviewers agree on | Independent critics catch what the builders can't see |
 
 The general principle: **de-risk first, build on verified foundations, and leave the UI late.** The UI is the most visible part, so it's tempting to start there. But a UI built before the logic it displays gets rewritten when that logic changes.
 

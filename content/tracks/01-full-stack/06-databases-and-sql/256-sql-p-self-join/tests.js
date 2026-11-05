@@ -1,0 +1,3 @@
+test("returns the expected rows", () => {
+  expect(result).toEqual([{"name": "Rosa", "title": "CEO", "manager": null}, {"name": "Dev", "title": "VP Engineering", "manager": "Rosa"}, {"name": "Mei", "title": "VP Sales", "manager": "Rosa"}, {"name": "Sam", "title": "Engineering Manager", "manager": "Dev"}, {"name": "Ola", "title": "Senior Engineer", "manager": "Sam"}, {"name": "Tom", "title": "Engineer", "manager": "Sam"}, {"name": "Ana", "title": "Engineer", "manager": "Sam"}, {"name": "Raj", "title": "Account Executive", "manager": "Mei"}, {"name": "Lee", "title": "Account Executive", "manager": "Mei"}, {"name": "Kim", "title": "Staff Engineer", "manager": "Dev"}]);
+});

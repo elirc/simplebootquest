@@ -1,0 +1,3 @@
+test("returns the expected rows", () => {
+  expect(result).toEqual([{"at": "2026-01-02", "member": "Ada", "event": "borrowed", "title": "A Wizard of Earthsea"}, {"at": "2026-01-15", "member": "Grace", "event": "borrowed", "title": "Guards! Guards!"}, {"at": "2026-01-20", "member": "Ada", "event": "returned", "title": "A Wizard of Earthsea"}, {"at": "2026-01-30", "member": "Grace", "event": "returned", "title": "Guards! Guards!"}, {"at": "2026-02-01", "member": "Ada", "event": "borrowed", "title": "Kindred"}, {"at": "2026-02-05", "member": "Linus", "event": "borrowed", "title": "Guards! Guards!"}, {"at": "2026-02-10", "member": "Grace", "event": "borrowed", "title": "Americanah"}, {"at": "2026-02-12", "member": "Ada", "event": "borrowed", "title": "Small Gods"}]);
+});

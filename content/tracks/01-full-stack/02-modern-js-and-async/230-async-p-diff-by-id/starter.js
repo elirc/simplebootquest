@@ -1,0 +1,1 @@
+function diffById(before, after) {}

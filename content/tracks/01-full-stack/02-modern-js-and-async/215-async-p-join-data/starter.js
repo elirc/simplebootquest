@@ -1,0 +1,1 @@
+function attachAuthors(posts, users) {}

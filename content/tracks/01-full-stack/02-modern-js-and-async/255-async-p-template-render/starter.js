@@ -1,0 +1,1 @@
+function renderTemplate(template, data) {}

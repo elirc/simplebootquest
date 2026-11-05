@@ -1,0 +1,1 @@
+function splitMessage(text, limit) {}

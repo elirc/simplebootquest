@@ -1,0 +1,1 @@
+function truncateWords(text, maxWords) {}

@@ -1,0 +1,1 @@
+function mergeSorted(a, b) {}

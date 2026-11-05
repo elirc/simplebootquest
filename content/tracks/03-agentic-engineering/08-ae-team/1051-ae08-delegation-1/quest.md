@@ -1,0 +1,12 @@
+---
+slug: "ae08-delegation-1"
+title: "Agent Drill: Delegate, pair, or do it yourself? #1"
+type: "quiz"
+xp: 10
+optional: true
+section: "Practice: Agentic Engineering Drills"
+questions: [{"prompt":"How should you approach this: **learn how React effects work, for the first time**?","options":["Do it yourself first, then ask the agent to explain and review","Keep the decision human; use the agent to research trade-offs","Delegate (autonomous in a branch); the type-checker and tests verify it","Pair: plan first, review every step, test the limits yourself"],"answer":0},{"prompt":"How should you approach this: **decide whether the orders service should move to a separate database**?","options":["Delegate, then review that the tests can actually fail","Delegate (autonomous in a branch); the type-checker and tests verify it","Keep the decision human; use the agent to research trade-offs","Pair: plan first, review every step, test the limits yourself"],"answer":2},{"prompt":"How should you approach this: **rename `getTicket` to `findTicket` across 60 files**?","options":["Delegate (autonomous in a branch); the type-checker and tests verify it","Delegate, then review that the tests can actually fail","Pair: plan first, review every step, test the limits yourself","Keep the decision human; use the agent to research trade-offs"],"answer":0},{"prompt":"How should you approach this: **upgrade a dependency with a documented migration guide and good test coverage**?","options":["Keep the decision human; use the agent to research trade-offs","Delegate (autonomous in a branch); the type-checker and tests verify it","Delegate in small steps, checking CI after each one","Pair: plan first, review every step, test the limits yourself"],"answer":2},{"prompt":"How should you approach this: **investigate why the events page got slow last week**?","options":["Delegate (autonomous in a branch); the type-checker and tests verify it","Keep the decision human; use the agent to research trade-offs","Pair: give the agent evidence (traces, slow queries) and verify its hypothesis","Pair: plan first, review every step, test the limits yourself"],"answer":2}]
+---
+# Agent Drill: Delegate, pair, or do it yourself? #1
+
+Delegate tasks that are well-specified and **cheap to verify** (strong tests, a type-checker, mechanical changes). Pair closely on security-sensitive or subtle work. Keep judgment calls (architecture, product, money) with humans, using the agent for research.

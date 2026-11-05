@@ -1,0 +1,12 @@
+---
+slug: "ae04-delegation-14"
+title: "Agent Drill: Delegate, pair, or do it yourself? #14"
+type: "quiz"
+xp: 10
+optional: true
+section: "Practice: Agentic Engineering Drills"
+questions: [{"prompt":"How should you approach this: **investigate why the events page got slow last week**?","options":["Pair: give the agent evidence (traces, slow queries) and verify its hypothesis","Keep the decision human; use the agent to research trade-offs","Pair: plan first, review every step, test the limits yourself","Delegate (autonomous in a branch); the type-checker and tests verify it"],"answer":0},{"prompt":"How should you approach this: **write unit tests for an existing, well-understood `formatCourse` function**?","options":["Delegate (autonomous in a branch); the type-checker and tests verify it","Pair: plan first, review every step, test the limits yourself","Delegate, then review that the tests can actually fail","Keep the decision human; use the agent to research trade-offs"],"answer":2},{"prompt":"How should you approach this: **add rate limiting to the recipes login endpoint**?","options":["Delegate (autonomous in a branch); the type-checker and tests verify it","Keep the decision human; use the agent to research trade-offs","Pair: plan first, review every step, test the limits yourself","Delegate, then review that the tests can actually fail"],"answer":2},{"prompt":"How should you approach this: **decide whether the cars service should move to a separate database**?","options":["Delegate, then review that the tests can actually fail","Delegate (autonomous in a branch); the type-checker and tests verify it","Pair: plan first, review every step, test the limits yourself","Keep the decision human; use the agent to research trade-offs"],"answer":3},{"prompt":"How should you approach this: **rename `getSong` to `findSong` across 60 files**?","options":["Delegate (autonomous in a branch); the type-checker and tests verify it","Pair: plan first, review every step, test the limits yourself","Delegate, then review that the tests can actually fail","Keep the decision human; use the agent to research trade-offs"],"answer":0}]
+---
+# Agent Drill: Delegate, pair, or do it yourself? #14
+
+Delegate tasks that are well-specified and **cheap to verify** (strong tests, a type-checker, mechanical changes). Pair closely on security-sensitive or subtle work. Keep judgment calls (architecture, product, money) with humans, using the agent for research.

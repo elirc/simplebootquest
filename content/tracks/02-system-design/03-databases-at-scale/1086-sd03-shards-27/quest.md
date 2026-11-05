@@ -1,0 +1,12 @@
+---
+slug: "sd03-shards-27"
+title: "Design Drill: How many shards? #27"
+type: "quiz"
+xp: 10
+optional: true
+section: "Practice: Estimation & Design Drills"
+questions: [{"prompt":"You have **43 TB** of data, expected to grow **3×** over the planning horizon. Each shard should hold at most **2 TB**. How many shards should you plan for?","options":["130","33","22","65"],"answer":3},{"prompt":"You have **1 TB** of data, expected to grow **2×** over the planning horizon. Each shard should hold at most **0.5 TB**. How many shards should you plan for?","options":["8","2","4"],"answer":2},{"prompt":"You have **10 TB** of data, expected to grow **3×** over the planning horizon. Each shard should hold at most **2 TB**. How many shards should you plan for?","options":["30","15","8","5"],"answer":1},{"prompt":"You have **42 TB** of data, expected to grow **3×** over the planning horizon. Each shard should hold at most **0.5 TB**. How many shards should you plan for?","options":["252","84","504","126"],"answer":0},{"prompt":"You have **49 TB** of data, expected to grow **1×** over the planning horizon. Each shard should hold at most **0.5 TB**. How many shards should you plan for?","options":["196","98","49"],"answer":1}]
+---
+# Design Drill: How many shards? #27
+
+Shards needed = total data ÷ comfortable size per shard (and also total write load ÷ write capacity per shard). Take the larger number, and plan for growth.

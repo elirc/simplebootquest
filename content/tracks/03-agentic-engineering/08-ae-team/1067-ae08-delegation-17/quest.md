@@ -1,0 +1,12 @@
+---
+slug: "ae08-delegation-17"
+title: "Agent Drill: Delegate, pair, or do it yourself? #17"
+type: "quiz"
+xp: 10
+optional: true
+section: "Practice: Agentic Engineering Drills"
+questions: [{"prompt":"How should you approach this: **change how tickets are charged for (billing logic)**?","options":["Pair: plan first, review every step, test the limits yourself","Keep the decision human; use the agent to research trade-offs","Delegate, then review that the tests can actually fail","Delegate (autonomous in a branch); the type-checker and tests verify it"],"answer":0},{"prompt":"How should you approach this: **decide whether the movies service should move to a separate database**?","options":["Delegate, then review that the tests can actually fail","Keep the decision human; use the agent to research trade-offs","Pair: plan first, review every step, test the limits yourself","Delegate (autonomous in a branch); the type-checker and tests verify it"],"answer":1},{"prompt":"How should you approach this: **add rate limiting to the repos login endpoint**?","options":["Delegate, then review that the tests can actually fail","Delegate (autonomous in a branch); the type-checker and tests verify it","Pair: plan first, review every step, test the limits yourself","Keep the decision human; use the agent to research trade-offs"],"answer":2},{"prompt":"How should you approach this: **rename `getFlight` to `findFlight` across 60 files**?","options":["Pair: plan first, review every step, test the limits yourself","Delegate, then review that the tests can actually fail","Keep the decision human; use the agent to research trade-offs","Delegate (autonomous in a branch); the type-checker and tests verify it"],"answer":3},{"prompt":"How should you approach this: **investigate why the products page got slow last week**?","options":["Pair: plan first, review every step, test the limits yourself","Keep the decision human; use the agent to research trade-offs","Pair: give the agent evidence (traces, slow queries) and verify its hypothesis","Delegate (autonomous in a branch); the type-checker and tests verify it"],"answer":2}]
+---
+# Agent Drill: Delegate, pair, or do it yourself? #17
+
+Delegate tasks that are well-specified and **cheap to verify** (strong tests, a type-checker, mechanical changes). Pair closely on security-sensitive or subtle work. Keep judgment calls (architecture, product, money) with humans, using the agent for research.

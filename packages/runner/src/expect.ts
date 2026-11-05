@@ -1,4 +1,5 @@
 import { format } from './format.js';
+import { isMock } from './mock.js';
 
 export class AssertionError extends Error {
   constructor(message: string) {
@@ -67,6 +68,9 @@ type Matchers = {
   toMatch(pattern: RegExp | string): void;
   toMatchObject(subset: object): void;
   toThrow(expected?: string | RegExp | (new (...args: never[]) => Error)): void;
+  toHaveBeenCalled(): void;
+  toHaveBeenCalledTimes(n: number): void;
+  toHaveBeenCalledWith(...args: unknown[]): void;
 };
 
 type AsyncMatchers = { [K in keyof Matchers]: (...args: Parameters<Matchers[K]>) => Promise<void> };
@@ -159,6 +163,26 @@ function buildMatchers(actual: unknown, negate: boolean): Matchers {
     },
     toMatchObject: (subset) =>
       assert(matchesSubset(actual, subset), `Expected ${a()} to match ${format(subset)}`, `Expected ${a()} not to match ${format(subset)}`),
+    toHaveBeenCalled: () => {
+      if (!isMock(actual)) throw new AssertionError('toHaveBeenCalled() expects a mock function, e.g. vi.fn()');
+      const n = actual.mock.calls.length;
+      assert(n > 0, 'Expected the mock to have been called, but it was never called', `Expected the mock not to have been called, but it was called ${n} time(s)`);
+    },
+    toHaveBeenCalledTimes: (times) => {
+      if (!isMock(actual)) throw new AssertionError('toHaveBeenCalledTimes() expects a mock function, e.g. vi.fn()');
+      const n = actual.mock.calls.length;
+      assert(n === times, `Expected the mock to have been called ${times} time(s), but it was called ${n} time(s)`, `Expected the mock not to have been called ${times} time(s)`);
+    },
+    toHaveBeenCalledWith: (...args) => {
+      if (!isMock(actual)) throw new AssertionError('toHaveBeenCalledWith() expects a mock function, e.g. vi.fn()');
+      const calls = actual.mock.calls;
+      const pass = calls.some((call) => deepEqual(call, args));
+      assert(
+        pass,
+        `Expected the mock to have been called with ${format(args)}, but its calls were ${format(calls)}`,
+        `Expected the mock not to have been called with ${format(args)}`,
+      );
+    },
     toThrow: (expected) => {
       if (typeof actual !== 'function') throw new AssertionError('toThrow() expects a function, e.g. expect(() => fn()).toThrow()');
       let thrown: unknown;

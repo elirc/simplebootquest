@@ -114,6 +114,34 @@ describe('loadCurriculum', () => {
   });
 });
 
+describe('write-tests quests', () => {
+  const q = '---\nslug: wt\ntitle: WT\ntype: code\nlanguage: js\nmode: write-tests\nxp: 20\n---\nWrite tests';
+  it('loads the subject and named mutants in order', () => {
+    const root = fixture({
+      '01-a/chapter.md': chapter,
+      '01-a/01-x/quest.md': q,
+      '01-a/01-x/subject.js': 'function f() {}',
+      '01-a/01-x/solution.js': "test('t', () => {});",
+      '01-a/01-x/mutant-2.js': '// mutant: second bug\nfunction f() {}',
+      '01-a/01-x/mutant-1.js': '// mutant: first bug\nfunction f() {}',
+    });
+    const quest = loadCurriculum(root).quests[0]!;
+    expect(quest.mode).toBe('write-tests');
+    expect(quest.mutants!.map((m) => m.name)).toEqual(['first bug', 'second bug']);
+  });
+
+  it('requires mutants to name their bug', () => {
+    const root = fixture({
+      '01-a/chapter.md': chapter,
+      '01-a/01-x/quest.md': q,
+      '01-a/01-x/subject.js': 'x',
+      '01-a/01-x/solution.js': 'x',
+      '01-a/01-x/mutant-1.js': 'function f() {}',
+    });
+    expect(() => loadCurriculum(root)).toThrow(/mutant: <description>/);
+  });
+});
+
 describe('countWords', () => {
   it('ignores markdown punctuation', () => {
     expect(countWords('# Title\n\n- one two\n- **three** (four) — five\n')).toBe(6);

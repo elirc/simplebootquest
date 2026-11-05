@@ -29,6 +29,12 @@ export interface Quest {
   setup?: string;
   questions?: QuizQuestion[];
   requirements?: string[];
+  /** Code quests: 'implement' (default) or 'write-tests' (graded by mutation testing). */
+  mode?: 'implement' | 'write-tests';
+  /** write-tests: the correct implementation the learner writes tests for. */
+  subject?: string;
+  /** write-tests: buggy copies of the subject that good tests must catch. */
+  mutants?: { name: string; code: string }[];
   /** Design write-ups: the self-assessment checklist. */
   rubric?: string[];
   /** Design write-ups: the starting document shown in the editor. */
@@ -103,6 +109,7 @@ const questSchema = z.object({
   title: z.string().min(1),
   type: z.enum(['code', 'quiz', 'project', 'design']),
   language: z.enum(['js', 'ts', 'jsx', 'sql']).optional(),
+  mode: z.enum(['implement', 'write-tests']).optional(),
   xp: z.number().int().positive(),
   boss: z.boolean().default(false),
   questions: z.array(questionSchema).optional(),
@@ -154,6 +161,19 @@ function readMeta<T extends z.ZodTypeAny>(file: string, schema: T): { data: z.in
   const result = schema.safeParse(parsed.data);
   if (!result.success) throw new ContentError(where(file, result.error));
   return { data: result.data, content: parsed.content.trim() };
+}
+
+/** mutant-1.js, mutant-2.js… Each starts with a comment naming the bug: `// mutant: off-by-one`. */
+function readMutants(dir: string, questFile: string): { name: string; code: string }[] {
+  return readdirSync(dir)
+    .filter((f) => /^mutant-\d+\./.test(f))
+    .sort((a, b) => Number(a.match(/\d+/)![0]) - Number(b.match(/\d+/)![0]))
+    .map((f) => {
+      const code = readFileSync(path.join(dir, f), 'utf8');
+      const name = /^\s*\/\/\s*mutant:\s*(.+)$/m.exec(code)?.[1]?.trim();
+      if (!name) throw new ContentError(`${questFile}: ${f} must start with a "// mutant: <description>" comment`);
+      return { name, code };
+    });
 }
 
 function readOptional(dir: string, base: string): string | undefined {
@@ -226,11 +246,18 @@ export function loadCurriculum(contentDir: string = defaultContentDir()): Curric
 
         if (data.type === 'code') {
           if (!data.language) throw new ContentError(`${questFile}: code quests need a language`);
+          quest.mode = data.mode ?? 'implement';
           quest.starter = readOptional(questDir.full, 'starter') ?? '';
           quest.tests = readOptional(questDir.full, 'tests');
           quest.solution = readOptional(questDir.full, 'solution');
           quest.setup = readOptional(questDir.full, 'setup');
-          if (!quest.tests) throw new ContentError(`${questFile}: code quests need a tests file`);
+          if (quest.mode === 'write-tests') {
+            quest.subject = readOptional(questDir.full, 'subject');
+            quest.mutants = readMutants(questDir.full, questFile);
+            if (!quest.subject) throw new ContentError(`${questFile}: write-tests quests need a subject file`);
+            if (quest.mutants.length === 0) throw new ContentError(`${questFile}: write-tests quests need at least one mutant-N file`);
+            quest.tests = '';
+          } else if (!quest.tests) throw new ContentError(`${questFile}: code quests need a tests file`);
           if (!quest.solution) throw new ContentError(`${questFile}: code quests need a solution file`);
           if (data.language === 'sql' && !quest.setup) throw new ContentError(`${questFile}: SQL quests need setup.sql`);
         } else if (data.type === 'quiz') {

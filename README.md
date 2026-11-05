@@ -31,7 +31,7 @@ There are three **tracks**. Start with the Full-Stack Path, and dip into the oth
 
 | Track | Quests | Formats | What you'll learn |
 |-------|--------|---------|-------------------|
-| ⌨️ **Full-Stack Path** | 255 | Code, quizzes, projects | JavaScript → TypeScript → Node → Express → SQL → auth → React → testing → deploy |
+| ⌨️ **Full-Stack Path** | 268 | Code, write-the-tests, quizzes, projects | JavaScript → TypeScript → Node → Express → SQL → auth → React → unit testing → testing in depth → deploy |
 | 🏗️ **System Design** | 46 | Quizzes, design docs | Requirements & estimates, scaling a Node API, databases at scale, caching, queues, reliability, API design, multi-tenancy, and six case studies |
 | 🤖 **Agentic Engineering** | 42 | Quizzes, write-ups | How coding agents work, writing specs, context files (CLAUDE.md / AGENTS.md), workflows, verifying and reviewing AI code, safety & prompt injection, debugging, team practices |
 
@@ -53,8 +53,9 @@ The core path is split into **chapters**. Each chapter is a set of short **quest
 | 8 | **Auth & Security** | Password hashing, sessions vs. JWT, protected routes, common vulnerabilities |
 | 9 | **React Fundamentals** | Components, props, state, effects, lists, forms |
 | 10 | **React + API** | Fetching data, loading/error states, routing, connecting to your backend |
-| 11 | **Testing** | Unit tests and API tests with Vitest, component tests with React Testing Library |
-| 12 | **Deploy It** | Environment variables, building for production, deploying frontend + backend + DB |
+| 11 | **Unit Testing** | Write your own test suites: boundaries, errors, async code, `vi.fn()` mocks, injected time, reducers and classes. They're graded by mutation testing |
+| 12 | **Testing in Depth** | Testing strategy, how test tools work under the hood, integration and component tests |
+| 13 | **Deploy It** | Environment variables, building for production, deploying frontend + backend + DB |
 
 ### 🏆 Final Quest
 
@@ -168,7 +169,7 @@ API integration tests need a database named `simplebootquest_test`. Create it wi
 
 ### Writing content
 
-Each quest is a folder in `content/tracks/<NN-track>/<NN-chapter>/<NN-quest>/` containing a `quest.md` (frontmatter + lesson in Markdown). Each track folder has a `track.md`, and each chapter a `chapter.md`. Code quests also have `starter.*`, `tests.*` and `solution.*` files, and SQL quests have a `setup.sql`. Design write-ups (`type: design`) have a `rubric` in the frontmatter, plus a `template.md` and a `reference.md`. Quizzes and projects keep their questions and requirements in the frontmatter. Quests can add `hints` and `resources` to their frontmatter, too. Run `npm run validate:content` after every change.
+Each quest is a folder in `content/tracks/<NN-track>/<NN-chapter>/<NN-quest>/` containing a `quest.md` (frontmatter + lesson in Markdown). Each track folder has a `track.md`, and each chapter a `chapter.md`. Code quests also have `starter.*`, `tests.*` and `solution.*` files, and SQL quests have a `setup.sql`. "Write the tests" quests (`mode: write-tests`) have a `subject.*` (the correct code), `mutant-N.*` files (buggy copies, each starting with `// mutant: <description>`) and a `solution.*` test suite that must catch every mutant. Design write-ups (`type: design`) have a `rubric` in the frontmatter, plus a `template.md` and a `reference.md`. Quizzes and projects keep their questions and requirements in the frontmatter. Quests can add `hints` and `resources` to their frontmatter, too. Run `npm run validate:content` after every change.
 
 ### A note on code checking
 
@@ -182,7 +183,8 @@ Learner code runs **in the browser**, inside a Web Worker, so there's no server 
 - [x] Test runner for JS, TypeScript, JSX and SQL quests
 - [x] User accounts and progress tracking
 - [x] XP, levels, streaks, achievements and leaderboard
-- [x] Full-Stack Path: 12 chapters, 255 quests (214 code, 30 quizzes, 11 projects), with progressive hints and further reading
+- [x] Full-Stack Path: 13 chapters, 268 quests (225 code, 32 quizzes, 11 projects), with progressive hints and further reading
+- [x] "Write the tests" quests graded by mutation testing
 - [x] Parallel tracks: System Design (46 quests) and Agentic Engineering (42 quests), with design write-ups and reference designs
 - [ ] Even more quests in the later chapters (React, testing, deploy)
 - [ ] Server-side sandboxed verification

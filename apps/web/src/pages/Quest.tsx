@@ -48,6 +48,7 @@ function CodeQuest({ quest, onCompleted }: { quest: QuestDetail; onCompleted: ()
   const [solutionAvailable, setSolutionAvailable] = useState(quest.solutionAvailable);
   const [tab, setTab] = useState<'results' | 'tests' | 'solution'>('results');
   const lastSaved = useRef(quest.code ?? '');
+  const writeTests = quest.mode === 'write-tests';
 
   // Autosave drafts (debounced) for logged-in learners.
   useEffect(() => {
@@ -62,7 +63,13 @@ function CodeQuest({ quest, onCompleted }: { quest: QuestDetail; onCompleted: ()
     setRunning(true);
     setTab('results');
     try {
-      const r = await runInWorker({ language: quest.language!, code, tests: quest.tests ?? '', setup: quest.setup });
+      const r = await runInWorker({
+        language: quest.language!,
+        code,
+        tests: quest.tests ?? '',
+        setup: quest.setup,
+        ...(writeTests ? { subject: quest.subject, mutants: quest.mutants } : {}),
+      });
       setResult(r);
       if (user) {
         const submission = await api.submitCode(quest.slug, code, r.passed);
@@ -95,6 +102,7 @@ function CodeQuest({ quest, onCompleted }: { quest: QuestDetail; onCompleted: ()
     <div className="workbench">
       <div className="workbench-toolbar">
         <span className="lang-badge">{quest.language?.toUpperCase()}</span>
+        {writeTests && <span className="lang-badge">WRITE TESTS</span>}
         <button
           className="btn btn-ghost btn-sm"
           onClick={() => {
@@ -106,7 +114,7 @@ function CodeQuest({ quest, onCompleted }: { quest: QuestDetail; onCompleted: ()
         <span className="spacer" />
         <kbd className="muted">Ctrl/⌘ + Enter</kbd>
         <button className="btn btn-primary" onClick={run} disabled={running}>
-          {running ? 'Running…' : quest.status === 'completed' ? 'Run tests again' : 'Run tests'}
+          {running ? 'Running…' : writeTests ? 'Check my tests' : quest.status === 'completed' ? 'Run tests again' : 'Run tests'}
         </button>
       </div>
       <div
@@ -118,7 +126,7 @@ function CodeQuest({ quest, onCompleted }: { quest: QuestDetail; onCompleted: ()
           }
         }}
       >
-        <CodeEditor value={code} onChange={setCode} language={quest.language!} label="Your code" />
+        <CodeEditor value={code} onChange={setCode} language={quest.language!} label={writeTests ? 'Your tests' : 'Your code'} />
       </div>
       <div className="workbench-output">
         <div className="tabs" role="tablist">
@@ -126,7 +134,7 @@ function CodeQuest({ quest, onCompleted }: { quest: QuestDetail; onCompleted: ()
             Results
           </button>
           <button role="tab" aria-selected={tab === 'tests'} onClick={() => setTab('tests')}>
-            Tests
+            {writeTests ? 'Code under test' : 'Tests'}
           </button>
           {user && (
             <button
@@ -143,7 +151,15 @@ function CodeQuest({ quest, onCompleted }: { quest: QuestDetail; onCompleted: ()
         <div className="tab-panel">
           {tab === 'results' &&
             (result ? <TestResults result={result} /> : <p className="muted">Run the tests to see how your code does. Failing is part of learning!</p>)}
-          {tab === 'tests' && <CodeEditor value={quest.tests ?? ''} language={quest.language === 'sql' ? 'js' : quest.language!} readOnly label="Tests" />}
+          {tab === 'tests' &&
+            (writeTests ? (
+              <>
+                <p className="muted">This is the correct implementation. Your tests must pass against it, and fail against {quest.mutants?.length ?? 0} hidden buggy versions of it.</p>
+                <CodeEditor value={quest.subject ?? ''} language={quest.language!} readOnly label="Code under test" />
+              </>
+            ) : (
+              <CodeEditor value={quest.tests ?? ''} language={quest.language === 'sql' ? 'js' : quest.language!} readOnly label="Tests" />
+            ))}
           {tab === 'solution' &&
             (solution === null ? (
               <Spinner />

@@ -70,7 +70,14 @@ async function main() {
       continue;
     }
     if (quest.type !== 'code') continue;
-    const base = { language: quest.language!, tests: quest.tests!, setup: quest.setup };
+    const base = {
+      language: quest.language!,
+      tests: quest.tests!,
+      setup: quest.setup,
+      // write-tests quests: the "solution" is a test suite that must pass on the
+      // subject and catch every mutant; the starter must not.
+      ...(quest.mode === 'write-tests' ? { subject: quest.subject, mutants: quest.mutants } : {}),
+    };
 
     const solution = await sandbox.run({ ...base, code: quest.solution! });
     if (!solution.passed) problems.push(`✖ ${quest.slug}: solution fails\n      ${describeFailure(solution)}`);

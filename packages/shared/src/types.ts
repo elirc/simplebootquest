@@ -49,6 +49,10 @@ export interface QuestDetail extends QuestSummary {
   code?: string;
   starter?: string;
   tests?: string;
+  /** Code quests: 'write-tests' means the learner writes tests for `subject`. */
+  mode?: 'implement' | 'write-tests';
+  subject?: string;
+  mutants?: { name: string; code: string }[];
   setup?: string;
   questions?: QuizQuestionPublic[];
   requirements?: string[];

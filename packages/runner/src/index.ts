@@ -3,8 +3,9 @@ import type { CodeLanguage } from '@sbq/shared';
 import { AssertionError, deepEqual, expect } from './expect.js';
 import { format } from './format.js';
 import { Fragment, find, findAll, h, render, renderAll, text } from './jsx.js';
+import { fn } from './mock.js';
 
-export { AssertionError, deepEqual, expect, format, Fragment, h, render, renderAll, text, find, findAll };
+export { AssertionError, deepEqual, expect, format, Fragment, h, render, renderAll, text, find, findAll, fn };
 
 export interface RunRequest {
   language: CodeLanguage;
@@ -14,6 +15,19 @@ export interface RunRequest {
   tests: string;
   /** SQL executed before the learner's query (schema + seed data). */
   setup?: string;
+  /**
+   * "Write the tests" quests: `code` is the learner's TEST file, `subject` is
+   * the correct implementation, and each mutant is a deliberately buggy copy.
+   * The learner's tests must pass against the subject and fail against every mutant.
+   */
+  subject?: string;
+  mutants?: Mutant[];
+}
+
+export interface Mutant {
+  /** A short description of the bug, e.g. "off-by-one at the upper boundary". */
+  name: string;
+  code: string;
 }
 
 export interface TestResult {
@@ -115,19 +129,26 @@ function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   });
 }
 
+interface Suite {
+  name: string;
+  parent: Suite | null;
+  before: (() => unknown)[];
+  after: (() => unknown)[];
+}
+
 /**
- * Run a learner's code against a quest's tests.
+ * Run one implementation against one test file.
  *
- * The learner's code and the tests are evaluated in the same function scope,
- * so tests can call the learner's functions directly by name. This is NOT a
+ * The code and the tests are evaluated in the same function scope, so tests
+ * can call the implementation's functions directly by name. This is NOT a
  * security sandbox: in the browser it runs inside a Web Worker that the page
  * terminates on timeout.
  */
-export async function runQuest(req: RunRequest, options: RunOptions = {}): Promise<RunResult> {
+async function runSuite(req: RunRequest, options: RunOptions, testsLabel = 'tests', codeLabel = 'your code'): Promise<RunResult> {
   const started = Date.now();
   const logs: string[] = [];
   const results: TestResult[] = [];
-  const registered: { name: string; fn: () => unknown }[] = [];
+  const registered: { name: string; fn: () => unknown; suite: Suite }[] = [];
   const testTimeoutMs = options.testTimeoutMs ?? 2000;
 
   const finish = (error?: string): RunResult => ({
@@ -138,14 +159,38 @@ export async function runQuest(req: RunRequest, options: RunOptions = {}): Promi
     durationMs: Date.now() - started,
   });
 
-  const test = (name: string, fn: () => unknown) => {
-    registered.push({ name, fn });
+  // Minimal describe/beforeEach/afterEach, mirroring Vitest's semantics.
+  const root: Suite = { name: '', parent: null, before: [], after: [] };
+  let current = root;
+  const chain = (suite: Suite) => {
+    const out: Suite[] = [];
+    for (let s: Suite | null = suite; s; s = s.parent) out.unshift(s);
+    return out;
   };
+  const test = (name: string, testFn: () => unknown) => {
+    const prefix = chain(current).map((s) => s.name).filter(Boolean);
+    registered.push({ name: [...prefix, name].join(' > '), fn: testFn, suite: current });
+  };
+  const describe = (name: string, body: () => void) => {
+    const suite: Suite = { name, parent: current, before: [], after: [] };
+    const previous = current;
+    current = suite;
+    try {
+      body();
+    } finally {
+      current = previous;
+    }
+  };
+
   const exportsObj: Record<string, unknown> = {};
   const helpers: Record<string, unknown> = {
     test,
     it: test,
+    describe,
+    beforeEach: (hook: () => unknown) => current.before.push(hook),
+    afterEach: (hook: () => unknown) => current.after.push(hook),
     expect,
+    vi: { fn },
     console: createConsole(logs),
     exports: exportsObj,
     module: { exports: exportsObj },
@@ -177,7 +222,7 @@ export async function runQuest(req: RunRequest, options: RunOptions = {}): Promi
       helpers.query = (sql: string) => rowsFrom(db.exec(sql));
       // The learner's SQL text, so tests can check that a technique was used.
       helpers.code = req.code;
-      program = `"use strict";\n{\n${transpile(req.tests, 'js', 'tests')}\n}`;
+      program = `"use strict";\n{\n${transpile(req.tests, 'js', testsLabel)}\n}`;
     } else {
       helpers.h = h;
       helpers.Fragment = Fragment;
@@ -186,8 +231,8 @@ export async function runQuest(req: RunRequest, options: RunOptions = {}): Promi
       helpers.text = text;
       helpers.find = find;
       helpers.findAll = findAll;
-      const user = transpile(req.code, req.language, 'your code');
-      const tests = transpile(req.tests, req.language, 'tests');
+      const user = transpile(req.code, req.language, codeLabel);
+      const tests = transpile(req.tests, req.language, testsLabel);
       // Helpers arrive as function parameters. Running the code inside a
       // nested block lets learners declare their own `text`, `find`, etc.
       // without a "has already been declared" SyntaxError.
@@ -195,25 +240,84 @@ export async function runQuest(req: RunRequest, options: RunOptions = {}): Promi
     }
 
     const names = Object.keys(helpers);
-    const fn = new AsyncFunction(...names, program);
-    await withTimeout(fn(...names.map((n) => helpers[n])), testTimeoutMs * 2);
+    const compiled = new AsyncFunction(...names, program);
+    await withTimeout(compiled(...names.map((n) => helpers[n])), testTimeoutMs * 2);
   } catch (err) {
     sqlDb?.close();
     return finish(errorMessage(err));
   }
 
-  for (const { name, fn } of registered) {
+  for (const { name, fn: testFn, suite } of registered) {
     const t0 = Date.now();
+    const suites = chain(suite);
+    let error: unknown = null;
     try {
-      await withTimeout(Promise.resolve().then(fn), testTimeoutMs);
-      results.push({ name, passed: true, durationMs: Date.now() - t0 });
+      for (const s of suites) for (const hook of s.before) await withTimeout(Promise.resolve().then(hook), testTimeoutMs);
+      await withTimeout(Promise.resolve().then(testFn), testTimeoutMs);
     } catch (err) {
-      results.push({ name, passed: false, error: errorMessage(err), durationMs: Date.now() - t0 });
+      error = err;
     }
+    for (const s of [...suites].reverse()) {
+      for (const hook of s.after) {
+        try {
+          await withTimeout(Promise.resolve().then(hook), testTimeoutMs);
+        } catch (err) {
+          error ??= err;
+        }
+      }
+    }
+    results.push(error === null ? { name, passed: true, durationMs: Date.now() - t0 } : { name, passed: false, error: errorMessage(error), durationMs: Date.now() - t0 });
   }
   sqlDb?.close();
-  if (registered.length === 0) return finish('No tests were found for this quest.');
+  if (registered.length === 0) return finish('No tests were found. Write some with test(...) or it(...).');
   return finish();
+}
+
+/**
+ * "Write the tests" quests are graded by mutation testing: the learner's
+ * tests must pass against the correct implementation AND fail against each
+ * deliberately buggy mutant. A suite that can't tell them apart isn't testing.
+ */
+async function runWriteTests(req: RunRequest, options: RunOptions): Promise<RunResult> {
+  const started = Date.now();
+  const learnerTests = req.code;
+  const base = { language: req.language, setup: req.setup };
+
+  const onSubject = await runSuite({ ...base, code: req.subject!, tests: learnerTests }, options, 'your tests', 'the code under test');
+  if (onSubject.error) return { ...onSubject, durationMs: Date.now() - started };
+
+  const results: TestResult[] = [];
+  const failing = onSubject.results.filter((r) => !r.passed);
+  results.push({
+    name: `Your ${onSubject.results.length} test(s) pass against the correct implementation`,
+    passed: failing.length === 0,
+    error: failing.length
+      ? `These tests fail even though the code is correct, so the test is wrong:\n${failing.map((r) => `• ${r.name}: ${r.error}`).join('\n')}`
+      : undefined,
+    durationMs: onSubject.durationMs,
+  });
+
+  for (const mutant of req.mutants ?? []) {
+    const run = await runSuite({ ...base, code: mutant.code, tests: learnerTests }, options, 'your tests', 'the code under test');
+    const caught = !run.passed;
+    results.push({
+      name: `Catches the bug: ${mutant.name}`,
+      passed: caught,
+      error: caught ? undefined : 'All your tests still pass with this bug in the code. Add a test that would fail.',
+      durationMs: run.durationMs,
+    });
+  }
+
+  return {
+    passed: results.every((r) => r.passed),
+    results,
+    logs: onSubject.logs,
+    durationMs: Date.now() - started,
+  };
+}
+
+export async function runQuest(req: RunRequest, options: RunOptions = {}): Promise<RunResult> {
+  return req.subject !== undefined ? runWriteTests(req, options) : runSuite(req, options);
 }
 
 export { deepEqual as isDeepEqual };

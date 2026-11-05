@@ -29,6 +29,7 @@ Every step below calls out which of these it's practicing.
 - [Step 9 — Verify like a user, then automate it](#step-9--verify-like-a-user-then-automate-it)
 - [Step 10 — Scaling the content (and what it taught us)](#step-10--scaling-the-content-and-what-it-taught-us)
 - [Step 11 — Parallel tracks and a new quest type](#step-11--parallel-tracks-and-a-new-quest-type)
+- [Step 12 — Grading tests with mutation testing](#step-12--grading-tests-with-mutation-testing)
 - [Recap: the build order, and why](#recap-the-build-order-and-why)
 - [Exercises: extend it yourself](#exercises-extend-it-yourself)
 
@@ -179,7 +180,7 @@ We chose the browser. **This is a deliberate trade-off, and the most important t
 
 ### Why write our own `expect` instead of bundling Jest?
 
-Jest and Vitest are built for Node. They expect a file system and a CLI process. Our `expect` (`src/expect.ts`) is about 250 lines, has zero dependencies, runs anywhere, and mirrors the Vitest API (`toBe`, `toEqual`, `toThrow`, `.not`, `.resolves`, `.rejects`, ...). So what learners practice transfers directly to real projects. Writing it is also a great exercise: Chapter 11 of the curriculum asks learners to build their own `deepEqual` and mock functions.
+Jest and Vitest are built for Node. They expect a file system and a CLI process. Our `expect` (`src/expect.ts`) is about 250 lines, has zero dependencies, runs anywhere, and mirrors the Vitest API (`toBe`, `toEqual`, `toThrow`, `.not`, `.resolves`, `.rejects`, ...). So what learners practice transfers directly to real projects. Writing it is also a great exercise: Chapter 12 of the curriculum asks learners to build their own `deepEqual` and mock functions.
 
 ### SQL in the browser
 
@@ -311,7 +312,7 @@ clock.set('2026-03-11T23:00:00Z'); // day 2 → streak 2
 clock.set('2026-03-14T08:00:00Z'); // gap   → streak resets to 1
 ```
 
-The same idea appears at every scale in this codebase, from `nextStreak(today)` in Step 2 to the whole app here. Learners practice it in the curriculum's Chapter 11.
+The same idea appears at every scale in this codebase, from `nextStreak(today)` in Step 2 to the whole app here. Learners practice it in the curriculum's Chapter 12.
 
 ### The hardest bug in the app: awarding XP twice
 
@@ -522,6 +523,32 @@ A design document can't be unit-tested. Rather than pretend otherwise (say, with
 - **A server-side minimum length**: the one objective check that stops empty submissions.
 
 A future improvement would be peer review, or an LLM grader that gives feedback against the rubric. Either way, the trade-off is written down.
+
+---
+
+## Step 12 — Grading tests with mutation testing
+
+*Skills: verification, trade-offs.*
+
+Learners had passed hundreds of tests, but never **written** a test suite that got graded. The Unit Testing chapter adds a `mode: write-tests` code quest. The hard question is how to grade a test suite automatically. "It has 5 tests" or "every test passes" measures nothing: `expect(true).toBe(true)` passes too.
+
+### The answer: mutation testing
+
+Each quest ships with the correct implementation (`subject.js`) and several **mutants**: copies with one realistic bug each (`>` instead of `>=`, a missing `await`, mutating an input). The learner's suite must:
+
+1. **pass** against the correct implementation (otherwise the test is wrong), and
+2. **fail** against every mutant (otherwise it can't detect that bug).
+
+The learner sees one result row per mutant ("Catches the bug: free shipping starts one cent too late"). That's precise, actionable feedback on *what* their tests miss, without giving away the test to write. It's the same technique tools like Stryker use on real codebases, and the same idea as the content validator's rule that "every starter must fail" (Step 5), turned into a learning tool.
+
+### Implementation notes
+
+- **No new runner infrastructure.** `runQuest` already runs "code + tests in one scope". Write-tests mode calls it once with the subject and once per mutant, swapping which side the learner wrote, then aggregates the results. A small addition, built on a well-tested primitive.
+- **Vitest-compatible API.** The runner gained `describe`, `beforeEach`/`afterEach`, `vi.fn()` and the `toHaveBeenCalled*` matchers, so learners write tests that run unchanged in a real Vitest project.
+- **Mutants are generated, not hand-copied.** The authoring script applies one string replacement per mutant and **asserts that the replaced text occurs exactly once**, so a typo can't silently produce a "mutant" identical to the subject.
+- **The validator grades the reference suites too.** It caught a gap in one of them: the password quest's reference tests never tried an uppercase-only password, so the "only matches lowercase letters" mutant survived. The quest's author (this codebase) made exactly the mistake the quest teaches learners to avoid, and the machinery caught it.
+
+**Trade-off:** as with every code quest, the mutants are sent to the browser, so a determined learner could read them. That's the same honor-system decision as Step 3.
 
 ---
 

@@ -122,6 +122,13 @@ export function questsRouter(db: Db, curriculum: Curriculum, progress: ProgressS
       detail.code = row?.code ?? quest.starter;
       detail.tests = quest.tests;
       detail.setup = quest.setup;
+      detail.mode = quest.mode;
+      if (quest.mode === 'write-tests') {
+        // Runs in the learner's browser, so the mutants have to be sent too
+        // (same honor-system trade-off as code quests: see BUILDING.md step 3).
+        detail.subject = quest.subject;
+        detail.mutants = quest.mutants;
+      }
     }
     if (quest.type === 'quiz') {
       // Never send the answers to the client — quizzes are graded on the server.

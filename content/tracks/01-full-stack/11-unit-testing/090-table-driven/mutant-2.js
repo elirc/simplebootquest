@@ -1,0 +1,10 @@
+// mutant: does not require a letter
+const COMMON = ['password1234', 'qwertyuiop12', '123456789abc'];
+
+function isStrongPassword(pw) {
+  if (pw.length < 12) return false;
+  
+  if (!/[\d ]/.test(pw)) return false;
+  if (COMMON.includes(pw.toLowerCase())) return false;
+  return true;
+}

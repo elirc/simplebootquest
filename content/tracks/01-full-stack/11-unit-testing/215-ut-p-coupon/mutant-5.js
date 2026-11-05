@@ -1,0 +1,11 @@
+// mutant: unknown types give the full value
+function applyCoupon(subtotalCents, coupon) {
+  if (!coupon) return 0;
+  if (coupon.minSpendCents !== undefined && subtotalCents < coupon.minSpendCents) return 0;
+  if (coupon.type === 'percent') {
+    const raw = Math.floor((subtotalCents * coupon.value) / 100);
+    return coupon.maxCents === undefined ? raw : Math.min(raw, coupon.maxCents);
+  }
+  if (coupon.type === 'fixed') return Math.min(coupon.value, subtotalCents);
+  return coupon.value;
+}

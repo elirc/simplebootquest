@@ -1,0 +1,5 @@
+export function averageDelayMinPerAirline(flights) {
+  const groups = {};
+  for (const x of flights) (groups[x.airline] ??= []).push(x.delayMin);
+  return Object.fromEntries(Object.entries(groups).map(([k, vals]) => [k, Math.floor(vals.reduce((a, b) => a + b, 0) / vals.length)]));
+}

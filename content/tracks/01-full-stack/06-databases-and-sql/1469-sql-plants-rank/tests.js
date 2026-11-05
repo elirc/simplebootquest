@@ -1,0 +1,3 @@
+test('returns the expected rows', () => {
+  expect(result).toEqual([{"light":"bright","name":"Lavender","water_every_days":18,"rank":1},{"light":"bright","name":"Cactus","water_every_days":5,"rank":2},{"light":"bright","name":"Aloe","water_every_days":4,"rank":3},{"light":"low","name":"Basil","water_every_days":19,"rank":1},{"light":"low","name":"Peace Lily","water_every_days":15,"rank":2},{"light":"low","name":"Ivy","water_every_days":11,"rank":3},{"light":"low","name":"Mint","water_every_days":6,"rank":4},{"light":"medium","name":"Snake Plant","water_every_days":9,"rank":1},{"light":"medium","name":"Fern","water_every_days":7,"rank":2}]);
+});

@@ -1,0 +1,3 @@
+SELECT DISTINCT fuel
+FROM cars
+ORDER BY fuel;

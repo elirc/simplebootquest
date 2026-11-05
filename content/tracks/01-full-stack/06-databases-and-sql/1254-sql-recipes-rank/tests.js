@@ -1,0 +1,3 @@
+test('returns the expected rows', () => {
+  expect(result).toEqual([{"difficulty":"easy","name":"Shakshuka","calories":914,"rank":1},{"difficulty":"easy","name":"Paella","calories":848,"rank":2},{"difficulty":"easy","name":"Gyoza","calories":467,"rank":3},{"difficulty":"easy","name":"Chili","calories":336,"rank":4},{"difficulty":"hard","name":"Curry","calories":651,"rank":1},{"difficulty":"hard","name":"Tacos","calories":595,"rank":2},{"difficulty":"hard","name":"Pancakes","calories":253,"rank":3},{"difficulty":"medium","name":"Lasagne","calories":252,"rank":1},{"difficulty":"medium","name":"Falafel","calories":224,"rank":2}]);
+});

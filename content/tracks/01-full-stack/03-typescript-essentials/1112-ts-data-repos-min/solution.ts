@@ -1,0 +1,14 @@
+interface Repo {
+  id: number;
+  name: string;
+  stars: number;
+  openIssues: number;
+  language: "TypeScript" | "Go" | "Python";
+  archived: boolean;
+}
+
+export function lowestOpenIssues(repos: Repo[]): string | null {
+  let best = null;
+  for (const x of repos) if (best === null || x.openIssues < best.openIssues) best = x;
+  return best ? best.name : null;
+}

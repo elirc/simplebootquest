@@ -1,0 +1,3 @@
+test('returns the expected rows', () => {
+  expect(result).toEqual([{"format":"hybrid","name":"AI Panel","registered":339,"rank":1},{"format":"hybrid","name":"Startup Night","registered":231,"rank":2},{"format":"hybrid","name":"Design Jam","registered":138,"rank":3},{"format":"hybrid","name":"JS Meetup","registered":126,"rank":4},{"format":"hybrid","name":"Open Mic","registered":37,"rank":5},{"format":"in-person","name":"Code Dojo","registered":247,"rank":1},{"format":"in-person","name":"Game Night","registered":46,"rank":2},{"format":"online","name":"Demo Day","registered":354,"rank":1},{"format":"online","name":"Workshop","registered":108,"rank":2}]);
+});

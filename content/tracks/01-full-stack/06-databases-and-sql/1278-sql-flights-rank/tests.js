@@ -1,0 +1,3 @@
+test('returns the expected rows', () => {
+  expect(result).toEqual([{"airline":"oneworld","number":"AF22","duration_min":263,"rank":1},{"airline":"oneworld","number":"AA100","duration_min":56,"rank":2},{"airline":"skyteam","number":"IB6251","duration_min":800,"rank":1},{"airline":"skyteam","number":"BA117","duration_min":542,"rank":2},{"airline":"skyteam","number":"EK3","duration_min":267,"rank":3},{"airline":"skyteam","number":"KL641","duration_min":244,"rank":4},{"airline":"star","number":"UA90","duration_min":699,"rank":1},{"airline":"star","number":"QF1","duration_min":541,"rank":2},{"airline":"star","number":"LH400","duration_min":459,"rank":3}]);
+});

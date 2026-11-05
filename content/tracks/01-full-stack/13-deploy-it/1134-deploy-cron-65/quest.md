@@ -1,0 +1,12 @@
+---
+slug: "deploy-cron-65"
+title: "Deploy Drill: Reading cron schedules #65"
+type: "quiz"
+xp: 10
+optional: true
+section: "Practice: Deploy & Operate Drills"
+questions: [{"prompt":"Does the cron schedule `0 */6 * * *` fire at **2026-05-03 03:00 UTC** (a Sunday)?","options":["No","Only if the server is in UTC+1","Only on the first run","Yes"],"answer":0,"explanation":"At least one field does not match."},{"prompt":"Does the cron schedule `45 23 * * 5` fire at **2026-06-02 22:15 UTC** (a Tuesday)?","options":["Only on the first run","No","Yes","Only if the server is in UTC+1"],"answer":1,"explanation":"At least one field does not match."},{"prompt":"Does the cron schedule `0 3 * * 0` fire at **2026-09-23 15:45 UTC** (a Wednesday)?","options":["No","Only if the server is in UTC+1","Only on the first run","Yes"],"answer":0,"explanation":"At least one field does not match."},{"prompt":"Does the cron schedule `0 3 * * 0` fire at **2026-06-08 10:10 UTC** (a Monday)?","options":["Only on the first run","Only if the server is in UTC+1","No","Yes"],"answer":2,"explanation":"At least one field does not match."},{"prompt":"Does the cron schedule `0 12 15 * *` fire at **2026-11-10 07:00 UTC** (a Tuesday)?","options":["Only on the first run","Yes","No","Only if the server is in UTC+1"],"answer":2,"explanation":"At least one field does not match."}]
+---
+# Deploy Drill: Reading cron schedules #65
+
+Cron fields are: **minute hour day-of-month month day-of-week** (0 = Sunday). `*` means every value, `*/15` means every 15, `1-5` is a range, and `0,30` is a list. Most schedulers use **UTC** unless you configure a time zone.

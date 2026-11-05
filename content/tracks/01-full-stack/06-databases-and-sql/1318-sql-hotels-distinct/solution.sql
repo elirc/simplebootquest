@@ -1,0 +1,3 @@
+SELECT DISTINCT city
+FROM hotels
+ORDER BY city;

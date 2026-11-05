@@ -1,0 +1,3 @@
+test('returns the expected rows', () => {
+  expect(result).toEqual([{"continent":"Americas","name":"Turin","avg_temp":2,"rank":1},{"continent":"Asia","name":"Seoul","avg_temp":14,"rank":1},{"continent":"Asia","name":"Lagos","avg_temp":11,"rank":2},{"continent":"Asia","name":"Lisbon","avg_temp":2,"rank":3},{"continent":"Europe","name":"Cairo","avg_temp":23,"rank":1},{"continent":"Europe","name":"Lima","avg_temp":20,"rank":2},{"continent":"Europe","name":"Perth","avg_temp":11,"rank":3},{"continent":"Oceania","name":"Oslo","avg_temp":25,"rank":1},{"continent":"Oceania","name":"Austin","avg_temp":15,"rank":2}]);
+});

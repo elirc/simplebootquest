@@ -1,0 +1,3 @@
+test('returns the expected rows', () => {
+  expect(result).toEqual([{"genre":"sci-fi","title":"Last Light","rating":7.9,"rank":1},{"genre":"sci-fi","title":"Cloud Atlas","rating":7.3,"rank":2},{"genre":"sci-fi","title":"Blue River","rating":4.9,"rank":3},{"genre":"thriller","title":"Open Road","rating":8.3,"rank":1},{"genre":"thriller","title":"Paper Moon","rating":7.9,"rank":2},{"genre":"thriller","title":"Quiet Storm","rating":7.5,"rank":3},{"genre":"thriller","title":"Red Harbor","rating":6.8,"rank":4},{"genre":"thriller","title":"Night Train","rating":5,"rank":5},{"genre":"thriller","title":"Silver Fox","rating":4.5,"rank":6}]);
+});

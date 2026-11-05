@@ -1,0 +1,3 @@
+test('returns the expected rows', () => {
+  expect(result).toEqual([{"level":"advanced","title":"Testing JS","enrolled":4204,"rank":1},{"level":"advanced","title":"Intro to SQL","enrolled":1519,"rank":2},{"level":"advanced","title":"Git Essentials","enrolled":1184,"rank":3},{"level":"advanced","title":"Web Security","enrolled":253,"rank":4},{"level":"beginner","title":"CSS Layouts","enrolled":4034,"rank":1},{"level":"beginner","title":"GraphQL","enrolled":2467,"rank":2},{"level":"beginner","title":"React Basics","enrolled":2242,"rank":3},{"level":"intermediate","title":"Node APIs","enrolled":4079,"rank":1},{"level":"intermediate","title":"Accessibility","enrolled":3997,"rank":2}]);
+});

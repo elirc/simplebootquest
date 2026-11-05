@@ -1,0 +1,3 @@
+test('returns the expected rows', () => {
+  expect(result).toEqual([{"category":"fun","reference":"TX-12","amount":715,"rank":1},{"category":"fun","reference":"TX-03","amount":460,"rank":2},{"category":"rent","reference":"TX-06","amount":950,"rank":1},{"category":"travel","reference":"TX-02","amount":999,"rank":1},{"category":"travel","reference":"TX-10","amount":942,"rank":2},{"category":"travel","reference":"TX-04","amount":648,"rank":3},{"category":"travel","reference":"TX-08","amount":570,"rank":4},{"category":"travel","reference":"TX-11","amount":-18,"rank":5},{"category":"travel","reference":"TX-07","amount":-234,"rank":6}]);
+});

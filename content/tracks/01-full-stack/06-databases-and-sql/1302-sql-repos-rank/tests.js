@@ -1,0 +1,3 @@
+test('returns the expected rows', () => {
+  expect(result).toEqual([{"language":"Go","name":"web-app","open_issues":121,"rank":1},{"language":"Go","name":"search","open_issues":67,"rank":2},{"language":"Go","name":"design-system","open_issues":31,"rank":3},{"language":"Python","name":"cli","open_issues":124,"rank":1},{"language":"Python","name":"infra","open_issues":67,"rank":2},{"language":"Python","name":"notifier","open_issues":60,"rank":3},{"language":"TypeScript","name":"api-gateway","open_issues":135,"rank":1},{"language":"TypeScript","name":"docs","open_issues":100,"rank":2},{"language":"TypeScript","name":"billing","open_issues":87,"rank":3}]);
+});

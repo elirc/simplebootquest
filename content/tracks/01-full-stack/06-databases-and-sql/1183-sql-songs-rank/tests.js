@@ -1,0 +1,3 @@
+test('returns the expected rows', () => {
+  expect(result).toEqual([{"artist":"Kairo","title":"Tides","seconds":258,"rank":1},{"artist":"Nova","title":"Lanterns","seconds":393,"rank":1},{"artist":"Nova","title":"Sunrise","seconds":334,"rank":2},{"artist":"Nova","title":"Velvet","seconds":267,"rank":3},{"artist":"The Pines","title":"Riverside","seconds":414,"rank":1},{"artist":"The Pines","title":"Drift","seconds":393,"rank":2},{"artist":"The Pines","title":"Halo","seconds":369,"rank":3},{"artist":"The Pines","title":"Echoes","seconds":351,"rank":4},{"artist":"The Pines","title":"Static","seconds":204,"rank":5}]);
+});

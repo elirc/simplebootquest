@@ -1,0 +1,3 @@
+test('returns the expected rows', () => {
+  expect(result).toEqual([{"category":"home","name":"Monitor Arm","stock":5,"rank":1},{"category":"home","name":"Pen Set","stock":4,"rank":2},{"category":"home","name":"Desk Lamp","stock":2,"rank":3},{"category":"office","name":"Notebook","stock":57,"rank":1},{"category":"tech","name":"Plant Pot","stock":60,"rank":1},{"category":"tech","name":"Headphones","stock":29,"rank":2},{"category":"tech","name":"USB Hub","stock":16,"rank":3},{"category":"tech","name":"Mouse Pad","stock":13,"rank":4},{"category":"tech","name":"Water Bottle","stock":12,"rank":5}]);
+});

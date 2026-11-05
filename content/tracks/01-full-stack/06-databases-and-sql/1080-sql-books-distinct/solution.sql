@@ -1,0 +1,3 @@
+SELECT DISTINCT genre
+FROM books
+ORDER BY genre;

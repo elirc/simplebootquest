@@ -1,0 +1,12 @@
+---
+slug: "testing-runner-8"
+title: "How Does the Runner Execute This? #8"
+type: "quiz"
+xp: 10
+optional: true
+section: "Practice: How Test Runners Work"
+questions: [{"prompt":"How many of these tests pass?\n\n```js\nconst log = [];\nafterEach(() => log.push('A'));\nbeforeEach(() => log.push('B'));\ntest('t1', () => {\n  log.push('t1');\n});\ntest('t2', () => {\n  log.push('t2');\n});\ntest('t3', () => {\n  log.push('t3');\n});\ndescribe('group', () => {\n  beforeEach(() => log.push('b'));\n  test('t4', () => {\n    log.push('t4');\n  });\n});\n```","options":["0 of 4","3 of 4","4 of 4","4 of 5"],"answer":2},{"prompt":"How many of these tests pass?\n\n```js\nconst log = [];\nbeforeEach(() => log.push('B'));\nafterEach(() => log.push('A'));\ntest('t1', () => {\n  log.push('t1');\n});\ntest('t2', () => {\n  log.push('t2');\n});\ntest('t3', () => {\n  log.push('t3');\n  expect(3).toBe(4);\n});\ndescribe('group', () => {\n  beforeEach(() => log.push('b'));\n  test('t4', () => {\n    log.push('t4');\n  });\n});\n```","options":["0 of 4","4 of 4","2 of 4","3 of 4"],"answer":3},{"prompt":"How many of these tests pass?\n\n```js\nconst log = [];\nafterEach(() => log.push('A'));\nbeforeEach(() => log.push('B'));\ntest('t1', () => {\n  log.push('t1');\n});\ntest('t2', () => {\n  log.push('t2');\n});\ntest('t3', () => {\n  log.push('t3');\n});\n```","options":["3 of 4","3 of 3","0 of 3","2 of 3"],"answer":1},{"prompt":"How many of these tests pass?\n\n```js\nconst log = [];\nbeforeEach(() => log.push('B'));\ntest('t1', () => {\n  log.push('t1');\n  expect(1).toBe(2);\n});\ntest('t2', () => {\n  log.push('t2');\n});\ntest('t3', () => {\n  log.push('t3');\n});\n```","options":["3 of 3","2 of 3","1 of 3","0 of 3"],"answer":1},{"prompt":"How many of these tests pass?\n\n```js\nconst log = [];\nafterEach(() => log.push('A'));\nbeforeEach(() => log.push('B'));\ntest('t1', () => {\n  log.push('t1');\n  expect(1).toBe(2);\n});\ntest('t2', () => {\n  log.push('t2');\n});\n```","options":["1 of 2","1 of 3","0 of 2","2 of 2"],"answer":0}]
+---
+# How Does the Runner Execute This? #8
+
+Vitest (and Jest) collect your tests first, then run them in order. For **each** test: every `beforeEach` from the outermost `describe` inwards, then the test, then every `afterEach` from the innermost outwards. A failing `expect` fails only that test, and the hooks still run. These answers come from running each file through the platform's test runner.

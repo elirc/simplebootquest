@@ -1,0 +1,3 @@
+test('returns the expected rows', () => {
+  expect(result).toEqual([{"kind":"cardio","label":"Fri yoga","minutes":107,"rank":1},{"kind":"cardio","label":"Wed swim","minutes":72,"rank":2},{"kind":"strength","label":"Thu ride","minutes":106,"rank":1},{"kind":"strength","label":"Wed lift","minutes":98,"rank":2},{"kind":"strength","label":"Tue swim","minutes":85,"rank":3},{"kind":"strength","label":"Fri run","minutes":34,"rank":4},{"kind":"strength","label":"Sat ride","minutes":25,"rank":5},{"kind":"strength","label":"Thu yoga","minutes":20,"rank":6},{"kind":"strength","label":"Sun walk","minutes":18,"rank":7}]);
+});

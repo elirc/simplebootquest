@@ -1,0 +1,3 @@
+test('returns the expected rows', () => {
+  expect(result).toEqual([{"priority":"low","subject":"Refund request","replies":4,"rank":1},{"priority":"low","subject":"Password reset","replies":3,"rank":2},{"priority":"normal","subject":"Dark mode","replies":9,"rank":1},{"priority":"normal","subject":"Feature idea","replies":8,"rank":2},{"priority":"normal","subject":"Missing order","replies":5,"rank":3},{"priority":"urgent","subject":"Login fails","replies":11,"rank":1},{"priority":"urgent","subject":"Email change","replies":6,"rank":2},{"priority":"urgent","subject":"Bug in export","replies":5,"rank":3},{"priority":"urgent","subject":"Slow page","replies":2,"rank":4}]);
+});

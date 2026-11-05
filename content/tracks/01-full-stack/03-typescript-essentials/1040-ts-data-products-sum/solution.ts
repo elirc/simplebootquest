@@ -1,0 +1,12 @@
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  stock: number;
+  category: "office" | "tech" | "home";
+  onSale: boolean;
+}
+
+export function totalPrice(products: Product[]): number {
+  return products.reduce((sum, x) => sum + x.price, 0);
+}

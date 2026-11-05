@@ -1,0 +1,8 @@
+function NewCourse({ create }) {
+  return (
+    <form>
+      <input />
+      <button>Save</button>
+    </form>
+  );
+}

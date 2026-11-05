@@ -1,0 +1,3 @@
+test('returns the expected rows', () => {
+  expect(result).toEqual([{"status":"cancelled","code":"A-101","total_cents":18219,"rank":1},{"status":"paid","code":"E-500","total_cents":12042,"rank":1},{"status":"paid","code":"B-201","total_cents":9244,"rank":2},{"status":"paid","code":"A-100","total_cents":7575,"rank":3},{"status":"pending","code":"C-300","total_cents":20866,"rank":1},{"status":"pending","code":"C-302","total_cents":2329,"rank":2},{"status":"shipped","code":"E-501","total_cents":13501,"rank":1},{"status":"shipped","code":"D-401","total_cents":4387,"rank":2},{"status":"shipped","code":"A-102","total_cents":3144,"rank":3}]);
+});

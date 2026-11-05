@@ -1,0 +1,3 @@
+test('returns the expected rows', () => {
+  expect(result).toEqual([{"level":"junior","name":"Radia","years_at_company":14,"rank":1},{"level":"junior","name":"Ken","years_at_company":13,"rank":2},{"level":"junior","name":"Frances","years_at_company":12,"rank":3},{"level":"mid","name":"Dennis","years_at_company":14,"rank":1},{"level":"senior","name":"Ada","years_at_company":13,"rank":1},{"level":"senior","name":"Margaret","years_at_company":13,"rank":1},{"level":"senior","name":"Tim","years_at_company":10,"rank":3},{"level":"senior","name":"Barbara","years_at_company":7,"rank":4},{"level":"senior","name":"Katherine","years_at_company":7,"rank":4}]);
+});

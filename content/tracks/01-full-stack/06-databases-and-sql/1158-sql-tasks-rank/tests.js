@@ -1,0 +1,3 @@
+test('returns the expected rows', () => {
+  expect(result).toEqual([{"assignee":"ada","title":"Plan sprint","estimate":1,"rank":1},{"assignee":"grace","title":"Fix login","estimate":14,"rank":1},{"assignee":"grace","title":"Add caching","estimate":5,"rank":2},{"assignee":"grace","title":"Review PR","estimate":3,"rank":3},{"assignee":"grace","title":"Write tests","estimate":3,"rank":3},{"assignee":"linus","title":"Refactor auth","estimate":12,"rank":1},{"assignee":"linus","title":"Write docs","estimate":11,"rank":2},{"assignee":"linus","title":"Add search","estimate":10,"rank":3},{"assignee":"linus","title":"Deploy API","estimate":9,"rank":4}]);
+});

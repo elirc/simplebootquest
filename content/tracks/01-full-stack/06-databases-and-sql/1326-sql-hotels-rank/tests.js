@@ -1,0 +1,3 @@
+test('returns the expected rows', () => {
+  expect(result).toEqual([{"city":"Kyoto","name":"The Grand","nightly_price":387,"rank":1},{"city":"Kyoto","name":"Maple House","nightly_price":275,"rank":2},{"city":"Kyoto","name":"Harbour View","nightly_price":263,"rank":3},{"city":"Kyoto","name":"Sea Breeze","nightly_price":258,"rank":4},{"city":"Lisbon","name":"Sky Garden","nightly_price":418,"rank":1},{"city":"Lisbon","name":"Riverside Inn","nightly_price":384,"rank":2},{"city":"Lisbon","name":"Olive Court","nightly_price":345,"rank":3},{"city":"Lisbon","name":"Old Mill","nightly_price":97,"rank":4},{"city":"Lisbon","name":"Pine Lodge","nightly_price":54,"rank":5}]);
+});

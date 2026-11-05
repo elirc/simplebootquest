@@ -1,0 +1,3 @@
+function parseQuery(qs) {
+  return {};
+}

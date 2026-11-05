@@ -31,9 +31,9 @@ There are three **tracks**. Start with the Full-Stack Path, and dip into the oth
 
 | Track | Quests | Formats | What you'll learn |
 |-------|--------|---------|-------------------|
-| ⌨️ **Full-Stack Path** | 268 | Code, write-the-tests, quizzes, projects | JavaScript → TypeScript → Node → Express → SQL → auth → React → unit testing → testing in depth → deploy |
-| 🏗️ **System Design** | 46 | Quizzes, design docs | Requirements & estimates, scaling a Node API, databases at scale, caching, queues, reliability, API design, multi-tenancy, and six case studies |
-| 🤖 **Agentic Engineering** | 42 | Quizzes, write-ups | How coding agents work, writing specs, context files (CLAUDE.md / AGENTS.md), workflows, verifying and reviewing AI code, safety & prompt injection, debugging, team practices |
+| ⌨️ **Full-Stack Path** | 497 | Code, write-the-tests, quizzes, projects | JavaScript → TypeScript → Node → Express → SQL → auth → React → unit testing → testing in depth → deploy |
+| 🏗️ **System Design** | 91 | Quizzes, design docs | Requirements & estimates, scaling a Node API, databases at scale, caching, queues, reliability, API design, multi-tenancy, security & cost, and ten case studies |
+| 🤖 **Agentic Engineering** | 87 | Quizzes, write-ups | How coding agents work, writing specs, context files (CLAUDE.md / AGENTS.md), workflows, verifying and reviewing AI code, safety & prompt injection, debugging, team practices, career growth |
 
 **Design write-ups** are a quest type of their own: you write a design document (in Markdown, in the browser), review it against a rubric, and then unlock a reference design to compare trade-offs with. It's the same artefact engineers write at work before building something big.
 
@@ -183,10 +183,10 @@ Learner code runs **in the browser**, inside a Web Worker, so there's no server 
 - [x] Test runner for JS, TypeScript, JSX and SQL quests
 - [x] User accounts and progress tracking
 - [x] XP, levels, streaks, achievements and leaderboard
-- [x] Full-Stack Path: 13 chapters, 268 quests (225 code, 32 quizzes, 11 projects), with progressive hints and further reading
+- [x] Full-Stack Path: 13 chapters, 497 quests (426 code, 60 quizzes, 11 projects), with progressive hints and further reading
 - [x] "Write the tests" quests graded by mutation testing
-- [x] Parallel tracks: System Design (46 quests) and Agentic Engineering (42 quests), with design write-ups and reference designs
-- [ ] Even more quests in the later chapters (React, testing, deploy)
+- [x] Parallel tracks: System Design (91 quests) and Agentic Engineering (87 quests), with design write-ups and reference designs
+- [x] A practice block in every chapter: extra drills, quizzes and write-ups before each boss fight
 - [ ] Server-side sandboxed verification
 - [ ] Peer review for projects
 

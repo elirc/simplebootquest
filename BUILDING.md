@@ -30,6 +30,7 @@ Every step below calls out which of these it's practicing.
 - [Step 10 — Scaling the content (and what it taught us)](#step-10--scaling-the-content-and-what-it-taught-us)
 - [Step 11 — Parallel tracks and a new quest type](#step-11--parallel-tracks-and-a-new-quest-type)
 - [Step 12 — Grading tests with mutation testing](#step-12--grading-tests-with-mutation-testing)
+- [Step 13 — Doubling the content without lowering the bar](#step-13--doubling-the-content-without-lowering-the-bar)
 - [Recap: the build order, and why](#recap-the-build-order-and-why)
 - [Exercises: extend it yourself](#exercises-extend-it-yourself)
 
@@ -552,6 +553,43 @@ The learner sees one result row per mutant ("Catches the bug: free shipping star
 
 ---
 
+## Step 13 — Doubling the content without lowering the bar
+
+*Skills: automation, verification, working at scale.*
+
+The curriculum then grew from 356 to 675 quests: every chapter of every track roughly doubled. At that size, the risk isn't writing the content. It's writing **wrong** content: a test that expects the wrong value, or a lesson that describes a file that doesn't exist. Learners trust the platform, so every wrong answer costs them hours.
+
+### Where the new quests go
+
+Each chapter got a **practice block** right before its finale (the boss fight, or the chapter's capstone design doc). Folder numbers are spaced (`010`, `020`, …), so new quests slot in between (`200`–`285` for practice drills, `041`–`049` before a capstone at `050`) **without renaming anything**. That matters, because slugs and folders are stable ids that learners' progress points to (Step 4).
+
+### Generate the facts, write the prose
+
+- **SQL expected results are computed, not typed.** The authoring helper runs `setup.sql` and the reference solution through Python's built-in SQLite (the same engine as sql.js in the browser), then writes the actual rows into `tests.js`. A hand-typed expected table for a 4-way join with `GROUP BY` is a typo waiting to happen.
+- **Write-the-tests mutants are string replacements** that must match exactly once (Step 12), so an author can't accidentally ship a mutant identical to the subject.
+- **Everything else is checked by the validator**, which still proves every solution passes and every starter fails.
+
+### What the validator caught
+
+The validator turned out to be essential, again:
+
+- **A whole chapter in the wrong language.** One batch of TypeScript drills was generated with the default `js` setting, so all 12 solutions failed to parse. One run of `validate:content` showed the problem, and since the cause was systematic, the fix was in the generator, not 12 hand edits.
+- **A reference test suite that missed a mutant.** The money parser's tests never used a number with *two* thousands separators, so the "only removes the first comma" bug survived. Exactly the lesson the quest teaches.
+- **Malformed metadata**: a resource link in the wrong shape failed schema validation (Zod, Step 4) before it reached a learner.
+
+### What the validator can't catch
+
+Tests prove code. They can't prove **prose**. Two practices filled that gap:
+
+- **Check claims against the real code.** A write-up describing this app's architecture first named files that don't exist (`lib/auth.ts`, `routes/progress.ts`). Comparing it against `ls apps/api/src` fixed it before it shipped.
+- **Make timing tests tolerant.** A test asserting "three 40 ms checks run in parallel in under 110 ms" is exactly the kind of test the chapter on flaky tests warns about. Widening the margins (60 ms checks, a 150 ms bound) keeps the intent and removes the flake.
+
+### Ship in reviewable batches
+
+Each chapter was validated and committed on its own ("Chapter 6: add SQL practice queries…"), so a problem in one batch never blocked or hid behind another, and the history tells the story chapter by chapter. It's the same small-diff discipline as the Agentic Engineering track teaches, applied to content.
+
+---
+
 ## Recap: the build order, and why
 
 | # | Step | Why at this point |
@@ -565,6 +603,7 @@ The learner sees one result row per mutant ("Catches the bug: free shipping star
 | 7 | API | Thin layer over proven logic: routes → services → Prisma |
 | 8 | Frontend | Consumes a tested API with shared types |
 | 9 | Browser verification + CI | Proves the whole thing works, and keeps it working |
+| 10–13 | Content at scale, new tracks, new quest types | Only once the core loop is proven does adding content pay off |
 
 The general principle: **de-risk first, build on verified foundations, and leave the UI late.** The UI is the most visible part, so it's tempting to start there. But a UI built before the logic it displays gets rewritten when that logic changes.
 
